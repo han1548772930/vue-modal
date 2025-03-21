@@ -1,0 +1,214 @@
+<script setup lang="ts">
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import { type CSSProperties, nextTick, onBeforeUnmount, onMounted, ref, watch, watchEffect, isVNode } from "vue";
+import { Button } from "@/components/ui/button";
+import { useDraggable } from "@vueuse/core";
+import type { VueNode } from '@/hooks';
+import { cn } from '@/lib/utils';
+import LoadingButton from "@/components/customUi/loadingButton/index.vue";
+
+
+
+defineOptions({
+  name: 'MyDialog'
+})
+const props = defineProps<{
+  class?: string;
+  title?: string | (() => VueNode) | VueNode;
+  footer?: string | (() => VueNode) | VueNode;
+  content?: string | (() => VueNode) | VueNode;
+  description?: string | (() => VueNode) | VueNode;
+  onOk?: (...args: any[]) => any;
+  onCancel?: (...args: any[]) => any;
+  width?: string;
+  okText?: string | (() => VueNode) | VueNode;
+  cancelText?: string | (() => VueNode) | VueNode;
+  type?: 'info' | 'success' | 'error' | 'warn' | 'warning' | 'confirm';
+  bodyStyle?: CSSProperties;
+  close?: Function
+}>()
+
+const open = defineModel<boolean>()
+const dialogTitleRef = ref<HTMLElement | null>(null);
+const dialogContentRef = ref<HTMLElement | null>(null);
+const { x, y, isDragging } = useDraggable(dialogTitleRef);
+const slots = defineSlots<{
+  default: any,
+  headerTitle: any,
+  headerDes: any,
+  footer: any
+}>()
+
+
+const startX = ref<number>(0);
+const startY = ref<number>(0);
+const startedDrag = ref(false);
+const transformX = ref(0);
+const transformY = ref(0);
+const preTransformX = ref(0);
+const preTransformY = ref(0);
+const dragRect = ref({ left: 0, right: 0, top: 0, bottom: 0 });
+
+const w1 = watch([x, y], () => {
+  if (!startedDrag.value && dialogTitleRef.value && dialogContentRef.value) {
+    startX.value = x.value;
+    startY.value = y.value;
+    const bodyRect = document.body.getBoundingClientRect();
+    const titleRect = dialogTitleRef.value.getBoundingClientRect();
+    dragRect.value.left = 0;
+    dragRect.value.top = 0;
+    dragRect.value.right = bodyRect.width - titleRect.width;
+    dragRect.value.bottom = bodyRect.height - titleRect.height;
+    preTransformX.value = transformX.value;
+    preTransformY.value = transformY.value;
+  }
+  if (isDragging.value) {
+    startedDrag.value = true;
+  }
+});
+
+const w2 = watch(isDragging, () => {
+  if (!isDragging.value) {
+    startedDrag.value = false;
+  }
+});
+
+watchEffect(() => {
+  if (startedDrag.value) {
+    transformX.value =
+      preTransformX.value +
+      Math.min(Math.max(dragRect.value.left, x.value), dragRect.value.right) -
+      startX.value;
+    transformY.value =
+      preTransformY.value +
+      Math.min(Math.max(dragRect.value.top, y.value), dragRect.value.bottom) -
+      startY.value;
+    if (dialogContentRef.value) {
+      if (transformX.value === 0 && transformY.value === 0) {
+        return
+      } else {
+        dialogContentRef.value.style.transform = `translate(calc(-50% + ${transformX.value}px), calc(-50% + ${transformY.value}px))`;
+        // dialogContentRef.value.style.transform = `translate(${transformX.value}px,${transformY.value}px)`;
+      }
+    }
+  }
+});
+
+const bindingEl = () => {
+  nextTick(() => {
+    const dialogHeaders = document.querySelectorAll('#dialog-header');
+    const dialogContents = document.querySelectorAll('.dialog-content');
+    // console.log(dialogHeaders, dialogContents)
+    dialogTitleRef.value = dialogHeaders[dialogHeaders.length - 1] as HTMLElement;
+    dialogContentRef.value = dialogContents[dialogContents.length - 1] as HTMLElement;
+    // Reset initial positions
+    startX.value = 0;
+    startY.value = 0;
+    preTransformX.value = 0;
+    preTransformY.value = 0;
+    transformX.value = 0;
+    transformY.value = 0;
+    // if (dialogContentRef.value) {
+    //   dialogContentRef.value.style.transform = 'translate(-50%, -50%)';
+    // }
+  });
+};
+onMounted(() => {
+  bindingEl()
+})
+onBeforeUnmount(() => {
+  w1();
+  w2();
+})
+watchEffect(() => {
+  if (open.value && dialogContentRef.value == null && dialogTitleRef.value == null) {
+    bindingEl()
+  }
+  if (!open.value) {
+    dialogContentRef.value = null;
+    dialogTitleRef.value = null;
+  }
+})
+
+function close() {
+  props.onCancel?.()
+  props.close?.()
+}
+async function confirm() {
+  await props.onOk?.()
+}
+function destroy() {
+  props.close?.()
+}
+function onOpenChange(b: boolean) {
+  if (!b)
+    setTimeout(() => {
+      destroy()
+    }, 500)
+}
+</script>
+
+<template>
+  <Dialog v-model:open="open" @update:open="onOpenChange">
+    <DialogContent :class="cn(props.class, props.width)" class="dialog-content select-none">
+      <DialogHeader id="dialog-header" class="select-none cursor-move">
+        <DialogTitle>
+          <div class="flex items-center justify-between">
+            <slot name="headerTitle" v-if="slots.headerTitle"></slot>
+            <template v-else-if="isVNode(title)">
+              <component :is="title"></component>
+            </template>
+            <template v-else>
+              {{ title }}
+            </template>
+          </div>
+        </DialogTitle>
+        <DialogDescription>
+          <slot name="headerDes" v-if="slots.headerDes"></slot>
+          <template v-else-if="isVNode(description)">
+            <component :is="description"></component>
+          </template>
+          <template v-else-if="description">
+            {{ description }}
+          </template>
+        </DialogDescription>
+      </DialogHeader>
+      <slot v-if="slots.default"></slot>
+      <template v-else-if="isVNode(content)">
+        <component :is="content" :class="bodyStyle"></component>
+      </template>
+      <template v-else>
+        {{ content }}
+      </template>
+      <DialogFooter>
+        <slot name="footer" v-if="slots.footer"></slot>
+        <template v-else-if="isVNode(footer)">
+          <component :is="footer"></component>
+        </template>
+        <div v-else class="w-full flex justify-end items-center">
+          <template v-if="isVNode(cancelText)">
+            <component :is="cancelText" @click="close"></component>
+          </template>
+          <template v-else>
+            <Button class="mr-3 w-[60px]" size="sm" variant="outline" @click="close">
+              {{ cancelText || '取消' }}
+            </Button>
+          </template>
+          <template v-if="isVNode(okText)">
+            <component :is="okText" @click="confirm"></component>
+          </template>
+          <template v-else>
+            <LoadingButton :label="okText || '确认'" :click="confirm"></LoadingButton>
+          </template>
+        </div>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
+</template>
