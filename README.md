@@ -149,7 +149,7 @@ const { destroy } = useDialog({
 Use Vue's template syntax for more flexible dialog customization with slots.
 
 ```vue
-<MyDialog v-model="open2" :close="() => open2 = false">
+<MyDialog v-model="open" :close="() => open = false">
   <template #headerTitle>
     <div class="flex items-center gap-2">
       <Icon icon="akar-icons:discord-fill" class="cursor-pointer"></Icon>
