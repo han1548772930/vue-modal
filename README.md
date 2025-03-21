@@ -1,4 +1,4 @@
-First delete or modify the duration-200 in DialogContent and AlertDialogContent。
+First delete or modify the `duration-200` in `DialogContent.vue` and `AlertDialogContent.vue`。
 
 ![屏幕录制 2025-03-21 135828(1)](https://github.com/user-attachments/assets/6eed08dd-3c54-4bc3-9865-2ae1ebf8ae8f)
 
