@@ -6,7 +6,7 @@ import { createVNode, ref } from 'vue';
 import { Icon } from "@iconify/vue";
 import { destroyAll } from './hooks/confirm';
 import MyDialog from './components/customUi/dialog/index.vue';
-
+import Hello from './components/hello/index.vue';
 const open2 = ref(false)
 function open() {
   useDialog({
@@ -67,6 +67,7 @@ function update() {
       update({
         title: 'Updated Dialog Title',
         content: 'Updated Dialog Content',
+        okText: 'Updated Dialog Ok',
       });
       console.log('Confirmed');
     },
@@ -86,7 +87,9 @@ function vNode() {
     ]),
     content: createVNode('div', {
       class: 'p-4 bg-slate-700',
-    }, 'Dialog Content'),
+    }, [
+      createVNode(Hello)
+    ]),
     cancelText: createVNode('span', {
       class: 'text-red-500 p-2  cursor-pointer'
     }, '取消'),
@@ -140,9 +143,6 @@ function promise() {
     <template #headerDes>
       <div>Dialog Description</div>
     </template>
-    <!-- <template #footer>
-      <span class="text-red-500 p-2  cursor-pointer">取消</span>
-    </template> -->
     <div class="p-4 bg-slate-700">Dialog Content</div>
   </MyDialog>
 </template>

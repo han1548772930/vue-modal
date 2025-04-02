@@ -94,8 +94,8 @@ watchEffect(() => {
       if (transformX.value === 0 && transformY.value === 0) {
         return
       } else {
-        dialogContentRef.value.style.transform = `translate(calc(-50% + ${transformX.value}px), calc(-50% + ${transformY.value}px))`;
-        // dialogContentRef.value.style.transform = `translate(${transformX.value}px,${transformY.value}px)`;
+        // dialogContentRef.value.style.transform = `translate(calc(-50% + ${transformX.value}px), calc(-50% + ${transformY.value}px))`;
+        dialogContentRef.value.style.transform = `translate(${transformX.value}px,${transformY.value}px)`;
       }
     }
   }
