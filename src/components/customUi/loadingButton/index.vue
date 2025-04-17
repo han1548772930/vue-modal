@@ -23,7 +23,7 @@ async function click() {
 </script>
 
 <template>
-  <Button class="mr-4  min-w-[60px]" size="sm" :disabled="loading" @click.stop.prevent="click">
+  <Button class="mr-4" size="default" :disabled="loading" @click.stop.prevent="click">
     <Loader2 class="w-4 h-4 mr-2 animate-spin" v-if="loading" />
     {{ label }}
   </Button>

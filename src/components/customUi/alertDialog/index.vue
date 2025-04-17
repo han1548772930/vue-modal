@@ -7,7 +7,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
-import { type CSSProperties, nextTick, onBeforeUnmount, onMounted, ref, watch, watchEffect, isVNode } from "vue";
+import { type CSSProperties, nextTick, onBeforeUnmount, onMounted, ref, watch, watchEffect, isVNode, type HTMLAttributes } from "vue";
 import { Button } from "@/components/ui/button";
 import { useDraggable } from "@vueuse/core";
 import type { VueNode } from '@/hooks';
@@ -21,7 +21,7 @@ defineOptions({
   name: 'MyAlertDialog'
 })
 const props = defineProps<{
-  class?: string;
+  class?: HTMLAttributes['class'];
   title?: string | (() => VueNode) | VueNode;
   footer?: string | (() => VueNode) | VueNode;
   content?: string | (() => VueNode) | VueNode;
@@ -162,7 +162,7 @@ function onOpenChange(b: boolean) {
 
 <template>
   <AlertDialog v-model:open="open" @update:open="onOpenChange">
-    <AlertDialogContent :class="cn(props.class, props.width)" class="alert-dialog-content select-none">
+    <AlertDialogContent :class="cn('alert-dialog-content select-none duration-0', props.class, props.width)">
       <AlertDialogHeader id="alert-dialog-header" class="select-none cursor-move">
         <AlertDialogTitle>
           <div class="flex items-center justify-between">
@@ -204,7 +204,7 @@ function onOpenChange(b: boolean) {
             <component :is="cancelText" @click="close"></component>
           </template>
           <template v-else>
-            <Button class="mr-3 w-[60px]" size="sm" variant="outline" @click="close">
+            <Button class="mr-3" size="default" variant="outline" @click="close">
               {{ cancelText || '取消' }}
             </Button>
           </template>

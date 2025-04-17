@@ -8,6 +8,7 @@ import { destroyAll } from './hooks/confirm';
 import MyDialog from './components/customUi/dialog/index.vue';
 import Hello from './components/hello/index.vue';
 const open2 = ref(false)
+
 function open() {
   useDialog({
     title: 'Dialog Title',

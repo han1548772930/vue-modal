@@ -7,7 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { type CSSProperties, nextTick, onBeforeUnmount, onMounted, ref, watch, watchEffect, isVNode } from "vue";
+import { type CSSProperties, nextTick, onBeforeUnmount, onMounted, ref, watch, watchEffect, isVNode, type HTMLAttributes } from "vue";
 import { Button } from "@/components/ui/button";
 import { useDraggable } from "@vueuse/core";
 import type { VueNode } from '@/hooks';
@@ -20,7 +20,7 @@ defineOptions({
   name: 'MyDialog'
 })
 const props = defineProps<{
-  class?: string;
+  class?: HTMLAttributes['class'];
   title?: string | (() => VueNode) | VueNode;
   footer?: string | (() => VueNode) | VueNode;
   content?: string | (() => VueNode) | VueNode;
@@ -157,7 +157,7 @@ function onOpenChange(b: boolean) {
 
 <template>
   <Dialog v-model:open="open" @update:open="onOpenChange">
-    <DialogContent :class="cn(props.class, props.width)" class="dialog-content select-none">
+    <DialogContent :class="cn('dialog-content select-none duration-0', props.class, props.width)">
       <DialogHeader id="dialog-header" class="select-none cursor-move">
         <DialogTitle>
           <div class="flex items-center justify-between">
@@ -197,7 +197,7 @@ function onOpenChange(b: boolean) {
             <component :is="cancelText" @click="close"></component>
           </template>
           <template v-else>
-            <Button class="mr-3 w-[60px]" size="sm" variant="outline" @click="close">
+            <Button class="mr-3" size="default" variant="outline" @click="close">
               {{ cancelText || '取消' }}
             </Button>
           </template>

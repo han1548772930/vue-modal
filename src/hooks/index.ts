@@ -1,5 +1,5 @@
 import { cloneVNode, render as vueRender } from 'vue';
-import type { CSSProperties, VNode } from 'vue';
+import type { CSSProperties, HTMLAttributes, VNode } from 'vue';
 
 declare type VNodeChildAtom = VNode | string | number | boolean | null | undefined | void;
 export type VueNode = VNodeChildAtom | VNodeChildAtom[] | VNode;
@@ -14,7 +14,7 @@ export function omit<T extends object, K extends keyof T>(obj: T, fields: K[]): 
   return shallowCopy;
 }
 export interface ModalFuncProps {
-  class?: string;
+  class?: HTMLAttributes['class'];
   open?: boolean;
   description?: string | (() => VueNode) | VueNode;
   title?: string | (() => VueNode) | VueNode;
