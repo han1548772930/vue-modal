@@ -1,24 +1,23 @@
 <script setup lang="ts">
 import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { type CSSProperties, nextTick, onBeforeUnmount, onMounted, ref, watch, watchEffect, isVNode, type HTMLAttributes } from "vue";
 import { Button } from "@/components/ui/button";
 import { useDraggable } from "@vueuse/core";
 import type { VueNode } from '@/hooks';
 import { cn } from '@/lib/utils';
-import LoadingButton from "@/components/customUi/loadingButton/index.vue";
-import { Icon } from "@iconify/vue";
+import { LoadingButton } from "@/components/customUi/index";
 
 
 
 defineOptions({
-  name: 'MyAlertDialog'
+  name: 'MyDialog'
 })
 const props = defineProps<{
   class?: HTMLAttributes['class'];
@@ -34,7 +33,6 @@ const props = defineProps<{
   type?: 'info' | 'success' | 'error' | 'warn' | 'warning' | 'confirm';
   bodyStyle?: CSSProperties;
   close?: Function
-  closable?: boolean
 }>()
 
 const open = defineModel<boolean>()
@@ -105,8 +103,8 @@ watchEffect(() => {
 
 const bindingEl = () => {
   nextTick(() => {
-    const dialogHeaders = document.querySelectorAll('#alert-dialog-header');
-    const dialogContents = document.querySelectorAll('.alert-dialog-content');
+    const dialogHeaders = document.querySelectorAll('#dialog-header');
+    const dialogContents = document.querySelectorAll('.dialog-content');
     // console.log(dialogHeaders, dialogContents)
     dialogTitleRef.value = dialogHeaders[dialogHeaders.length - 1] as HTMLElement;
     dialogContentRef.value = dialogContents[dialogContents.length - 1] as HTMLElement;
@@ -130,7 +128,6 @@ onBeforeUnmount(() => {
   w2();
 })
 watchEffect(() => {
-
   if (open.value && dialogContentRef.value == null && dialogTitleRef.value == null) {
     bindingEl()
   }
@@ -146,25 +143,23 @@ function close() {
 }
 async function confirm() {
   await props.onOk?.()
-
 }
-function closeIcon() {
+function destroy() {
   props.close?.()
-  open.value = false
 }
 function onOpenChange(b: boolean) {
   if (!b)
     setTimeout(() => {
-      props.close?.()
+      destroy()
     }, 500)
 }
 </script>
 
 <template>
-  <AlertDialog v-model:open="open" @update:open="onOpenChange">
-    <AlertDialogContent :class="cn('alert-dialog-content select-none duration-0', props.class, props.width)">
-      <AlertDialogHeader id="alert-dialog-header" class="select-none cursor-move">
-        <AlertDialogTitle>
+  <Dialog v-model:open="open" @update:open="onOpenChange">
+    <DialogContent :class="cn('dialog-content select-none duration-0', props.class, props.width)">
+      <DialogHeader id="dialog-header" class="select-none cursor-move">
+        <DialogTitle>
           <div class="flex items-center justify-between">
             <slot name="headerTitle" v-if="slots.headerTitle"></slot>
             <template v-else-if="isVNode(title)">
@@ -173,11 +168,9 @@ function onOpenChange(b: boolean) {
             <template v-else>
               {{ title }}
             </template>
-            <Icon icon="line-md:menu-to-close-transition" class="cursor-pointer" v-if="closable" @click="closeIcon">
-            </Icon>
           </div>
-        </AlertDialogTitle>
-        <AlertDialogDescription>
+        </DialogTitle>
+        <DialogDescription>
           <slot name="headerDes" v-if="slots.headerDes"></slot>
           <template v-else-if="isVNode(description)">
             <component :is="description"></component>
@@ -185,8 +178,8 @@ function onOpenChange(b: boolean) {
           <template v-else-if="description">
             {{ description }}
           </template>
-        </AlertDialogDescription>
-      </AlertDialogHeader>
+        </DialogDescription>
+      </DialogHeader>
       <slot v-if="slots.default"></slot>
       <template v-else-if="isVNode(content)">
         <component :is="content" :class="bodyStyle"></component>
@@ -194,7 +187,7 @@ function onOpenChange(b: boolean) {
       <template v-else>
         {{ content }}
       </template>
-      <AlertDialogFooter>
+      <DialogFooter>
         <slot name="footer" v-if="slots.footer"></slot>
         <template v-else-if="isVNode(footer)">
           <component :is="footer"></component>
@@ -215,7 +208,7 @@ function onOpenChange(b: boolean) {
             <LoadingButton :label="okText || '确认'" :click="confirm"></LoadingButton>
           </template>
         </div>
-      </AlertDialogFooter>
-    </AlertDialogContent>
-  </AlertDialog>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
 </template>

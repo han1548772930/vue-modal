@@ -1,6 +1,6 @@
 import { type ModalFuncProps } from '.'
 import { confirm } from './confirm'
-import MyAlertDialog from '@/components/customUi/alertDialog/index.vue'
+import { MyAlertDialog } from '@/components/customUi/index'
 
 
 export const useAlertDialog = (config: ModalFuncProps) => {

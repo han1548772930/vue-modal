@@ -5,7 +5,7 @@ import { useAlertDialog } from './hooks/useAlertDialog';
 import { createVNode, ref } from 'vue';
 import { Icon } from "@iconify/vue";
 import { destroyAll } from './hooks/confirm';
-import MyDialog from './components/customUi/dialog/index.vue';
+import { MyDialog } from '@/components/customUi/index';
 import Hello from './components/hello/index.vue';
 const open2 = ref(false)
 
