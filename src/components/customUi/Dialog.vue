@@ -32,13 +32,13 @@ const props = defineProps<{
   bodyStyle?: CSSProperties;
   close?: Function
   open?: boolean
-  changeStateFn: (a: (b: boolean) => void) => void
+  changeStateFn?: (a: (b: boolean) => void) => void
 }>()
+const open = defineModel<boolean>('open');
 
-props.changeStateFn(function (b: boolean) {
+props.changeStateFn && props.changeStateFn(function (b: boolean) {
   open.value = b
 })
-const open = ref<boolean>(props.open || false);
 const dialogTitleRef = ref<HTMLElement | null>(null);
 const dialogContentRef = ref<HTMLElement | null>(null);
 const { x, y, isDragging } = useDraggable(dialogTitleRef);

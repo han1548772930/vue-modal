@@ -33,9 +33,9 @@ const props = defineProps<{
   close?: Function
   closable?: boolean
   open?: boolean
-  changeStateFn: (a: (b: boolean) => void) => void
+  changeStateFn?: (a: (b: boolean) => void) => void
 }>()
-const open = ref<boolean>(props.open || false);
+const open = defineModel<boolean>('open');
 const dialogTitleRef = ref<HTMLElement | null>(null);
 const dialogContentRef = ref<HTMLElement | null>(null);
 const { x, y, isDragging } = useDraggable(dialogTitleRef);
@@ -46,7 +46,7 @@ const slots = defineSlots<{
   footer: any
 }>()
 
-props.changeStateFn(function (b: boolean) {
+props.changeStateFn && props.changeStateFn(function (b: boolean) {
   open.value = b
 })
 const startX = ref<number>(0);
