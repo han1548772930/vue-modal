@@ -2,18 +2,17 @@
 import { useDialog } from './hooks/useDialog';
 import Button from './components/ui/button/Button.vue';
 import { useAlertDialog } from './hooks/useAlertDialog';
-import { createVNode, ref } from 'vue';
+import { createVNode } from 'vue';
 import { Icon } from "@iconify/vue";
 import { destroyAll } from './hooks/confirm';
-import { MyDialog } from '@/components/customUi/index';
 import Hello from './components/hello/index.vue';
-const open2 = ref(false)
 
 function open() {
-  useDialog({
+  const { destroy } = useDialog({
     title: 'Dialog Title',
     content: 'Dialog Content',
     onOk: () => {
+      destroy()
       console.log('Confirmed');
     },
     onCancel: () => {
@@ -122,6 +121,7 @@ function promise() {
     },
   })
 }
+
 </script>
 
 <template>
@@ -132,20 +132,8 @@ function promise() {
     <Button @click="update">update</Button>
     <Button @click="vNode">vNode</Button>
     <Button @click="promise">promise</Button>
-    <Button @click="open2 = true">template open</Button>
+
   </div>
-  <MyDialog v-model="open2" :close="() => open2 = false">
-    <template #headerTitle>
-      <div class="flex items-center gap-2">
-        <Icon icon="akar-icons:discord-fill" class="cursor-pointer"></Icon>
-        <span>菜单图标</span>
-      </div>
-    </template>
-    <template #headerDes>
-      <div>Dialog Description</div>
-    </template>
-    <div class="p-4 bg-slate-700">Dialog Content</div>
-  </MyDialog>
 </template>
 
 <style scoped></style>

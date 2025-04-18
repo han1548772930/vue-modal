@@ -1,4 +1,4 @@
-import { createVNode, ref, render as vueRender } from 'vue';
+import { createVNode, render as vueRender } from 'vue';
 import { type ConfigUpdate, type ModalFuncProps, omit, triggerVNodeUpdate } from ".";
 import type { Component } from 'vue';
 
@@ -24,13 +24,13 @@ export const destroyAll = () => {
 
 export const confirm = (config: ModalFuncProps, el: Component) => {
     const container = document.createDocumentFragment();
-    const open = ref(true)
+    // const open = ref(true)
     let currentConfig = {
         ...omit(config, []),
         close,
     } as any;
     let confirmDialogInstance: any = null;
-
+    let changeStateFn: (b: boolean) => void
     function destroy(..._: any[]) {
         if (confirmDialogInstance) {
             // destroy
@@ -54,7 +54,6 @@ export const confirm = (config: ModalFuncProps, el: Component) => {
     }
 
     function close(...args: any[]) {
-        open.value = false
         currentConfig = {
             ...currentConfig,
         };
@@ -63,7 +62,10 @@ export const confirm = (config: ModalFuncProps, el: Component) => {
             delete currentConfig.visible;
         }
         update(currentConfig);
-        destroy(...args);
+        changeStateFn && changeStateFn(false)
+        setTimeout(() => {
+            destroy(...args);
+        }, 200)
     }
 
     function update(configUpdate: ConfigUpdate) {
@@ -83,9 +85,9 @@ export const confirm = (config: ModalFuncProps, el: Component) => {
     function render(props: ModalFuncProps) {
         const vm = createVNode(el, {
             ...props,
-            modelValue: open.value,
-            'onUpdate:open': (value: boolean) => {
-                open.value = value;
+            open: true,
+            changeStateFn: (fn: (b: boolean) => void) => {
+                changeStateFn = fn
             }
         });
         vueRender(vm, container as any);

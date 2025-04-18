@@ -12,14 +12,11 @@ import { Button } from "@/components/ui/button";
 import { useDraggable } from "@vueuse/core";
 import type { VueNode } from '@/hooks';
 import { cn } from '@/lib/utils';
-import { LoadingButton } from "@/components/customUi/index";
+import { LoadingButton } from "./index";
 import { Icon } from "@iconify/vue";
 
 
 
-defineOptions({
-  name: 'MyAlertDialog'
-})
 const props = defineProps<{
   class?: HTMLAttributes['class'];
   title?: string | (() => VueNode) | VueNode;
@@ -35,9 +32,10 @@ const props = defineProps<{
   bodyStyle?: CSSProperties;
   close?: Function
   closable?: boolean
+  open?: boolean
+  changeStateFn: (a: (b: boolean) => void) => void
 }>()
-
-const open = defineModel<boolean>()
+const open = ref<boolean>(props.open || false);
 const dialogTitleRef = ref<HTMLElement | null>(null);
 const dialogContentRef = ref<HTMLElement | null>(null);
 const { x, y, isDragging } = useDraggable(dialogTitleRef);
@@ -48,7 +46,9 @@ const slots = defineSlots<{
   footer: any
 }>()
 
-
+props.changeStateFn(function (b: boolean) {
+  open.value = b
+})
 const startX = ref<number>(0);
 const startY = ref<number>(0);
 const startedDrag = ref(false);
@@ -141,8 +141,10 @@ watchEffect(() => {
 })
 
 function close() {
+  open.value = false
   props.onCancel?.()
   props.close?.()
+
 }
 async function confirm() {
   await props.onOk?.()
@@ -162,7 +164,9 @@ function onOpenChange(b: boolean) {
 
 <template>
   <AlertDialog v-model:open="open" @update:open="onOpenChange">
-    <AlertDialogContent :class="cn('alert-dialog-content select-none duration-0', props.class, props.width)">
+
+    <AlertDialogContent :class="cn(props.class, props.width, isDragging && 'duration-0')"
+      class="alert-dialog-content select-none">
       <AlertDialogHeader id="alert-dialog-header" class="select-none cursor-move">
         <AlertDialogTitle>
           <div class="flex items-center justify-between">
@@ -204,7 +208,7 @@ function onOpenChange(b: boolean) {
             <component :is="cancelText" @click="close"></component>
           </template>
           <template v-else>
-            <Button class="mr-3" size="default" variant="outline" @click="close">
+            <Button class="mr-3 px-6" size="default" variant="outline" @click="close">
               {{ cancelText || '取消' }}
             </Button>
           </template>

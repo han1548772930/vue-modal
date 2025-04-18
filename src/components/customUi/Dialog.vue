@@ -12,13 +12,11 @@ import { Button } from "@/components/ui/button";
 import { useDraggable } from "@vueuse/core";
 import type { VueNode } from '@/hooks';
 import { cn } from '@/lib/utils';
-import { LoadingButton } from "@/components/customUi/index";
+import { LoadingButton } from "./index";
 
 
 
-defineOptions({
-  name: 'MyDialog'
-})
+
 const props = defineProps<{
   class?: HTMLAttributes['class'];
   title?: string | (() => VueNode) | VueNode;
@@ -33,9 +31,14 @@ const props = defineProps<{
   type?: 'info' | 'success' | 'error' | 'warn' | 'warning' | 'confirm';
   bodyStyle?: CSSProperties;
   close?: Function
+  open?: boolean
+  changeStateFn: (a: (b: boolean) => void) => void
 }>()
 
-const open = defineModel<boolean>()
+props.changeStateFn(function (b: boolean) {
+  open.value = b
+})
+const open = ref<boolean>(props.open || false);
 const dialogTitleRef = ref<HTMLElement | null>(null);
 const dialogContentRef = ref<HTMLElement | null>(null);
 const { x, y, isDragging } = useDraggable(dialogTitleRef);
@@ -138,8 +141,11 @@ watchEffect(() => {
 })
 
 function close() {
-  props.onCancel?.()
-  props.close?.()
+  open.value = false
+  setTimeout(() => {
+    props.onCancel?.()
+    props.close?.()
+  }, 500)
 }
 async function confirm() {
   await props.onOk?.()
@@ -157,7 +163,7 @@ function onOpenChange(b: boolean) {
 
 <template>
   <Dialog v-model:open="open" @update:open="onOpenChange">
-    <DialogContent :class="cn('dialog-content select-none duration-0', props.class, props.width)">
+    <DialogContent :class="cn(props.class, props.width, isDragging && 'duration-0')" class="dialog-content select-none">
       <DialogHeader id="dialog-header" class="select-none cursor-move">
         <DialogTitle>
           <div class="flex items-center justify-between">
@@ -197,7 +203,7 @@ function onOpenChange(b: boolean) {
             <component :is="cancelText" @click="close"></component>
           </template>
           <template v-else>
-            <Button class="mr-3" size="default" variant="outline" @click="close">
+            <Button class="mr-3 w-[60px]" size="default" variant="outline" @click="close">
               {{ cancelText || '取消' }}
             </Button>
           </template>
