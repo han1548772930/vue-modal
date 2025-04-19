@@ -1,5 +1,4 @@
-![屏幕录制 2025-03-21 135828(1)](https://github.com/user-attachments/assets/6eed08dd-3c54-4bc3-9865-2ae1ebf8ae8f)
-
+![alt text](<屏幕录制 2025-04-19 124359.gif>)
 
 Various usage scenarios and features of the Shadcn-Vue dialog component.
 

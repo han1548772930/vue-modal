@@ -24,26 +24,18 @@ export const destroyAll = () => {
 
 export const confirm = (config: ModalFuncProps, el: Component) => {
     const container = document.createDocumentFragment();
-    // const open = ref(true)
     let currentConfig = {
         ...omit(config, []),
         close,
     } as any;
     let confirmDialogInstance: any = null;
-    let changeStateFn: (b: boolean) => void
+    let changeStateFn: ((b: boolean) => void) | null = null;
     function destroy(..._: any[]) {
         if (confirmDialogInstance) {
             // destroy
             vueRender(null, container as any);
             confirmDialogInstance = null;
         }
-        // console.log('config', config)
-        // const triggerCancel = args.some(param => param && param.triggerCancel);
-        // console.log('triggerCancel', triggerCancel)
-        // if (config.onCancel && triggerCancel) {
-        //     config.onCancel(() => {
-        //     }, ...args.slice(1));
-        // }
         for (let i = 0; i < destroyFns.length; i++) {
             const fn = destroyFns[i];
             if (fn === close) {
@@ -51,6 +43,7 @@ export const confirm = (config: ModalFuncProps, el: Component) => {
                 break;
             }
         }
+        changeStateFn = null
     }
 
     function close(...args: any[]) {
@@ -85,7 +78,7 @@ export const confirm = (config: ModalFuncProps, el: Component) => {
     function render(props: ModalFuncProps) {
         const vm = createVNode(el, {
             ...props,
-            open: true,
+            isOpen: true,
             changeStateFn: (fn: (b: boolean) => void) => {
                 changeStateFn = fn
             }

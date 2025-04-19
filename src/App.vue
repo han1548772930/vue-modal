@@ -136,7 +136,7 @@ function promise() {
     <Button @click="open2 = true">template</Button>
 
   </div>
-  <MyDialog v-model:open="open2" :close="() => open2 = false">
+  <MyDialog :isOpen="open2" :close="() => open2 = false">
     <template #headerTitle>
       <div class="flex items-center gap-2">
         <Icon icon="akar-icons:discord-fill" class="cursor-pointer"></Icon>

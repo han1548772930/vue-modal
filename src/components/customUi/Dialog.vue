@@ -7,41 +7,20 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { type CSSProperties, nextTick, onBeforeUnmount, onMounted, ref, watch, watchEffect, isVNode, type HTMLAttributes } from "vue";
+import { isVNode, type Ref, ref, watchEffect } from "vue";
 import { Button } from "@/components/ui/button";
-import { useDraggable } from "@vueuse/core";
-import type { VueNode } from '@/hooks';
+import type { ModalFuncProps } from '@/hooks';
 import { cn } from '@/lib/utils';
 import { LoadingButton } from "./index";
+import { useDraggableDialog } from './useDraggableDialog';
 
-
-
-
-const props = defineProps<{
-  class?: HTMLAttributes['class'];
-  title?: string | (() => VueNode) | VueNode;
-  footer?: string | (() => VueNode) | VueNode;
-  content?: string | (() => VueNode) | VueNode;
-  description?: string | (() => VueNode) | VueNode;
-  onOk?: (...args: any[]) => any;
-  onCancel?: (...args: any[]) => any;
-  width?: string;
-  okText?: string | (() => VueNode) | VueNode;
-  cancelText?: string | (() => VueNode) | VueNode;
-  type?: 'info' | 'success' | 'error' | 'warn' | 'warning' | 'confirm';
-  bodyStyle?: CSSProperties;
-  close?: Function
-  open?: boolean
-  changeStateFn?: (a: (b: boolean) => void) => void
-}>()
-const open = defineModel<boolean>('open');
+const props = defineProps<ModalFuncProps>()
+const open = ref(props.isOpen || false)
 
 props.changeStateFn && props.changeStateFn(function (b: boolean) {
   open.value = b
 })
-const dialogTitleRef = ref<HTMLElement | null>(null);
-const dialogContentRef = ref<HTMLElement | null>(null);
-const { x, y, isDragging } = useDraggable(dialogTitleRef);
+
 const slots = defineSlots<{
   default: any,
   headerTitle: any,
@@ -49,121 +28,37 @@ const slots = defineSlots<{
   footer: any
 }>()
 
-
-const startX = ref<number>(0);
-const startY = ref<number>(0);
-const startedDrag = ref(false);
-const transformX = ref(0);
-const transformY = ref(0);
-const preTransformX = ref(0);
-const preTransformY = ref(0);
-const dragRect = ref({ left: 0, right: 0, top: 0, bottom: 0 });
-
-const w1 = watch([x, y], () => {
-  if (!startedDrag.value && dialogTitleRef.value && dialogContentRef.value) {
-    startX.value = x.value;
-    startY.value = y.value;
-    const bodyRect = document.body.getBoundingClientRect();
-    const titleRect = dialogTitleRef.value.getBoundingClientRect();
-    dragRect.value.left = 0;
-    dragRect.value.top = 0;
-    dragRect.value.right = bodyRect.width - titleRect.width;
-    dragRect.value.bottom = bodyRect.height - titleRect.height;
-    preTransformX.value = transformX.value;
-    preTransformY.value = transformY.value;
-  }
-  if (isDragging.value) {
-    startedDrag.value = true;
-  }
-});
-
-const w2 = watch(isDragging, () => {
-  if (!isDragging.value) {
-    startedDrag.value = false;
-  }
-});
-
-watchEffect(() => {
-  if (startedDrag.value) {
-    transformX.value =
-      preTransformX.value +
-      Math.min(Math.max(dragRect.value.left, x.value), dragRect.value.right) -
-      startX.value;
-    transformY.value =
-      preTransformY.value +
-      Math.min(Math.max(dragRect.value.top, y.value), dragRect.value.bottom) -
-      startY.value;
-    if (dialogContentRef.value) {
-      if (transformX.value === 0 && transformY.value === 0) {
-        return
-      } else {
-        // dialogContentRef.value.style.transform = `translate(calc(-50% + ${transformX.value}px), calc(-50% + ${transformY.value}px))`;
-        dialogContentRef.value.style.transform = `translate(${transformX.value}px,${transformY.value}px)`;
-      }
-    }
-  }
-});
-
-const bindingEl = () => {
-  nextTick(() => {
-    const dialogHeaders = document.querySelectorAll('#dialog-header');
-    const dialogContents = document.querySelectorAll('.dialog-content');
-    // console.log(dialogHeaders, dialogContents)
-    dialogTitleRef.value = dialogHeaders[dialogHeaders.length - 1] as HTMLElement;
-    dialogContentRef.value = dialogContents[dialogContents.length - 1] as HTMLElement;
-    // Reset initial positions
-    startX.value = 0;
-    startY.value = 0;
-    preTransformX.value = 0;
-    preTransformY.value = 0;
-    transformX.value = 0;
-    transformY.value = 0;
-    // if (dialogContentRef.value) {
-    //   dialogContentRef.value.style.transform = 'translate(-50%, -50%)';
-    // }
-  });
-};
-onMounted(() => {
-  bindingEl()
-})
-onBeforeUnmount(() => {
-  w1();
-  w2();
-})
-watchEffect(() => {
-  if (open.value && dialogContentRef.value == null && dialogTitleRef.value == null) {
-    bindingEl()
-  }
-  if (!open.value) {
-    dialogContentRef.value = null;
-    dialogTitleRef.value = null;
-  }
+// 使用通用拖拽方法
+const { isDragging } = useDraggableDialog({
+  open: (open as Ref<boolean>),
+  contentSelector: '.dialog-content',
+  headerSelector: '#dialog-header'
 })
 
 function close() {
-  open.value = false
-  setTimeout(() => {
-    props.onCancel?.()
-    props.close?.()
-  }, 500)
+  props.onCancel?.()
+  props.close?.()
 }
 async function confirm() {
   await props.onOk?.()
 }
-function destroy() {
-  props.close?.()
-}
 function onOpenChange(b: boolean) {
   if (!b)
-    setTimeout(() => {
-      destroy()
-    }, 500)
+    props.close?.()
 }
+watchEffect(() => {
+  if (props.isOpen !== undefined) {
+    open.value = props.isOpen
+  }
+})
 </script>
 
 <template>
-  <Dialog v-model:open="open" @update:open="onOpenChange">
-    <DialogContent :class="cn(props.class, props.width, isDragging && 'duration-0')" class="dialog-content select-none">
+  <Dialog v-model:open="open" @update:open="onOpenChange" >
+    <DialogContent :class="cn(props.class, props.width, isDragging && 'duration-0')" class="dialog-content select-none"
+      :OverlayClass="cn(
+        'bg-black/50'
+      )">
       <DialogHeader id="dialog-header" class="select-none cursor-move">
         <DialogTitle>
           <div class="flex items-center justify-between">

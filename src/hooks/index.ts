@@ -15,21 +15,21 @@ export function omit<T extends object, K extends keyof T>(obj: T, fields: K[]): 
 }
 export interface ModalFuncProps {
   class?: HTMLAttributes['class'];
-  open?: boolean;
-  description?: string | (() => VueNode) | VueNode;
   title?: string | (() => VueNode) | VueNode;
   footer?: string | (() => VueNode) | VueNode;
   content?: string | (() => VueNode) | VueNode;
-  // TODO: find out exact types
+  description?: string | (() => VueNode) | VueNode;
   onOk?: (...args: any[]) => any;
   onCancel?: (...args: any[]) => any;
   width?: string;
   okText?: string | (() => VueNode) | VueNode;
   cancelText?: string | (() => VueNode) | VueNode;
-  style?: CSSProperties | string;
   type?: 'info' | 'success' | 'error' | 'warn' | 'warning' | 'confirm';
   bodyStyle?: CSSProperties;
-  closable?: boolean;
+  close?: Function
+  closable?: boolean
+  isOpen?: boolean
+  changeStateFn?: (a: (b: boolean) => void) => void
 }
 
 
