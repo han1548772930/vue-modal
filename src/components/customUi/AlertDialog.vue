@@ -7,16 +7,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
-import { isVNode, type Ref, ref, watchEffect } from "vue";
+import { isVNode } from "vue";
 import { Button } from "@/components/ui/button";
 import type { ModalFuncProps } from '@/hooks';
 import { cn } from '@/lib/utils';
 import { LoadingButton } from "./index";
 import { Icon } from "@iconify/vue";
-import { useDraggableDialog } from './useDraggableDialog';
+import { useDraggableDialog } from '../../hooks/useDraggableDialog';
 
 const props = defineProps<ModalFuncProps>()
-const open = ref(props.isOpen || false)
+const open = defineModel<boolean>('open', { default: false })
 
 const slots = defineSlots<{
   default: any,
@@ -25,13 +25,11 @@ const slots = defineSlots<{
   footer: any
 }>()
 
-props.changeStateFn && props.changeStateFn(function (b: boolean) {
-  open.value = b
-})
+
 
 // 使用通用拖拽方法
 const { isDragging } = useDraggableDialog({
-  open: (open as Ref<boolean>),
+  open,
   contentSelector: '.alert-dialog-content',
   headerSelector: '#alert-dialog-header'
 })
@@ -50,11 +48,7 @@ function onOpenChange(b: boolean) {
   if (!b)
     props.close?.()
 }
-watchEffect(() => {
-  if (props.isOpen !== undefined) {
-    open.value = props.isOpen
-  }
-})
+
 </script>
 
 <template>

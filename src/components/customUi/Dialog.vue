@@ -7,19 +7,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { isVNode, type Ref, ref, watchEffect } from "vue";
+import { isVNode } from "vue";
 import { Button } from "@/components/ui/button";
 import type { ModalFuncProps } from '@/hooks';
 import { cn } from '@/lib/utils';
 import { LoadingButton } from "./index";
-import { useDraggableDialog } from './useDraggableDialog';
+import { useDraggableDialog } from '../../hooks/useDraggableDialog';
+
 
 const props = defineProps<ModalFuncProps>()
-const open = ref(props.isOpen || false)
-
-props.changeStateFn && props.changeStateFn(function (b: boolean) {
-  open.value = b
-})
+const open = defineModel<boolean>('open', { default: false })
 
 const slots = defineSlots<{
   default: any,
@@ -28,14 +25,18 @@ const slots = defineSlots<{
   footer: any
 }>()
 
+
+
+
 // 使用通用拖拽方法
 const { isDragging } = useDraggableDialog({
-  open: (open as Ref<boolean>),
-  contentSelector: '.dialog-content',
+  open,
+  contentSelector: `.dialog-content-${props.dataId}`,
   headerSelector: '#dialog-header'
 })
 
 function close() {
+  // applyCloseAnimation();
   props.onCancel?.()
   props.close?.()
 }
@@ -43,22 +44,25 @@ async function confirm() {
   await props.onOk?.()
 }
 function onOpenChange(b: boolean) {
-  if (!b)
+  if (!b) {
+    // applyCloseAnimation();
     props.close?.()
-}
-watchEffect(() => {
-  if (props.isOpen !== undefined) {
-    open.value = props.isOpen
   }
-})
+}
+
+
 </script>
 
 <template>
-  <Dialog v-model:open="open" @update:open="onOpenChange" >
-    <DialogContent :class="cn(props.class, props.width, isDragging && 'duration-0')" class="dialog-content select-none"
-      :OverlayClass="cn(
-        'bg-black/50'
-      )">
+  <Dialog v-model:open="open" @update:open="onOpenChange">
+    <DialogContent :class="cn(props.class,
+      props.width,
+      isDragging && 'duration-0',
+      `dialog-content-${dataId}`,
+      props.isMousePosition && 'translate-x-0 translate-y-0 top-0 left-0',
+    )" class=" select-none" :OverlayClass="cn(
+      'bg-black/50'
+    )">
       <DialogHeader id="dialog-header" class="select-none cursor-move">
         <DialogTitle>
           <div class="flex items-center justify-between">
@@ -98,7 +102,7 @@ watchEffect(() => {
             <component :is="cancelText" @click="close"></component>
           </template>
           <template v-else>
-            <Button class="mr-3 w-[60px]" size="default" variant="outline" @click="close">
+            <Button class="mr-3" size="default" variant="outline" @click="close">
               {{ cancelText || '取消' }}
             </Button>
           </template>

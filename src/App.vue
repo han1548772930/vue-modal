@@ -2,24 +2,36 @@
 import { useDialog } from './hooks/useDialog';
 import Button from './components/ui/button/Button.vue';
 import { useAlertDialog } from './hooks/useAlertDialog';
-import { createVNode, ref } from 'vue';
+import { createVNode, ref, useTemplateRef, type ShallowRef } from 'vue';
 import { Icon } from "@iconify/vue";
 import { destroyAll } from './hooks/confirm';
 import Hello from './components/hello/index.vue';
 import MyDialog from './components/customUi/Dialog.vue';
+import { useDraggable } from "@vueuse/core"
+
 const open2 = ref(false)
+const el = useTemplateRef<HTMLElement>('el')
+
+const { x, y, style } = useDraggable(el, {
+  initialValue: { x: 40, y: 40 },
+})
+// 使用展开对话框钩子
+
 function open() {
+
   const { destroy } = useDialog({
     title: 'Dialog Title',
     content: 'Dialog Content',
+    isMousePosition: true,
     onOk: () => {
-      destroy()
       console.log('Confirmed');
+      destroy()
     },
     onCancel: () => {
       console.log('Canceled');
     },
   });
+
 }
 function openAlert() {
   useAlertDialog({
@@ -39,10 +51,12 @@ function openTwo() {
     title: 'Dialog Title',
     content: 'Dialog Content',
     okText: 'open second Dialog',
+    isMousePosition: true,
     onOk: () => {
       useDialog({
         title: 'second Dialog Title',
         content: 'destroy all Dialog',
+        isMousePosition: true,
         onOk: () => {
           console.log('Confirmed');
 
@@ -60,7 +74,7 @@ function openTwo() {
   });
 }
 function update() {
-  const { update } = useDialog({
+  const { update, destroy } = useDialog({
     title: 'Dialog Title',
     content: 'Dialog Content',
     okText: 'update Dialog',
@@ -70,6 +84,7 @@ function update() {
         content: 'Updated Dialog Content',
         okText: 'Updated Dialog Ok',
       });
+      destroy()
       console.log('Confirmed');
     },
     onCancel: () => {
@@ -123,20 +138,26 @@ function promise() {
   })
 }
 
+
+
 </script>
 
 <template>
-  <div class="w-full h-full flex flex-col justify-center items-center space-y-2">
-    <Button @click="open">Open Dialog</Button>
-    <Button @click="openAlert">Open Alert Dialog</Button>
-    <Button @click="openTwo">Open two Dialog</Button>
-    <Button @click="update">update</Button>
-    <Button @click="vNode">vNode</Button>
-    <Button @click="promise">promise</Button>
-    <Button @click="open2 = true">template</Button>
 
+  <div class="w-full h-full flex">
+    <div ref="el" :style="style" class="fixed flex flex-col justify-center items-center space-y-2">
+      <Button class="cursor-move">Drag</Button>
+      <Button @click="open">Open Dialog</Button>
+      <Button @click="openAlert">Open Alert Dialog</Button>
+      <Button @click="openTwo">Open two Dialog</Button>
+      <Button @click="update">update</Button>
+      <Button @click="vNode">vNode</Button>
+      <Button @click="promise">promise</Button>
+      <Button @click="open2 = true">template</Button>
+
+    </div>
   </div>
-  <MyDialog :isOpen="open2" :close="() => open2 = false">
+  <MyDialog v-model:open="open2" :close="() => open2 = false">
     <template #headerTitle>
       <div class="flex items-center gap-2">
         <Icon icon="akar-icons:discord-fill" class="cursor-pointer"></Icon>

@@ -28,8 +28,9 @@ export interface ModalFuncProps {
   bodyStyle?: CSSProperties;
   close?: Function
   closable?: boolean
-  isOpen?: boolean
-  changeStateFn?: (a: (b: boolean) => void) => void
+  open?: boolean
+  isMousePosition?:boolean;
+  dataId?: string | number;
 }
 
 
