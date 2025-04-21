@@ -28,7 +28,7 @@ export const destroyAll = () => {
 export const confirm = (config: ModalFuncProps, el: Component) => {
     let applyOpenAnimation: () => void = () => { };
     let applyCloseAnimation: () => void = () => { };
-    const dialogId = `dialog-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+    const dialogId = `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
     if (config.isMousePosition) {
         const { applyOpenAnimation: f, applyCloseAnimation: f2 } = useDialogAnimation({
             contentSelector: `.dialog-content-${dialogId}`,

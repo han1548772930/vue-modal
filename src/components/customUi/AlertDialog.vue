@@ -30,7 +30,7 @@ const slots = defineSlots<{
 // 使用通用拖拽方法
 const { isDragging } = useDraggableDialog({
   open,
-  contentSelector: '.alert-dialog-content',
+  contentSelector: `.alert-dialog-content-${props.dataId}`,
   headerSelector: '#alert-dialog-header'
 })
 
@@ -53,10 +53,13 @@ function onOpenChange(b: boolean) {
 
 <template>
   <AlertDialog v-model:open="open" @update:open="onOpenChange">
-
-    <AlertDialogContent :class="cn(props.class, props.width, isDragging && 'duration-0')" :OverlayClass="cn(
-      'bg-black/50'
-    )" class="alert-dialog-content select-none">
+    <AlertDialogContent :class="cn(props.class,
+      props.width,
+      `alert-dialog-content-${dataId}`,
+      isDragging && 'duration-0'),
+      'select-none'" :OverlayClass="cn(
+        'bg-black/50'
+      )">
       <AlertDialogHeader id="alert-dialog-header" class="select-none cursor-move">
         <AlertDialogTitle>
           <div class="flex items-center justify-between">
