@@ -176,7 +176,6 @@ function generateId(): string {
 // 创建容器
 function createContainer(): HTMLElement {
   const container = document.createDocumentFragment() as unknown as HTMLElement;
-
   document.body.appendChild(container);
   return container;
 }
@@ -374,7 +373,8 @@ export function useModal(options: ModalOptions = {}) {
       icon: mergedOptions.icon,
       modelValue: true,
       'onUpdate:modelValue': (val: boolean) => {
-        // if (!val) handleCancel();
+
+        if (!val) handleCancel();
       },
       onOk: handleOk,
       onCancel: handleCancel,

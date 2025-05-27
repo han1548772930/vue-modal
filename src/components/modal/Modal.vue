@@ -4,7 +4,8 @@
 
       <div v-if="modelValue" class="fixed inset-0">
         <!-- 遮罩层 -->
-        <div v-if="mask" class="modal-mask fixed inset-0 bg-black/45 transition-opacity duration-200" />
+        <div v-if="mask" class="modal-mask fixed inset-0 bg-black/45 transition-opacity duration-200"
+          :class="{ 'cursor-not-allowed': confirmLoading }" />
         <div class="fixed inset-0 p-4" @click.self="handleMaskClick">
 
           <div :id="id" ref="modalWrapperRef"
@@ -13,7 +14,10 @@
               'max-w-[calc(100vw-32px)] max-h-[calc(100vh-32px)]',
               isDragging ? 'duration-0' : 'duration-200',
               sizeClass,
-              { 'cursor-move': draggable && isDragging }
+              {
+                'cursor-move': draggable && isDragging && !confirmLoading,
+                'pointer-events-none': confirmLoading && draggable
+              }
             ]" :style="[computedStyle]" role="dialog" aria-modal="true"
             :aria-labelledby="title ? 'modal-title' : undefined">
 
@@ -306,6 +310,7 @@ const handleOk = () => {
 };
 
 const handleCancel = () => {
+  if (props.confirmLoading) return;
   emit('cancel');
   if (modelValue.value) {
     modelValue.value = false;
@@ -313,6 +318,7 @@ const handleCancel = () => {
 };
 
 const handleClose = () => {
+  if (props.confirmLoading) return;
   emit('close');
 
   handleCancel();
@@ -320,15 +326,14 @@ const handleClose = () => {
 };
 
 const handleMaskClick = () => {
-  if (props.maskClosable) {
-    handleCancel();
-  }
-
+  if (props.confirmLoading || !props.maskClosable) return;
+  handleCancel();
 };
 
 // ESC 键处理
 const handleKeyDown = (e: KeyboardEvent) => {
-  if (modelValue.value && e.key === 'Escape' && props.keyboard && props.closable) {
+  // 加载时阻止 ESC 键关闭
+  if (modelValue.value && e.key === 'Escape' && props.keyboard && props.closable && !props.confirmLoading) {
     handleCancel();
   }
 };
