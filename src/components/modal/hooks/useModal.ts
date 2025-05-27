@@ -101,34 +101,64 @@ class ModalManager {
 
   destroyAll(): void {
     const instances = Array.from(this.instances.values());
+
+    // 先清理内部状态
     this.instances.clear();
     this.destroying.clear();
 
-    instances.forEach(instance => {
+    // 分批处理实例销毁
+    instances.forEach((instance, index) => {
       try {
         // 取消待执行的动画帧
         if (instance.animationFrame) {
           cancelAnimationTimeout(instance.animationFrame);
         }
 
+        // 先设置 modelValue 为 false 触发组件的关闭动画
         if (instance.vnode?.component) {
           instance.vnode.component.props.modelValue = false;
         }
 
-        // 使用新的 requestAnimationTimeout
-        const frame = requestAnimationTimeout(() => {
-          if (instance.container && instance.container.parentNode) {
-            instance.container.parentNode.removeChild(instance.container);
-          }
-        }, 300);
+        // 使用延时确保动画完成后再清理DOM
+        const cleanupDelay = index * 50; // 错开清理时间避免冲突
 
-        // 不需要保存这个 frame，因为实例即将被清理
+        const frame = requestAnimationTimeout(() => {
+          try {
+            // 先清理 Vue 渲染
+            if (instance.container) {
+              render(null, instance.container);
+            }
+
+            // 再移除DOM容器
+            if (instance.container && instance.container.parentNode) {
+              instance.container.parentNode.removeChild(instance.container);
+            }
+          } catch (error) {
+            console.error('Error cleaning up modal container:', error);
+          }
+        }, 300 + cleanupDelay);
+
       } catch (error) {
         console.error('Error destroying modal:', error);
+
+        // 出错时强制清理
+        try {
+          if (instance.container) {
+            render(null, instance.container);
+            if (instance.container.parentNode) {
+              instance.container.parentNode.removeChild(instance.container);
+            }
+          }
+        } catch (cleanupError) {
+          console.error('Error in forced cleanup:', cleanupError);
+        }
       }
     });
 
+    // 重置 z-index 管理器
     zIndexManager.reset();
+
+
   }
 
   getCount(): number {
@@ -158,11 +188,22 @@ export function useModal(options: ModalOptions = {}) {
   let vnode: VNode | null = null;
   let confirmLoading = false;
   let destroyAnimationFrame: ReturnType<typeof requestAnimationTimeout> | null = null;
-
+  // 添加状态标志防止重复执行
+  let isDestroyed = false;
+  let onCancelExecuted = false;
+  let afterCloseExecuted = false;
   // 安全执行回调
-  const safeExecute = async (callback?: Function, ...args: any[]) => {
+  const safeExecute = async (callback?: Function, callbackName?: string, ...args: any[]) => {
+    // 防止重复执行特定回调
+    if (callbackName === 'onCancel' && onCancelExecuted) return;
+    if (callbackName === 'afterClose' && afterCloseExecuted) return;
+
     if (typeof callback === 'function') {
       try {
+        // 标记已执行
+        if (callbackName === 'onCancel') onCancelExecuted = true;
+        if (callbackName === 'afterClose') afterCloseExecuted = true;
+
         const result = callback(...args);
         if (result instanceof Promise) {
           return await result;
@@ -182,8 +223,9 @@ export function useModal(options: ModalOptions = {}) {
   };
   // 销毁方法 - 简化版本
   const destroy = () => {
-    if (modalManager.isDestroying(id)) return;
+    if (isDestroyed || modalManager.isDestroying(id)) return;
 
+    isDestroyed = true;
     modalManager.setDestroying(id);
 
     if (destroyAnimationFrame) {
@@ -201,24 +243,22 @@ export function useModal(options: ModalOptions = {}) {
             container.parentNode.removeChild(container);
           }
           modalManager.remove(id);
-          safeExecute(options.afterClose);
+
         } catch (error) {
           console.error('Error in destroy:', error);
         }
         destroyAnimationFrame = null;
       }, 300);
 
-      // 更新实例中的动画帧引用
       updateInstanceAnimationFrame();
     } else {
-      // 立即销毁逻辑保持不变
       try {
         render(null, container);
         if (container.parentNode) {
           container.parentNode.removeChild(container);
         }
         modalManager.remove(id);
-        safeExecute(options.afterClose);
+
       } catch (error) {
         console.error('Error in immediate destroy:', error);
       }
@@ -246,13 +286,14 @@ export function useModal(options: ModalOptions = {}) {
 
   // 取消处理
   const handleCancel = async () => {
-    await safeExecute(options.onCancel);
+    if (onCancelExecuted) return;
+    await safeExecute(options.onCancel, 'onCancel');
     destroy();
   };
 
   // 关闭处理
   const handleClose = async () => {
-    await safeExecute(options.onClose);
+    await safeExecute(options.onClose, 'onClose');
     destroy();
   };
 
@@ -333,7 +374,7 @@ export function useModal(options: ModalOptions = {}) {
       icon: mergedOptions.icon,
       modelValue: true,
       'onUpdate:modelValue': (val: boolean) => {
-        if (!val) handleCancel();
+        // if (!val) handleCancel();
       },
       onOk: handleOk,
       onCancel: handleCancel,

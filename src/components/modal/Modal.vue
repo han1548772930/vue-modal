@@ -64,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch, onMounted, onUnmounted, nextTick, type CSSProperties } from 'vue';
+import { computed, ref, watch, onMounted, onUnmounted, nextTick, type CSSProperties, useTemplateRef } from 'vue';
 
 import { AlertTriangle, CheckCircle, HelpCircle, Info, X, XCircle } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
@@ -104,9 +104,9 @@ const emit = defineEmits<{
 
 const modelValue = defineModel<boolean>();
 
-const modalWrapperRef = ref<HTMLElement | null>(null);
-const dragHandleRef = ref<HTMLElement | null>(null);
-const modalRef = ref<HTMLElement | null>(null);
+const modalWrapperRef = useTemplateRef("modalWrapperRef");
+const dragHandleRef = useTemplateRef("dragHandleRef");
+const modalRef = useTemplateRef("modalRef");
 
 
 const { width: modalActualWidth, height: modalActualHeight } = useElementSize(modalWrapperRef);
@@ -314,7 +314,7 @@ const handleCancel = () => {
 
 const handleClose = () => {
   emit('close');
-  handleCancel();
+  // handleCancel();
 };
 
 const handleMaskClick = () => {

@@ -179,6 +179,9 @@ function showFunctionModal() {
     content: 'This modal is created using the function-based approach. It provides a simple way to display information or get user confirmation.',
     draggable: true,
     maskClosable: true,
+    afterClose: () => {
+      console.log('Function modal afterClosed');
+    },
     onOk() {
       console.log('Function modal confirmed');
     },
