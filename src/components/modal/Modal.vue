@@ -314,7 +314,9 @@ const handleCancel = () => {
 
 const handleClose = () => {
   emit('close');
-  // handleCancel();
+
+  handleCancel();
+
 };
 
 const handleMaskClick = () => {

@@ -122,7 +122,7 @@ class ModalManager {
         // 使用延时确保动画完成后再清理DOM
         const cleanupDelay = index * 50; // 错开清理时间避免冲突
 
-        const frame = requestAnimationTimeout(() => {
+        requestAnimationTimeout(() => {
           try {
             // 先清理 Vue 渲染
             if (instance.container) {
