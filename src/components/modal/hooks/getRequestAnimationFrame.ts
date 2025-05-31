@@ -4,9 +4,6 @@ const availablePrefixs: string[] = ['moz', 'ms', 'webkit'];
 // 定义 RequestAnimationFrameFunction 类型
 type RequestAnimationFrameFunction = (callback: FrameRequestCallback) => number;
 
-// 定义 CancelAnimationFrameFunction 类型
-type CancelAnimationFrameFunction = (handle: number) => void;
-
 function requestAnimationFramePolyfill(): RequestAnimationFrameFunction {
   let lastTime = 0;
   return function (callback: FrameRequestCallback): number {

@@ -18,17 +18,18 @@
     "clsx": "^2.1.1",
     "lucide-vue-next": "^0.486.0",
     "reka-ui": "^2.2.1",
-    "tailwind-merge": "^3.1.0",
-    "tailwindcss": "^4.1.0",
-    "tw-animate-css": "^1.2.5",
     "vue": "^3.5.15"
   },
   "devDependencies": {
     "@types/node": "^22.13.17",
     "@vitejs/plugin-vue": "^5.2.3",
     "@vue/tsconfig": "^0.7.0",
+    "tailwind-merge": "^3.3.0",
+    "tailwindcss": "^4.1.8",
+    "tw-animate-css": "^1.3.2",
     "typescript": "~5.8.2",
     "vite": "^6.2.4",
     "vue-tsc": "^2.2.8"
-  }
+  },
+  "packageManager": "npm@10.8.2+sha512.c7f0088c520a46596b85c6f8f1da943400199748a0f7ea8cb8df75469668dc26f6fb3ba26df87e2884a5ebe91557292d0f3db7d0929cdb4f14910c3032ac81fb"
 }

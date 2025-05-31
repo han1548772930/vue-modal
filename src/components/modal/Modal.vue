@@ -68,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch, onMounted, onUnmounted, nextTick, type CSSProperties, useTemplateRef } from 'vue';
+import { computed, watch, onMounted, onUnmounted, nextTick, type CSSProperties, useTemplateRef } from 'vue';
 
 import { AlertTriangle, CheckCircle, HelpCircle, Info, X, XCircle } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
