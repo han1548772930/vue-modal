@@ -47,6 +47,12 @@ export default defineComponent({
       (visible) => {
         if (visible) {
           animatedVisible.value = true;
+          // 当modal显示时，让wrapper获得焦点以便ESC键能正常工作
+          nextTick(() => {
+            if (wrapperRef.value) {
+              wrapperRef.value.focus();
+            }
+          });
         }
       },
       { immediate: true }
