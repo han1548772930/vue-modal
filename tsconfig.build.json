@@ -7,7 +7,9 @@
     "declarationMap": true,
     "declarationDir": "dist",
     "outDir": "dist",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "preserveSymlinks": false,
+    "stripInternal": true
   },
   "include": [
     "src/**/*.ts",
