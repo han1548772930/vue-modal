@@ -9,10 +9,8 @@
             使用 simple-modal 插件的完整示例项目
           </p>
           <div class="flex justify-center">
-            <button
-              @click="toggleTheme"
-              class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
-            >
+            <button @click="toggleTheme"
+              class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
               <Sun v-if="isDark" class="h-4 w-4" />
               <Moon v-else class="h-4 w-4" />
               <span class="ml-2">{{ isDark ? '切换到亮色模式' : '切换到暗色模式' }}</span>
@@ -25,6 +23,7 @@
           <BasicDemo />
           <ConfirmDemo />
           <InfoDemo />
+          <CreateVNodeDemo />
           <HookModalDemo />
           <AsyncDemo />
           <CustomFooterDemo />
@@ -76,6 +75,7 @@ import { Sun, Moon } from 'lucide-vue-next'
 import BasicDemo from './demos/BasicDemo.vue'
 import ConfirmDemo from './demos/ConfirmDemo.vue'
 import InfoDemo from './demos/InfoDemo.vue'
+import CreateVNodeDemo from './demos/CreateVNodeDemo.vue'
 import HookModalDemo from './demos/HookModalDemo.vue'
 import AsyncDemo from './demos/AsyncDemo.vue'
 import CustomFooterDemo from './demos/CustomFooterDemo.vue'
