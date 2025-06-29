@@ -15,6 +15,7 @@ A lightweight, flexible Vue 3 modal component library built with TypeScript and 
 - 📱 **Responsive Design** - Mobile-friendly with touch support
 - 🔧 **Multiple Usage Patterns** - Component-based and programmatic API
 - 🎭 **Rich Animations** - Smooth enter/exit animations with customizable effects
+- 🖱️ **Draggable Support** - Built-in support for draggable modals with boundary constraints
 - 🔒 **Focus Management** - Automatic focus trapping and restoration
 - ⌨️ **Keyboard Support** - ESC key to close, tab navigation
 - 🌙 **Theme Support** - Compatible with dark/light mode themes
@@ -248,6 +249,156 @@ Modal.info({
 })
 ```
 
+##### Draggable Modal
+
+```vue
+<template>
+  <div>
+    <Button @click="showModal">Open Draggable Modal</Button>
+    <Button @click="resetPosition" class="ml-2">Reset Position</Button>
+
+    <Modal
+      v-model:open="open"
+      :wrap-style="{ overflow: 'hidden' }"
+      @ok="handleOk"
+      @after-close="handleAfterClose"
+    >
+      <div class="space-y-4">
+        <p>🎯 This is a draggable modal example.</p>
+        <p>📱 You can drag the title bar to move the modal.</p>
+        <p>🔒 The modal is constrained within the browser window.</p>
+        <p>💾 Position is preserved during dragging.</p>
+
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h4 class="font-medium mb-2">Drag Info:</h4>
+          <div class="text-sm text-gray-600 space-y-1">
+            <div>Position: X: {{ Math.round(transformX) }}px, Y: {{ Math.round(transformY) }}px</div>
+            <div>Status: {{ isDragging ? 'Dragging' : 'Static' }}</div>
+            <div>Has Moved: {{ startedDrag ? 'Yes' : 'No' }}</div>
+          </div>
+        </div>
+      </div>
+
+      <template #title>
+        <div
+          ref="modalTitleRef"
+          class="w-full cursor-move select-none px-2 py-1 rounded transition-colors duration-200"
+          :class="{
+            'hover:bg-black/5': !isDragging,
+            'bg-blue-50 border border-dashed border-blue-300': isDragging
+          }"
+        >
+          <span class="flex items-center gap-2">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-gray-500">
+              <path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+            </svg>
+            Draggable Modal (Drag Me)
+          </span>
+        </div>
+      </template>
+
+      <template #modalRender="{ originVNode }">
+        <div
+          :style="transformStyle"
+          :class="{ 'shadow-2xl': isDragging }"
+        >
+          <component :is="originVNode" />
+        </div>
+      </template>
+    </Modal>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, watch, watchEffect } from 'vue'
+import { useDraggable } from '@vueuse/core'
+import { Modal } from 'simple-modal'
+
+const open = ref(false)
+const modalTitleRef = ref()
+
+const showModal = () => {
+  open.value = true
+}
+
+const handleOk = () => {
+  open.value = false
+}
+
+const handleAfterClose = () => {
+  // Position is preserved after closing
+  console.log('Modal closed, position preserved')
+}
+
+const resetPosition = () => {
+  transformX.value = 0
+  transformY.value = 0
+  preTransformX.value = 0
+  preTransformY.value = 0
+  startedDrag.value = false
+}
+
+// VueUse draggable
+const { x, y, isDragging } = useDraggable(modalTitleRef)
+
+// Drag state management
+const startX = ref(0)
+const startY = ref(0)
+const startedDrag = ref(false)
+const transformX = ref(0)
+const transformY = ref(0)
+const preTransformX = ref(0)
+const preTransformY = ref(0)
+const dragRect = ref({ left: 0, right: 0, top: 0, bottom: 0 })
+
+// Watch for drag start
+watch([x, y], () => {
+  if (!startedDrag.value) {
+    startX.value = x.value
+    startY.value = y.value
+    const bodyRect = document.body.getBoundingClientRect()
+    // Boundary calculation considering modal size
+    dragRect.value.left = 0
+    dragRect.value.top = 0
+    dragRect.value.right = bodyRect.width - 520 // Assume modal width 520px
+    dragRect.value.bottom = bodyRect.height - 400 // Assume modal height ~400px
+    preTransformX.value = transformX.value
+    preTransformY.value = transformY.value
+  }
+  startedDrag.value = true
+})
+
+// Watch for drag end
+watch(isDragging, (dragging) => {
+  if (!dragging && startedDrag.value) {
+    startedDrag.value = false
+  }
+})
+
+// Calculate transform with boundary constraints
+watchEffect(() => {
+  if (startedDrag.value) {
+    transformX.value =
+      preTransformX.value +
+      Math.min(Math.max(dragRect.value.left, x.value), dragRect.value.right) -
+      startX.value
+    transformY.value =
+      preTransformY.value +
+      Math.min(Math.max(dragRect.value.top, y.value), dragRect.value.bottom) -
+      startY.value
+  }
+})
+
+// Transform style with no transition during drag
+const transformStyle = computed(() => {
+  return {
+    transform: `translate(${transformX.value}px, ${transformY.value}px)`,
+    transition: isDragging.value ? 'none' : 'transform 0.2s ease-out',
+  }
+})
+</script>
+```
+
 ### 📖 API Reference
 
 #### Modal Component Props
@@ -293,6 +444,7 @@ Modal.info({
 | `title` | Custom title content |
 | `footer` | Custom footer content |
 | `header` | Custom header content |
+| `modalRender` | Custom modal wrapper (for draggable functionality) |
 
 #### Programmatic API Methods
 
@@ -616,6 +768,7 @@ modalManager.destroy('loading')
 - 📱 **响应式设计** - 移动端友好，支持触摸操作
 - 🔧 **多种使用方式** - 组件式和编程式 API
 - 🎭 **丰富动画** - 流畅的进入/退出动画，可自定义效果
+- 🖱️ **拖拽支持** - 内置可拖拽模态框支持，带边界限制
 - 🔒 **焦点管理** - 自动焦点捕获和恢复
 - ⌨️ **键盘支持** - ESC 键关闭，Tab 键导航
 - 🌙 **主题支持** - 兼容深色/浅色模式主题
@@ -818,6 +971,156 @@ Modal.info({
 })
 ```
 
+##### 可拖拽模态框
+
+```vue
+<template>
+  <div>
+    <Button @click="showModal">打开可拖拽模态框</Button>
+    <Button @click="resetPosition" class="ml-2">重置位置</Button>
+
+    <Modal
+      v-model:open="open"
+      :wrap-style="{ overflow: 'hidden' }"
+      @ok="handleOk"
+      @after-close="handleAfterClose"
+    >
+      <div class="space-y-4">
+        <p>🎯 这是一个可拖拽的模态框示例。</p>
+        <p>📱 您可以通过拖拽标题栏来移动模态框。</p>
+        <p>🔒 模态框会被限制在浏览器窗口内。</p>
+        <p>💾 位置会在拖拽过程中保持记忆。</p>
+
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h4 class="font-medium mb-2">拖拽信息：</h4>
+          <div class="text-sm text-gray-600 space-y-1">
+            <div>当前位置: X: {{ Math.round(transformX) }}px, Y: {{ Math.round(transformY) }}px</div>
+            <div>拖拽状态: {{ isDragging ? '拖拽中' : '静止' }}</div>
+            <div>已拖拽: {{ startedDrag ? '是' : '否' }}</div>
+          </div>
+        </div>
+      </div>
+
+      <template #title>
+        <div
+          ref="modalTitleRef"
+          class="w-full cursor-move select-none px-2 py-1 rounded transition-colors duration-200"
+          :class="{
+            'hover:bg-black/5': !isDragging,
+            'bg-blue-50 border border-dashed border-blue-300': isDragging
+          }"
+        >
+          <span class="flex items-center gap-2">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-gray-500">
+              <path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+            </svg>
+            可拖拽模态框 (拖拽我)
+          </span>
+        </div>
+      </template>
+
+      <template #modalRender="{ originVNode }">
+        <div
+          :style="transformStyle"
+          :class="{ 'shadow-2xl': isDragging }"
+        >
+          <component :is="originVNode" />
+        </div>
+      </template>
+    </Modal>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, watch, watchEffect } from 'vue'
+import { useDraggable } from '@vueuse/core'
+import { Modal } from 'simple-modal'
+
+const open = ref(false)
+const modalTitleRef = ref()
+
+const showModal = () => {
+  open.value = true
+}
+
+const handleOk = () => {
+  open.value = false
+}
+
+const handleAfterClose = () => {
+  // 关闭后保持位置
+  console.log('模态框已关闭，位置已保留')
+}
+
+const resetPosition = () => {
+  transformX.value = 0
+  transformY.value = 0
+  preTransformX.value = 0
+  preTransformY.value = 0
+  startedDrag.value = false
+}
+
+// VueUse 拖拽功能
+const { x, y, isDragging } = useDraggable(modalTitleRef)
+
+// 拖拽状态管理
+const startX = ref(0)
+const startY = ref(0)
+const startedDrag = ref(false)
+const transformX = ref(0)
+const transformY = ref(0)
+const preTransformX = ref(0)
+const preTransformY = ref(0)
+const dragRect = ref({ left: 0, right: 0, top: 0, bottom: 0 })
+
+// 监听拖拽开始
+watch([x, y], () => {
+  if (!startedDrag.value) {
+    startX.value = x.value
+    startY.value = y.value
+    const bodyRect = document.body.getBoundingClientRect()
+    // 边界计算，考虑模态框大小
+    dragRect.value.left = 0
+    dragRect.value.top = 0
+    dragRect.value.right = bodyRect.width - 520 // 假设模态框宽度 520px
+    dragRect.value.bottom = bodyRect.height - 400 // 假设模态框高度约 400px
+    preTransformX.value = transformX.value
+    preTransformY.value = transformY.value
+  }
+  startedDrag.value = true
+})
+
+// 监听拖拽结束
+watch(isDragging, (dragging) => {
+  if (!dragging && startedDrag.value) {
+    startedDrag.value = false
+  }
+})
+
+// 计算带边界限制的变换
+watchEffect(() => {
+  if (startedDrag.value) {
+    transformX.value =
+      preTransformX.value +
+      Math.min(Math.max(dragRect.value.left, x.value), dragRect.value.right) -
+      startX.value
+    transformY.value =
+      preTransformY.value +
+      Math.min(Math.max(dragRect.value.top, y.value), dragRect.value.bottom) -
+      startY.value
+  }
+})
+
+// 拖拽时无过渡效果的变换样式
+const transformStyle = computed(() => {
+  return {
+    transform: `translate(${transformX.value}px, ${transformY.value}px)`,
+    transition: isDragging.value ? 'none' : 'transform 0.2s ease-out',
+  }
+})
+</script>
+```
+
 ### 📖 API 参考
 
 #### Modal 组件属性
@@ -863,6 +1166,7 @@ Modal.info({
 | `title` | 自定义标题内容 |
 | `footer` | 自定义底部内容 |
 | `header` | 自定义头部内容 |
+| `modalRender` | 自定义模态框包装器（用于拖拽功能） |
 
 #### 编程式 API 方法
 
