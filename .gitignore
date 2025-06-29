@@ -1,5 +1,6 @@
 # Logs
 logs
+ant-design-vue
 *.log
 npm-debug.log*
 yarn-debug.log*

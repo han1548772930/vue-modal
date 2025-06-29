@@ -225,9 +225,17 @@ Modal.info({
   title: 'Custom Modal',
   content: 'This modal has custom positioning and size.',
   width: 800,
-  height: 600,
-  centered: true,
-  draggable: true
+  centered: true
+})
+
+// Large modal with custom styling
+Modal.confirm({
+  title: 'Large Confirmation',
+  content: 'This is a large modal for important confirmations.',
+  width: 900,
+  okText: 'Proceed',
+  cancelText: 'Go Back',
+  centered: true
 })
 
 // Full-screen modal
@@ -259,7 +267,6 @@ Modal.info({
 | `destroyOnClose` | `boolean` | `false` | Destroy modal content when closed |
 | `loading` | `boolean` | `false` | Show loading state |
 | `confirmLoading` | `boolean` | `false` | Show loading on confirm button |
-| `draggable` | `boolean` | `false` | Enable modal dragging |
 | `size` | `'small' \| 'default' \| 'large'` | `'default'` | Predefined modal sizes |
 | `type` | `'info' \| 'success' \| 'error' \| 'warning' \| 'confirm'` | `'confirm'` | Modal type (affects icon and styling) |
 | `okText` | `string` | `'OK'` | OK button text |
@@ -312,7 +319,6 @@ interface ModalOptions {
   maskClosable?: boolean
   keyboard?: boolean
   destroyOnClose?: boolean
-  draggable?: boolean
   size?: 'small' | 'default' | 'large'
   type?: 'info' | 'success' | 'error' | 'warning' | 'confirm'
   okText?: string
@@ -831,7 +837,6 @@ Modal.info({
 | `destroyOnClose` | `boolean` | `false` | 关闭时销毁内容 |
 | `loading` | `boolean` | `false` | 显示加载状态 |
 | `confirmLoading` | `boolean` | `false` | 确认按钮加载状态 |
-| `draggable` | `boolean` | `false` | 启用模态框拖拽 |
 | `size` | `'small' \| 'default' \| 'large'` | `'default'` | 预定义模态框尺寸 |
 | `type` | `'info' \| 'success' \| 'error' \| 'warning' \| 'confirm'` | `'confirm'` | 模态框类型（影响图标和样式） |
 | `okText` | `string` | `'确定'` | 确定按钮文本 |
@@ -884,7 +889,6 @@ interface ModalOptions {
   maskClosable?: boolean            // 点击遮罩关闭
   keyboard?: boolean                // 键盘支持
   destroyOnClose?: boolean          // 关闭时销毁
-  draggable?: boolean               // 可拖拽
   size?: 'small' | 'default' | 'large'  // 尺寸
   type?: 'info' | 'success' | 'error' | 'warning' | 'confirm'  // 类型
   okText?: string                   // 确定按钮文本

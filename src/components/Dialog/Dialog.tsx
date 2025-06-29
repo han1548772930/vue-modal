@@ -1,4 +1,4 @@
-import { defineComponent, ref, computed, watch, Teleport, Transition, nextTick } from 'vue';
+import { defineComponent, ref, shallowRef, computed, watch, Teleport, Transition, nextTick } from 'vue';
 import classNames from '../../utils/classNames';
 import { dialogProps } from './types';
 import { initDefaultProps } from '../../utils/props';
@@ -62,9 +62,36 @@ export default defineComponent({
       emit('close', e);
     };
 
-    const onMaskClick = (e: MouseEvent) => {
-      if (props.maskClosable && e.target === e.currentTarget) {
-        onInternalClose(e);
+    // 参考 Ant Design Vue 的内容点击跟踪逻辑
+    const contentClickRef = shallowRef(false);
+    const contentTimeoutRef = shallowRef<any>();
+
+    const onContentMouseDown = () => {
+      clearTimeout(contentTimeoutRef.value);
+      contentClickRef.value = true;
+    };
+
+    const onContentMouseUp = () => {
+      contentTimeoutRef.value = setTimeout(() => {
+        contentClickRef.value = false;
+      });
+    };
+
+    const onWrapperClick = (e: MouseEvent) => {
+      if (!props.maskClosable) return;
+      if (contentClickRef.value) {
+        contentClickRef.value = false;
+      } else {
+        const target = e.target as HTMLElement;
+        // 允许点击包装器本身或者模态框内的 tabindex="0" 元素来关闭模态框
+        const isWrapper = wrapperRef.value === target;
+        const isTabindexElement = target?.getAttribute?.('tabindex') === '0' &&
+          target?.style?.outline === 'none' &&
+          wrapperRef.value?.contains(target);
+
+        if (isWrapper || isTabindexElement) {
+          onInternalClose(e);
+        }
       }
     };
 
@@ -192,6 +219,9 @@ export default defineComponent({
 
       const { style, class: className } = attrs;
 
+      // 按照 Ant Design Vue 的方式处理 modalRender：优先使用 slot，然后是 prop
+      const finalModalRender = slots.modalRender || modalRender;
+
       const maskElement = mask ? (
         <Transition
           name={maskTransitionName || 'simple-fade'}
@@ -218,7 +248,7 @@ export default defineComponent({
             [`${prefixCls}-centered`]: !!centered,
           })}
           ref={wrapperRef}
-          onClick={onMaskClick}
+          onClick={onWrapperClick}
           style={{ zIndex, ...wrapStyle, display: !animatedVisible.value ? 'none' : undefined }}
         >
 
@@ -237,36 +267,60 @@ export default defineComponent({
                 role="document"
                 class={classNames(`${prefixCls}`, className)}
                 style={[contentStyle.value, style]}
+                onMousedown={onContentMouseDown}
+                onMouseup={onContentMouseUp}
               >
-                <div class={`${prefixCls}-content`}>
-                  {closable && (
-                    <button
-                      type="button"
-                      onClick={onInternalClose}
-                      aria-label="Close"
-                      class={`${prefixCls}-close`}
-                    >
-                      {closeIcon || (
-                        <span class={`${prefixCls}-close-x`}>
-                          <span class={`${prefixCls}-close-icon`}>×</span>
-                        </span>
-                      )}
-                    </button>
-                  )}
-                  {title && (
-                    <div class={`${prefixCls}-header`}>
-                      <div class={`${prefixCls}-title`}>{title}</div>
-                    </div>
-                  )}
-                  <div class={`${prefixCls}-body`}>
-                    {slots.default?.()}
-                  </div>
-                  {footer && (
-                    <div class={`${prefixCls}-footer`}>
-                      {footer}
-                    </div>
-                  )}
+                <div
+                  tabindex={0}
+                  style={{ outline: 'none' }}
+                  onClick={(e) => {
+                    // 如果点击的是这个 tabindex div 本身，传播事件到包装器
+                    if (e.target === e.currentTarget) {
+                      e.stopPropagation();
+                      if (props.maskClosable) {
+                        onInternalClose(e);
+                      }
+                    }
+                  }}
+                >
+                  {(() => {
+                    const content = (
+                      <div class={`${prefixCls}-content`}>
+                        {closable && (
+                          <button
+                            type="button"
+                            onClick={onInternalClose}
+                            aria-label="Close"
+                            class={`${prefixCls}-close`}
+                          >
+                            {closeIcon || (
+                              <span class={`${prefixCls}-close-x`}>
+                                <span class={`${prefixCls}-close-icon`}>×</span>
+                              </span>
+                            )}
+                          </button>
+                        )}
+                        {title && (
+                          <div class={`${prefixCls}-header`}>
+                            <div class={`${prefixCls}-title`}>{title}</div>
+                          </div>
+                        )}
+                        <div class={`${prefixCls}-body`}>
+                          {slots.default?.()}
+                        </div>
+                        {footer && (
+                          <div class={`${prefixCls}-footer`}>
+                            {footer}
+                          </div>
+                        )}
+                      </div>
+                    );
+
+                    // 完全按照 Ant Design Vue 的方式应用 modalRender
+                    return finalModalRender ? finalModalRender({ originVNode: content }) : content;
+                  })()}
                 </div>
+                <div tabindex={0} style={{ width: '0px', height: '0px', overflow: 'hidden', outline: 'none' }} />
               </div>
             ) : null}
           </Transition>
@@ -279,10 +333,6 @@ export default defineComponent({
           {dialogElement}
         </div>
       );
-
-      if (modalRender) {
-        return modalRender({ originVNode: dialogNode });
-      }
 
       if (getContainer.value === false) {
         return dialogNode;

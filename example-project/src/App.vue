@@ -21,6 +21,7 @@
         <!-- Demo Examples -->
         <div class="space-y-6">
           <BasicDemo />
+          <DraggableDemo />
           <ConfirmDemo />
           <InfoDemo />
           <CreateVNodeDemo />
@@ -73,6 +74,7 @@ import { Sun, Moon } from 'lucide-vue-next'
 
 // Import all demo components
 import BasicDemo from './demos/BasicDemo.vue'
+import DraggableDemo from './demos/DraggableDemo.vue'
 import ConfirmDemo from './demos/ConfirmDemo.vue'
 import InfoDemo from './demos/InfoDemo.vue'
 import CreateVNodeDemo from './demos/CreateVNodeDemo.vue'

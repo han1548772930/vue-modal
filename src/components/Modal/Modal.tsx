@@ -130,6 +130,7 @@ export default defineComponent({
             props.maskTransitionName,
           )}
           mousePosition={savedMousePosition.value!}
+          modalRender={props.modalRender}
         >
           {{
             ...slots,
