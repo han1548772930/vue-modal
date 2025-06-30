@@ -11,8 +11,6 @@ export { SimpleModal as Modal };
 // 导出 useModal hook
 export { default as useModal } from './components/Modal/useModal';
 
-
-
 // 导出类型
 export type { ModalProps, ModalFuncProps } from './components/Modal/types';
 

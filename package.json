@@ -14,7 +14,9 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "src",
+    "README.md"
   ],
   "scripts": {
     "build": "vite build && npm run build:types",
@@ -30,8 +32,16 @@
     "dialog",
     "component"
   ],
-  "author": "",
+  "author": "han1548772930",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/han1548772930/vue-modal.git"
+  },
+  "homepage": "https://github.com/han1548772930/vue-modal#readme",
+  "bugs": {
+    "url": "https://github.com/han1548772930/vue-modal/issues"
+  },
   "peerDependencies": {
     "vue": "^3.5.14",
     "lucide-vue-next": "^0.510.0",
