@@ -5,7 +5,10 @@ import type { VueNode } from '../../utils/types';
 export const dialogProps = () => ({
   prefixCls: String,
   class: String,
-  style: objectType<CSSProperties>(),
+  style: {
+    type: [Object, String] as PropType<CSSProperties | string>,
+    default: undefined,
+  },
   rootClassName: String,
   visible: booleanType(),
   destroyOnClose: booleanType(),

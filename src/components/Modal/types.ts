@@ -49,6 +49,10 @@ export const modalProps = () => ({
     default: undefined,
   },
   zIndex: Number,
+  style: {
+    type: [Object, String] as PropType<CSSProperties | string>,
+    default: undefined,
+  },
   bodyStyle: objectType<CSSProperties>(),
   maskStyle: objectType<CSSProperties>(),
   mask: { type: Boolean, default: undefined },

@@ -217,7 +217,47 @@ export default defineComponent({
         mousePosition,
       } = props;
 
-      const { style, class: className } = attrs;
+      const { class: className } = attrs;
+      console.log('Dialog received style from props:', props.style, 'type:', typeof props.style);
+      console.log('Dialog received style from attrs:', attrs.style, 'type:', typeof attrs.style);
+
+      // 使用 props.style 优先，然后是 attrs.style
+      const style = props.style || attrs.style;
+
+      // 处理样式 - 特别处理 top 值
+      const contentStyleFromAttrs: any = {};
+      let modalTopValue: string | undefined;
+
+      if (style && typeof style === 'object') {
+        Object.keys(style).forEach(key => {
+          const value = (style as any)[key];
+          if (key === 'top') {
+            // top 值通过 CSS 变量设置
+            modalTopValue = value;
+          } else {
+            // 其他样式应用到内容区域
+            contentStyleFromAttrs[key] = value;
+          }
+        });
+      } else if (typeof style === 'string') {
+        // 如果是字符串样式，需要解析
+        (style as string).split(';').forEach((rule: string) => {
+          const [key, value] = rule.split(':').map((s: string) => s.trim());
+          if (key && value) {
+            if (key === 'top') {
+              modalTopValue = value;
+            } else {
+              contentStyleFromAttrs[key] = value;
+            }
+          }
+        });
+      }
+
+      // 如果有 top 值，设置 CSS 变量
+      if (modalTopValue) {
+        contentStyleFromAttrs['--modal-top'] = modalTopValue;
+        console.log('Setting --modal-top to:', modalTopValue);
+      }
 
       // 按照 Ant Design Vue 的方式处理 modalRender：优先使用 slot，然后是 prop
       const finalModalRender = slots.modalRender || modalRender;
@@ -266,7 +306,7 @@ export default defineComponent({
                 key="dialog-element"
                 role="document"
                 class={classNames(`${prefixCls}`, className)}
-                style={[contentStyle.value, style]}
+                style={[contentStyle.value, contentStyleFromAttrs]}
                 onMousedown={onContentMouseDown}
                 onMouseup={onContentMouseUp}
               >

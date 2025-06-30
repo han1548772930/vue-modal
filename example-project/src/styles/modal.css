@@ -13,13 +13,13 @@
 /* 遮罩层 */
 .simple-modal-mask,
 .simple-dialog-mask {
-  @apply fixed inset-0 z-[1000] bg-black/50;
+  @apply fixed inset-0 z-[50] bg-black/50;
 }
 
 /* Modal 容器 */
 .simple-modal-wrap,
 .simple-dialog-wrap {
-  @apply fixed inset-0 overflow-auto outline-none z-[1000];
+  @apply fixed inset-0 overflow-auto outline-none z-[50];
   -webkit-overflow-scrolling: touch;
 }
 
@@ -51,7 +51,8 @@
 .simple-modal,
 .simple-dialog {
   position: relative;
-  top: 100px;
+  top: var(--modal-top, 100px);
+  /* 使用 CSS 变量，默认 100px */
   width: auto;
   max-width: calc(100vw - 32px);
   margin: 0 auto;

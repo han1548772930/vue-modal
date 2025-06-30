@@ -97,6 +97,7 @@ export default defineComponent({
         focusTriggerAfterClose = true,
         confirmLoading,
         maskClosable = true,
+        style,
         ...restProps
       } = props;
 
@@ -113,6 +114,7 @@ export default defineComponent({
         <Dialog
           {...restProps}
           {...attrs}
+          style={style}
           class={classNames(attrs.class)}
           getContainer={getContainer}
           prefixCls={dialogPrefixCls}
