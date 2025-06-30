@@ -27,11 +27,11 @@ A lightweight, flexible Vue 3 modal component library built with TypeScript and 
 #### Installation
 
 ```bash
-npm install simple-modal
+npm install v-modals
 # or
-yarn add simple-modal
+yarn add v-modals
 # or
-pnpm add simple-modal
+pnpm add v-modals
 ```
 
 #### Basic Usage
@@ -52,7 +52,7 @@ pnpm add simple-modal
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Modal } from 'simple-modal'
+import { Modal } from 'v-modals'
 
 const showModal = ref(false)
 </script>
@@ -61,7 +61,7 @@ const showModal = ref(false)
 #### Programmatic Usage
 
 ```typescript
-import { Modal } from 'simple-modal'
+import { Modal } from 'v-modals'
 
 // Info dialog
 Modal.info({
@@ -103,7 +103,7 @@ Modal.warning({
 
 ```typescript
 import { createVNode } from 'vue'
-import { Modal } from 'simple-modal'
+import { Modal } from 'v-modals'
 
 // Complex content with createVNode
 Modal.info({
@@ -312,7 +312,7 @@ Modal.info({
 <script setup>
 import { ref, computed, watch, watchEffect } from 'vue'
 import { useDraggable } from '@vueuse/core'
-import { Modal } from 'simple-modal'
+import { Modal } from 'v-modals'
 
 const open = ref(false)
 const modalTitleRef = ref()
@@ -520,9 +520,9 @@ The modal component is designed to work with your existing CSS framework. You ne
 ```
 
 The component uses CSS classes that you can customize:
-- `.simple-modal-*` - Modal container classes
+- `.v-modals-*` - Modal container classes
 - `.simple-dialog-*` - Dialog-specific classes
-- `.simple-modal-confirm-*` - Confirm dialog classes
+- `.v-modals-confirm-*` - Confirm dialog classes
 
 ### 🔧 Advanced Usage
 
@@ -780,11 +780,11 @@ modalManager.destroy('loading')
 #### 安装
 
 ```bash
-npm install simple-modal
+npm install v-modals
 # 或
-yarn add simple-modal
+yarn add v-modals
 # 或
-pnpm add simple-modal
+pnpm add v-modals
 ```
 
 #### 基础用法
@@ -805,7 +805,7 @@ pnpm add simple-modal
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Modal } from 'simple-modal'
+import { Modal } from 'v-modals'
 
 const showModal = ref(false)
 </script>
@@ -814,7 +814,7 @@ const showModal = ref(false)
 #### 编程式调用
 
 ```typescript
-import { Modal } from 'simple-modal'
+import { Modal } from 'v-modals'
 
 // 信息对话框
 Modal.info({
@@ -856,7 +856,7 @@ Modal.warning({
 
 ```typescript
 import { createVNode } from 'vue'
-import { Modal } from 'simple-modal'
+import { Modal } from 'v-modals'
 
 // 使用 createVNode 创建复杂内容
 Modal.info({
@@ -1034,7 +1034,7 @@ Modal.info({
 <script setup>
 import { ref, computed, watch, watchEffect } from 'vue'
 import { useDraggable } from '@vueuse/core'
-import { Modal } from 'simple-modal'
+import { Modal } from 'v-modals'
 
 const open = ref(false)
 const modalTitleRef = ref()
@@ -1242,9 +1242,9 @@ interface ModalInstance {
 ```
 
 组件使用可自定义的 CSS 类：
-- `.simple-modal-*` - 模态框容器类
+- `.v-modals-*` - 模态框容器类
 - `.simple-dialog-*` - 对话框特定类
-- `.simple-modal-confirm-*` - 确认对话框类
+- `.v-modals-confirm-*` - 确认对话框类
 
 ### 🔧 高级用法
 
