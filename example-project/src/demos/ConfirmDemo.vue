@@ -7,6 +7,8 @@
       <Button @click="showPromiseConfirm">With promise</Button>
       <Button variant="outline" @click="showDeleteConfirm">Delete</Button>
       <Button variant="outline" @click="showPropsConfirm">With extra props</Button>
+      <Button variant="outline" @click="showNoIcon">No Icon</Button>
+      <Button variant="outline" @click="showNoFooter">No Footer</Button>
     </template>
   </DemoSection>
 </template>
@@ -20,6 +22,7 @@ const showConfirm = () => {
   Modal.confirm({
     title: 'Do you Want to delete these items?',
     content: 'Some descriptions',
+
     onOk() {
       console.log('OK');
     },
@@ -80,4 +83,32 @@ function showPromiseConfirm() {
     onCancel() { },
   });
 }
+
+const showNoIcon = () => {
+  Modal.confirm({
+    title: 'No Icon Test',
+    content: 'This modal should not display any icon',
+    icon: null,
+    onOk() {
+      console.log('OK');
+    },
+    onCancel() {
+      console.log('Cancel');
+    },
+  });
+};
+
+const showNoFooter = () => {
+  Modal.confirm({
+    title: 'No Footer Test',
+    content: 'This modal should not display footer buttons',
+    footer: null,
+    onOk() {
+      console.log('OK');
+    },
+    onCancel() {
+      console.log('Cancel');
+    },
+  });
+};
 </script>

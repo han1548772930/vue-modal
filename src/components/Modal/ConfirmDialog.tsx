@@ -62,13 +62,21 @@ export default defineComponent({
     'iconPrefixCls',
     'style',
     'mousePosition',
+    'footer',
   ],
   setup(props: ConfirmDialogProps, { attrs }) {
     const confirmLoading = ref(false);
 
     const iconNode = computed(() => {
       const { icon, type } = props;
-      if (icon) {
+
+      // 如果 icon 明确设置为 null，则不显示图标
+      if (icon === null) {
+        return null;
+      }
+
+      // 如果 icon 有值，则渲染自定义图标
+      if (icon !== undefined) {
         return renderSomeContent(icon);
       }
 
@@ -150,6 +158,7 @@ export default defineComponent({
         wrapClassName,
         style,
         mousePosition,
+        footer,
       } = props;
 
       const baseClassName = `${prefixCls}-confirm`;
@@ -231,7 +240,7 @@ export default defineComponent({
         >
           <div class={`${contentPrefixCls}-body-wrapper`}>
             <div class={classNames(`${contentPrefixCls}-body`, `${contentPrefixCls}-${type}`)}>
-              {renderSomeContent(mergedIcon)}
+              {mergedIcon && renderSomeContent(mergedIcon)}
               {title === undefined ? null : (
                 <span class={`${contentPrefixCls}-title`}>
                   {renderSomeContent(title)}
@@ -241,10 +250,16 @@ export default defineComponent({
                 {renderSomeContent(content)}
               </div>
             </div>
-            <div class={`${contentPrefixCls}-btns`}>
-              {cancelButton}
-              {okButton}
-            </div>
+            {footer === null ? null : (
+              <div class={`${contentPrefixCls}-btns`}>
+                {footer !== undefined ? renderSomeContent(footer) : (
+                  <>
+                    {cancelButton}
+                    {okButton}
+                  </>
+                )}
+              </div>
+            )}
           </div>
         </Modal>
       );
