@@ -239,12 +239,11 @@ Modal.confirm({
   centered: true
 })
 
-// Full-screen modal
+// Large modal
 Modal.info({
-  title: 'Full Screen Modal',
-  content: 'This modal takes up most of the screen.',
+  title: 'Large Modal',
+  content: 'This is a large modal for displaying more content.',
   width: '90vw',
-  height: '90vh',
   centered: true
 })
 ```
@@ -406,26 +405,32 @@ const transformStyle = computed(() => {
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `open` | `boolean` | `false` | Controls modal visibility |
-| `title` | `string` | - | Modal title |
-| `content` | `string \| VNode` | - | Modal content (for programmatic usage) |
+| `title` | `string \| VNode` | - | Modal title |
 | `width` | `string \| number` | `520` | Modal width |
-| `height` | `string \| number` | - | Modal height |
 | `centered` | `boolean` | `false` | Center modal vertically |
 | `closable` | `boolean` | `true` | Show close button |
+| `closeIcon` | `string \| VNode` | - | Custom close icon |
 | `mask` | `boolean` | `true` | Show background mask |
 | `maskClosable` | `boolean` | `true` | Close modal when clicking mask |
 | `keyboard` | `boolean` | `true` | Close modal with ESC key |
 | `destroyOnClose` | `boolean` | `false` | Destroy modal content when closed |
-| `loading` | `boolean` | `false` | Show loading state |
 | `confirmLoading` | `boolean` | `false` | Show loading on confirm button |
-| `size` | `'small' \| 'default' \| 'large'` | `'default'` | Predefined modal sizes |
-| `type` | `'info' \| 'success' \| 'error' \| 'warning' \| 'confirm'` | `'confirm'` | Modal type (affects icon and styling) |
-| `okText` | `string` | `'OK'` | OK button text |
-| `cancelText` | `string` | `'Cancel'` | Cancel button text |
-| `showFooter` | `boolean` | `true` | Show modal footer |
-| `showCancel` | `boolean` | `true` | Show cancel button |
-| `zIndex` | `number` | `1000` | Modal z-index |
+| `okText` | `string \| VNode` | - | OK button text |
+| `cancelText` | `string \| VNode` | - | Cancel button text |
+| `okType` | `ButtonType` | - | OK button type |
+| `okButtonProps` | `ButtonProps` | - | OK button props |
+| `cancelButtonProps` | `ButtonProps` | - | Cancel button props |
+| `zIndex` | `number` | - | Modal z-index |
 | `forceRender` | `boolean` | `false` | Force render modal content |
+| `getContainer` | `string \| HTMLElement \| (() => HTMLElement) \| false` | - | Container for modal |
+| `maskStyle` | `CSSProperties` | - | Style for mask |
+| `bodyStyle` | `CSSProperties` | - | Style for modal body |
+| `wrapClassName` | `string` | - | Wrapper class name |
+| `style` | `CSSProperties \| string` | - | Modal style |
+| `transitionName` | `string` | - | Transition name |
+| `maskTransitionName` | `string` | - | Mask transition name |
+| `focusTriggerAfterClose` | `boolean` | `true` | Focus trigger after close |
+| `modalRender` | `(originVNode: VNode) => VNode` | - | Custom modal render function |
 
 #### Modal Component Events
 
@@ -461,41 +466,47 @@ const transformStyle = computed(() => {
 
 ```typescript
 interface ModalOptions {
-  title?: string
+  title?: string | VNode
   content?: string | VNode | (() => VNode)
   width?: number | string
-  height?: number | string
   centered?: boolean
   closable?: boolean
+  closeIcon?: string | VNode
   mask?: boolean
   maskClosable?: boolean
   keyboard?: boolean
   destroyOnClose?: boolean
-  size?: 'small' | 'default' | 'large'
-  type?: 'info' | 'success' | 'error' | 'warning' | 'confirm'
-  okText?: string
-  cancelText?: string
-  closeText?: string
-  showFooter?: boolean
-  showCancel?: boolean
+  type?: 'info' | 'success' | 'error' | 'warn' | 'warning' | 'confirm'
+  okText?: string | VNode
+  cancelText?: string | VNode
+  okType?: ButtonType
   zIndex?: number
   forceRender?: boolean
+  getContainer?: string | HTMLElement | (() => HTMLElement) | false | null
 
   // Event handlers
-  onOk?: () => void | Promise<any>
-  onCancel?: () => void
-  onClose?: () => void
+  onOk?: (...args: any[]) => any
+  onCancel?: (...args: any[]) => any
   afterClose?: () => void
 
   // Advanced options
-  autoFocusButton?: 'ok' | 'cancel' | null
-  okButtonProps?: Record<string, any>
-  cancelButtonProps?: Record<string, any>
+  autoFocusButton?: null | 'ok' | 'cancel'
+  okButtonProps?: ButtonProps
+  cancelButtonProps?: ButtonProps
   class?: string
-  style?: Record<string, any>
+  style?: CSSProperties | string
   wrapClassName?: string
   footer?: VNode
-  icon?: Component | string
+  icon?: VNode
+  maskStyle?: CSSProperties
+  bodyStyle?: CSSProperties
+  transitionName?: string
+  maskTransitionName?: string
+  focusTriggerAfterClose?: boolean
+  modalRender?: (arg: { originVNode: VNode }) => VNode
+  mousePosition?: { x: number; y: number } | null
+  okCancel?: boolean
+  appContext?: any
 }
 ```
 
@@ -1128,26 +1139,32 @@ const transformStyle = computed(() => {
 | 属性 | 类型 | 默认值 | 描述 |
 |------|------|--------|------|
 | `open` | `boolean` | `false` | 控制模态框显示/隐藏 |
-| `title` | `string` | - | 模态框标题 |
-| `content` | `string \| VNode` | - | 模态框内容（编程式调用时使用） |
+| `title` | `string \| VNode` | - | 模态框标题 |
 | `width` | `string \| number` | `520` | 模态框宽度 |
-| `height` | `string \| number` | - | 模态框高度 |
 | `centered` | `boolean` | `false` | 垂直居中显示 |
 | `closable` | `boolean` | `true` | 显示关闭按钮 |
+| `closeIcon` | `string \| VNode` | - | 自定义关闭图标 |
 | `mask` | `boolean` | `true` | 显示背景遮罩 |
 | `maskClosable` | `boolean` | `true` | 点击遮罩层关闭 |
 | `keyboard` | `boolean` | `true` | ESC 键关闭 |
 | `destroyOnClose` | `boolean` | `false` | 关闭时销毁内容 |
-| `loading` | `boolean` | `false` | 显示加载状态 |
 | `confirmLoading` | `boolean` | `false` | 确认按钮加载状态 |
-| `size` | `'small' \| 'default' \| 'large'` | `'default'` | 预定义模态框尺寸 |
-| `type` | `'info' \| 'success' \| 'error' \| 'warning' \| 'confirm'` | `'confirm'` | 模态框类型（影响图标和样式） |
-| `okText` | `string` | `'确定'` | 确定按钮文本 |
-| `cancelText` | `string` | `'取消'` | 取消按钮文本 |
-| `showFooter` | `boolean` | `true` | 显示模态框底部 |
-| `showCancel` | `boolean` | `true` | 显示取消按钮 |
-| `zIndex` | `number` | `1000` | 模态框层级 |
+| `okText` | `string \| VNode` | - | 确定按钮文本 |
+| `cancelText` | `string \| VNode` | - | 取消按钮文本 |
+| `okType` | `ButtonType` | - | 确定按钮类型 |
+| `okButtonProps` | `ButtonProps` | - | 确定按钮属性 |
+| `cancelButtonProps` | `ButtonProps` | - | 取消按钮属性 |
+| `zIndex` | `number` | - | 模态框层级 |
 | `forceRender` | `boolean` | `false` | 强制渲染模态框内容 |
+| `getContainer` | `string \| HTMLElement \| (() => HTMLElement) \| false` | - | 模态框容器 |
+| `maskStyle` | `CSSProperties` | - | 遮罩样式 |
+| `bodyStyle` | `CSSProperties` | - | 模态框主体样式 |
+| `wrapClassName` | `string` | - | 包装器类名 |
+| `style` | `CSSProperties \| string` | - | 模态框样式 |
+| `transitionName` | `string` | - | 过渡动画名称 |
+| `maskTransitionName` | `string` | - | 遮罩过渡动画名称 |
+| `focusTriggerAfterClose` | `boolean` | `true` | 关闭后聚焦触发器 |
+| `modalRender` | `(originVNode: VNode) => VNode` | - | 自定义模态框渲染函数 |
 
 #### Modal 组件事件
 
@@ -1183,41 +1200,47 @@ const transformStyle = computed(() => {
 
 ```typescript
 interface ModalOptions {
-  title?: string                    // 标题
+  title?: string | VNode            // 标题
   content?: string | VNode | (() => VNode)  // 内容
   width?: number | string           // 宽度
-  height?: number | string          // 高度
   centered?: boolean                // 居中显示
   closable?: boolean                // 可关闭
+  closeIcon?: string | VNode        // 自定义关闭图标
   mask?: boolean                    // 显示遮罩
   maskClosable?: boolean            // 点击遮罩关闭
   keyboard?: boolean                // 键盘支持
   destroyOnClose?: boolean          // 关闭时销毁
-  size?: 'small' | 'default' | 'large'  // 尺寸
-  type?: 'info' | 'success' | 'error' | 'warning' | 'confirm'  // 类型
-  okText?: string                   // 确定按钮文本
-  cancelText?: string               // 取消按钮文本
-  closeText?: string                // 关闭按钮文本
-  showFooter?: boolean              // 显示底部
-  showCancel?: boolean              // 显示取消按钮
+  type?: 'info' | 'success' | 'error' | 'warn' | 'warning' | 'confirm'  // 类型
+  okText?: string | VNode           // 确定按钮文本
+  cancelText?: string | VNode       // 取消按钮文本
+  okType?: ButtonType               // 确定按钮类型
   zIndex?: number                   // 层级
   forceRender?: boolean             // 强制渲染
+  getContainer?: string | HTMLElement | (() => HTMLElement) | false | null  // 容器
 
   // 事件处理器
-  onOk?: () => void | Promise<any>  // 确定回调
-  onCancel?: () => void             // 取消回调
-  onClose?: () => void              // 关闭回调
+  onOk?: (...args: any[]) => any    // 确定回调
+  onCancel?: (...args: any[]) => any // 取消回调
   afterClose?: () => void           // 关闭后回调
 
   // 高级选项
-  autoFocusButton?: 'ok' | 'cancel' | null  // 自动聚焦按钮
-  okButtonProps?: Record<string, any>       // 确定按钮属性
-  cancelButtonProps?: Record<string, any>   // 取消按钮属性
-  class?: string                            // 自定义类名
-  style?: Record<string, any>               // 自定义样式
-  wrapClassName?: string                    // 包装器类名
-  footer?: VNode                            // 自定义底部
-  icon?: Component | string                 // 自定义图标
+  autoFocusButton?: null | 'ok' | 'cancel'  // 自动聚焦按钮
+  okButtonProps?: ButtonProps       // 确定按钮属性
+  cancelButtonProps?: ButtonProps   // 取消按钮属性
+  class?: string                    // 自定义类名
+  style?: CSSProperties | string    // 自定义样式
+  wrapClassName?: string            // 包装器类名
+  footer?: VNode                    // 自定义底部
+  icon?: VNode                      // 自定义图标
+  maskStyle?: CSSProperties         // 遮罩样式
+  bodyStyle?: CSSProperties         // 主体样式
+  transitionName?: string           // 过渡动画名称
+  maskTransitionName?: string       // 遮罩过渡动画名称
+  focusTriggerAfterClose?: boolean  // 关闭后聚焦触发器
+  modalRender?: (arg: { originVNode: VNode }) => VNode  // 自定义渲染函数
+  mousePosition?: { x: number; y: number } | null       // 鼠标位置
+  okCancel?: boolean                // 显示取消按钮
+  appContext?: any                  // 应用上下文
 }
 ```
 

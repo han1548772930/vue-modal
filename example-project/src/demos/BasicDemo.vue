@@ -5,7 +5,7 @@
     <template #buttons>
       <Button variant="default" @click="showModal">Open Modal</Button>
     </template>
-    <Modal v-model:open="open" title="Basic Modal"  @ok="handleOk" >
+    <Modal v-model:open="open" title="Basic Modal"   @ok="handleOk" >
       <p>Some contents...</p>
       <p>Some contents...</p>
       <p>Some contents...</p>
