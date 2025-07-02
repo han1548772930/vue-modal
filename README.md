@@ -60,7 +60,7 @@ const showModal = ref(false)
 
 #### Setup Styles
 
-The modal component requires CSS styles to display properly. You need to create your own styles or use the example below as a starting point.
+The modal component requires CSS styles to display properly. Please refer to the [CSS Styling System](#-css-styling-system--css-样式系统) section at the end of this document for a complete style file example.
 
 #### Programmatic Usage
 
@@ -763,224 +763,7 @@ modalManager.create('loading', {
 modalManager.destroy('loading')
 ```
 
-### 🎨 CSS Styling System
 
-#### Complete Style File Example
-
-Here's a complete `modal.css` style file example that you can use as a reference to create your own modal styles:
-
-```css
-/* Simple Modal CSS - Standalone Modal Style File */
-/* This file contains all Modal related styles using Tailwind CSS classes */
-
-@import "tailwindcss";
-@import "tw-animate-css";
-
-/* Modal Base Styles */
-.simple-modal-root,
-.simple-dialog-root {
-  @apply relative;
-}
-
-/* Mask Layer */
-.simple-modal-mask,
-.simple-dialog-mask {
-  @apply fixed inset-0 z-[50] bg-black/50;
-}
-
-/* Modal Container */
-.simple-modal-wrap,
-.simple-dialog-wrap {
-  @apply fixed inset-0 overflow-auto outline-none z-[50];
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Centered Layout */
-.simple-modal-wrap.simple-modal-centered,
-.simple-dialog-wrap.simple-dialog-centered {
-  @apply text-center;
-}
-
-.simple-modal-wrap.simple-modal-centered::before,
-.simple-dialog-wrap.simple-dialog-centered::before {
-  @apply inline-block w-0 h-full align-middle;
-  content: '';
-}
-
-/* Modal Body */
-.simple-modal,
-.simple-dialog {
-  position: relative;
-  top: var(--modal-top, 100px); /* Use CSS variable, default 100px */
-  width: auto;
-  max-width: calc(100vw - 32px);
-  margin: 0 auto;
-  padding-bottom: 1.5rem;
-  pointer-events: none;
-}
-
-/* Modal Content Area */
-.simple-modal-content,
-.simple-dialog-content {
-  @apply relative bg-background border border-border rounded-lg shadow-lg p-6 text-base leading-relaxed pointer-events-auto;
-}
-
-/* Close Button */
-.simple-modal-close,
-.simple-dialog-close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  z-index: 10;
-  display: inline-flex;
-  height: 2rem;
-  width: 2rem;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  color: var(--muted-foreground);
-  border-radius: 0.375rem;
-  transition: all 0.2s;
-}
-
-.simple-modal-close:hover,
-.simple-dialog-close:hover {
-  background-color: var(--accent);
-  color: var(--accent-foreground);
-}
-
-/* Modal Header, Title, Content, Footer */
-.simple-modal-header,
-.simple-dialog-header {
-  margin-bottom: 0.5rem;
-}
-
-.simple-modal-title,
-.simple-dialog-title {
-  margin: 0;
-  font-weight: 600;
-  font-size: 1.125rem;
-  line-height: 1.25;
-  color: var(--foreground);
-}
-
-.simple-modal-body,
-.simple-dialog-body {
-  font-size: 1rem;
-  line-height: 1.625;
-  color: var(--muted-foreground);
-}
-
-.simple-modal-footer,
-.simple-dialog-footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  padding-top: 0.75rem;
-}
-
-/* Animation Effects */
-.simple-zoom-enter-active {
-  transition: all 0.3s cubic-bezier(0.08, 0.82, 0.17, 1);
-}
-
-.simple-zoom-leave-active {
-  transition: all 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86);
-  pointer-events: none;
-}
-
-.simple-zoom-enter-from,
-.simple-zoom-leave-to {
-  opacity: 0;
-  transform: scale(0.2);
-}
-
-.simple-fade-enter-active,
-.simple-fade-leave-active {
-  transition: opacity 0.3s;
-}
-
-.simple-fade-enter-from,
-.simple-fade-leave-to {
-  opacity: 0;
-}
-
-/* Responsive Design */
-@media (max-width: 767px) {
-  .simple-modal,
-  .simple-dialog {
-    max-width: calc(100vw - 16px);
-    margin: 8px auto;
-  }
-}
-
-/* Confirm Dialog Styles */
-.simple-modal-confirm-body {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.simple-modal-confirm-title {
-  flex: none;
-  display: block;
-  overflow: hidden;
-  color: var(--foreground);
-  font-weight: 600;
-  font-size: 1rem;
-  line-height: 1.25;
-}
-
-.simple-modal-confirm-content {
-  font-size: 1rem;
-  color: var(--muted-foreground);
-}
-
-/* Confirm Dialog Icon Colors */
-.simple-modal-confirm-error > svg {
-  color: var(--destructive) !important;
-}
-
-.simple-modal-confirm-warning > svg,
-.simple-modal-confirm-confirm > svg {
-  color: #eab308 !important; /* yellow-500 */
-}
-
-.simple-modal-confirm-info > svg {
-  color: #3b82f6 !important; /* blue-500 */
-}
-
-.simple-modal-confirm-success > svg {
-  color: #22c55e !important; /* green-500 */
-}
-```
-
-#### Key Features
-
-**CSS Variable Support:**
-- `--modal-top`: Controls modal distance from top, default 100px
-- Theme variables support: `--background`, `--foreground`, `--muted-foreground`, etc.
-
-**Tailwind CSS Integration:**
-- Uses `@apply` directive to integrate Tailwind classes
-- Supports responsive design and dark mode
-
-**Animation System:**
-- `simple-zoom`: Scale animation effect
-- `simple-fade`: Fade in/out effect
-
-#### Usage Instructions
-
-1. **Copy the CSS code above** to your project and save as `modal.css`
-2. **Import in your main style file**:
-   ```css
-   @import "./modal.css";
-   ```
-3. **Customize as needed** CSS variables and styles
-4. **Ensure Tailwind CSS is properly configured** (if using)
 
 ### ⚠️ Important Notes
 
@@ -1002,7 +785,7 @@ Here's a complete `modal.css` style file example that you can use as a reference
 ### 🔧 Troubleshooting
 
 #### Styles Not Working
-1. Ensure you have created and imported CSS style file (refer to modal.css example in documentation)
+1. Ensure you have created and imported CSS style file (refer to [CSS Styling System](#-css-styling-system--css-样式系统))
 2. Check for CSS style conflicts
 3. Verify CSS variables are correctly defined
 4. Confirm Tailwind CSS configuration is correct (if using)
@@ -1325,14 +1108,10 @@ const showModal = ref(false)
 </script>
 ```
 
-#### 设置样式
-
-模态框组件需要 CSS 样式才能正常显示。你需要创建自己的样式文件，或者使用下面的示例作为起点。
-
 ### 🔧 常见问题解决
 
 #### 样式不生效
-1. 确保已创建并引入 CSS 样式文件（参考文档中的 modal.css 示例）
+1. 确保已创建并引入 CSS 样式文件（参考 [CSS 样式系统](#-css-styling-system--css-样式系统)）
 2. 检查是否有 CSS 样式冲突
 3. 验证 CSS 变量是否正确定义
 4. 确认 Tailwind CSS 配置正确（如果使用）
@@ -1473,7 +1252,7 @@ const showModal = ref(false)
 
 #### 设置样式
 
-模态框组件需要 CSS 样式才能正常显示。你需要创建自己的样式文件，或者使用下面的示例作为起点。
+模态框组件需要 CSS 样式才能正常显示。请参考文档末尾的 [CSS 样式系统](#-css-styling-system--css-样式系统) 部分获取完整的样式文件示例。
 
 #### 编程式调用
 
@@ -1898,224 +1677,8 @@ modal.update({...})  // 更新配置
 
 
 
-### 🎨 基础样式案例
 
-#### 完整样式文件示例
 
-以下是一个完整的 `modal.css` 样式文件示例，你可以参考这个文件来创建自己的模态框样式：
-
-```css
-/* Simple Modal CSS - 独立的 Modal 样式文件 */
-/* 这个文件包含所有 Modal 相关的样式，使用 Tailwind CSS 类 */
-
-@import "tailwindcss";
-@import "tw-animate-css";
-
-/* Modal 基础样式 */
-.simple-modal-root,
-.simple-dialog-root {
-  @apply relative;
-}
-
-/* 遮罩层 */
-.simple-modal-mask,
-.simple-dialog-mask {
-  @apply fixed inset-0 z-[50] bg-black/50;
-}
-
-/* Modal 容器 */
-.simple-modal-wrap,
-.simple-dialog-wrap {
-  @apply fixed inset-0 overflow-auto outline-none z-[50];
-  -webkit-overflow-scrolling: touch;
-}
-
-/* 居中布局 */
-.simple-modal-wrap.simple-modal-centered,
-.simple-dialog-wrap.simple-dialog-centered {
-  @apply text-center;
-}
-
-.simple-modal-wrap.simple-modal-centered::before,
-.simple-dialog-wrap.simple-dialog-centered::before {
-  @apply inline-block w-0 h-full align-middle;
-  content: '';
-}
-
-/* Modal 主体 */
-.simple-modal,
-.simple-dialog {
-  position: relative;
-  top: var(--modal-top, 100px); /* 使用 CSS 变量，默认 100px */
-  width: auto;
-  max-width: calc(100vw - 32px);
-  margin: 0 auto;
-  padding-bottom: 1.5rem;
-  pointer-events: none;
-}
-
-/* Modal 内容区域 */
-.simple-modal-content,
-.simple-dialog-content {
-  @apply relative bg-background border border-border rounded-lg shadow-lg p-6 text-base leading-relaxed pointer-events-auto;
-}
-
-/* 关闭按钮 */
-.simple-modal-close,
-.simple-dialog-close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  z-index: 10;
-  display: inline-flex;
-  height: 2rem;
-  width: 2rem;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  color: var(--muted-foreground);
-  border-radius: 0.375rem;
-  transition: all 0.2s;
-}
-
-.simple-modal-close:hover,
-.simple-dialog-close:hover {
-  background-color: var(--accent);
-  color: var(--accent-foreground);
-}
-
-/* Modal 头部、标题、内容、页脚 */
-.simple-modal-header,
-.simple-dialog-header {
-  margin-bottom: 0.5rem;
-}
-
-.simple-modal-title,
-.simple-dialog-title {
-  margin: 0;
-  font-weight: 600;
-  font-size: 1.125rem;
-  line-height: 1.25;
-  color: var(--foreground);
-}
-
-.simple-modal-body,
-.simple-dialog-body {
-  font-size: 1rem;
-  line-height: 1.625;
-  color: var(--muted-foreground);
-}
-
-.simple-modal-footer,
-.simple-dialog-footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  padding-top: 0.75rem;
-}
-
-/* 动画效果 */
-.simple-zoom-enter-active {
-  transition: all 0.3s cubic-bezier(0.08, 0.82, 0.17, 1);
-}
-
-.simple-zoom-leave-active {
-  transition: all 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86);
-  pointer-events: none;
-}
-
-.simple-zoom-enter-from,
-.simple-zoom-leave-to {
-  opacity: 0;
-  transform: scale(0.2);
-}
-
-.simple-fade-enter-active,
-.simple-fade-leave-active {
-  transition: opacity 0.3s;
-}
-
-.simple-fade-enter-from,
-.simple-fade-leave-to {
-  opacity: 0;
-}
-
-/* 响应式设计 */
-@media (max-width: 767px) {
-  .simple-modal,
-  .simple-dialog {
-    max-width: calc(100vw - 16px);
-    margin: 8px auto;
-  }
-}
-
-/* Confirm Dialog 样式 */
-.simple-modal-confirm-body {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.simple-modal-confirm-title {
-  flex: none;
-  display: block;
-  overflow: hidden;
-  color: var(--foreground);
-  font-weight: 600;
-  font-size: 1rem;
-  line-height: 1.25;
-}
-
-.simple-modal-confirm-content {
-  font-size: 1rem;
-  color: var(--muted-foreground);
-}
-
-/* 确认框图标颜色 */
-.simple-modal-confirm-error > svg {
-  color: var(--destructive) !important;
-}
-
-.simple-modal-confirm-warning > svg,
-.simple-modal-confirm-confirm > svg {
-  color: #eab308 !important; /* yellow-500 */
-}
-
-.simple-modal-confirm-info > svg {
-  color: #3b82f6 !important; /* blue-500 */
-}
-
-.simple-modal-confirm-success > svg {
-  color: #22c55e !important; /* green-500 */
-}
-```
-
-#### 关键特性说明
-
-**CSS 变量支持：**
-- `--modal-top`: 控制模态框距离顶部的距离，默认 100px
-- 支持主题变量：`--background`, `--foreground`, `--muted-foreground` 等
-
-**Tailwind CSS 集成：**
-- 使用 `@apply` 指令集成 Tailwind 类
-- 支持响应式设计和暗色模式
-
-**动画系统：**
-- `simple-zoom`: 缩放动画效果
-- `simple-fade`: 淡入淡出效果
-
-#### 使用方法
-
-1. **复制上面的 CSS 代码**到你的项目中，保存为 `modal.css`
-2. **在你的主样式文件中引入**：
-   ```css
-   @import "./modal.css";
-   ```
-3. **根据需要自定义**CSS 变量和样式
-4. **确保 Tailwind CSS 正确配置**（如果使用）
 
 
 
@@ -2272,3 +1835,250 @@ MIT License
 ### 📞 支持
 
 如果您在使用过程中遇到问题，请提交 Issue 或查看示例项目。
+
+---
+
+## 🎨 CSS Styling System | CSS 样式系统
+
+### Complete Style File Example | 完整样式文件示例
+
+Here's a complete `modal.css` style file example that you can use as a reference to create your own modal styles:
+
+以下是一个完整的 `modal.css` 样式文件示例，你可以参考这个文件来创建自己的模态框样式：
+
+```css
+/* Simple Modal CSS - Standalone Modal Style File */
+/* Simple Modal CSS - 独立的 Modal 样式文件 */
+/* This file contains all Modal related styles using Tailwind CSS classes */
+/* 这个文件包含所有 Modal 相关的样式，使用 Tailwind CSS 类 */
+
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Modal Base Styles | Modal 基础样式 */
+.simple-modal-root,
+.simple-dialog-root {
+  @apply relative;
+}
+
+/* Mask Layer | 遮罩层 */
+.simple-modal-mask,
+.simple-dialog-mask {
+  @apply fixed inset-0 z-[50] bg-black/50;
+}
+
+/* Modal Container | Modal 容器 */
+.simple-modal-wrap,
+.simple-dialog-wrap {
+  @apply fixed inset-0 overflow-auto outline-none z-[50];
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Centered Layout | 居中布局 */
+.simple-modal-wrap.simple-modal-centered,
+.simple-dialog-wrap.simple-dialog-centered {
+  @apply text-center;
+}
+
+.simple-modal-wrap.simple-modal-centered::before,
+.simple-dialog-wrap.simple-dialog-centered::before {
+  @apply inline-block w-0 h-full align-middle;
+  content: '';
+}
+
+/* Modal Body | Modal 主体 */
+.simple-modal,
+.simple-dialog {
+  position: relative;
+  top: var(--modal-top, 100px); /* Use CSS variable, default 100px | 使用 CSS 变量，默认 100px */
+  width: auto;
+  max-width: calc(100vw - 32px);
+  margin: 0 auto;
+  padding-bottom: 1.5rem;
+  pointer-events: none;
+}
+
+/* Modal Content Area | Modal 内容区域 */
+.simple-modal-content,
+.simple-dialog-content {
+  @apply relative bg-background border border-border rounded-lg shadow-lg p-6 text-base leading-relaxed pointer-events-auto;
+}
+
+/* Close Button | 关闭按钮 */
+.simple-modal-close,
+.simple-dialog-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  display: inline-flex;
+  height: 2rem;
+  width: 2rem;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--muted-foreground);
+  border-radius: 0.375rem;
+  transition: all 0.2s;
+}
+
+.simple-modal-close:hover,
+.simple-dialog-close:hover {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+/* Modal Header, Title, Content, Footer | Modal 头部、标题、内容、页脚 */
+.simple-modal-header,
+.simple-dialog-header {
+  margin-bottom: 0.5rem;
+}
+
+.simple-modal-title,
+.simple-dialog-title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.25;
+  color: var(--foreground);
+}
+
+.simple-modal-body,
+.simple-dialog-body {
+  font-size: 1rem;
+  line-height: 1.625;
+  color: var(--muted-foreground);
+}
+
+.simple-modal-footer,
+.simple-dialog-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+}
+
+/* Animation Effects | 动画效果 */
+.simple-zoom-enter-active {
+  transition: all 0.3s cubic-bezier(0.08, 0.82, 0.17, 1);
+}
+
+.simple-zoom-leave-active {
+  transition: all 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86);
+  pointer-events: none;
+}
+
+.simple-zoom-enter-from,
+.simple-zoom-leave-to {
+  opacity: 0;
+  transform: scale(0.2);
+}
+
+.simple-fade-enter-active,
+.simple-fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.simple-fade-enter-from,
+.simple-fade-leave-to {
+  opacity: 0;
+}
+
+/* Responsive Design | 响应式设计 */
+@media (max-width: 767px) {
+  .simple-modal,
+  .simple-dialog {
+    max-width: calc(100vw - 16px);
+    margin: 8px auto;
+  }
+}
+
+/* Confirm Dialog Styles | Confirm Dialog 样式 */
+.simple-modal-confirm-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.simple-modal-confirm-title {
+  flex: none;
+  display: block;
+  overflow: hidden;
+  color: var(--foreground);
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.simple-modal-confirm-content {
+  font-size: 1rem;
+  color: var(--muted-foreground);
+}
+
+/* Confirm Dialog Icon Colors | 确认框图标颜色 */
+.simple-modal-confirm-error > svg {
+  color: var(--destructive) !important;
+}
+
+.simple-modal-confirm-warning > svg,
+.simple-modal-confirm-confirm > svg {
+  color: #eab308 !important; /* yellow-500 */
+}
+
+.simple-modal-confirm-info > svg {
+  color: #3b82f6 !important; /* blue-500 */
+}
+
+.simple-modal-confirm-success > svg {
+  color: #22c55e !important; /* green-500 */
+}
+```
+
+### Key Features | 关键特性
+
+**CSS Variable Support | CSS 变量支持:**
+- `--modal-top`: Controls modal distance from top, default 100px | 控制模态框距离顶部的距离，默认 100px
+- Theme variables support | 支持主题变量: `--background`, `--foreground`, `--muted-foreground`, etc.
+
+**Tailwind CSS Integration | Tailwind CSS 集成:**
+- Uses `@apply` directive to integrate Tailwind classes | 使用 `@apply` 指令集成 Tailwind 类
+- Supports responsive design and dark mode | 支持响应式设计和暗色模式
+
+**Animation System | 动画系统:**
+- `simple-zoom`: Scale animation effect | 缩放动画效果
+- `simple-fade`: Fade in/out effect | 淡入淡出效果
+
+### Usage Instructions | 使用方法
+
+1. **Copy the CSS code above** to your project and save as `modal.css`
+   **复制上面的 CSS 代码**到你的项目中，保存为 `modal.css`
+
+2. **Import in your main style file | 在你的主样式文件中引入**:
+   ```css
+   @import "./modal.css";
+   ```
+
+3. **Customize as needed** CSS variables and styles
+   **根据需要自定义** CSS 变量和样式
+
+4. **Ensure Tailwind CSS is properly configured** (if using)
+   **确保 Tailwind CSS 正确配置**（如果使用）
+
+### CSS Class Structure | CSS 类名结构
+
+The modal uses the following CSS class structure for customization:
+模态框使用以下 CSS 类名结构进行自定义：
+
+- `.simple-modal-root` / `.simple-dialog-root` - Root container | 根容器
+- `.simple-modal-mask` / `.simple-dialog-mask` - Mask layer | 遮罩层
+- `.simple-modal-wrap` / `.simple-dialog-wrap` - Modal wrapper | 模态框包装器
+- `.simple-modal` / `.simple-dialog` - Modal body | 模态框主体
+- `.simple-modal-content` / `.simple-dialog-content` - Content area | 内容区域
+- `.simple-modal-header` / `.simple-dialog-header` - Header | 头部
+- `.simple-modal-title` / `.simple-dialog-title` - Title | 标题
+- `.simple-modal-body` / `.simple-dialog-body` - Body | 主体
+- `.simple-modal-footer` / `.simple-dialog-footer` - Footer | 页脚
+- `.simple-modal-close` / `.simple-dialog-close` - Close button | 关闭按钮
