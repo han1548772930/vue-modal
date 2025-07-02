@@ -763,22 +763,571 @@ modalManager.create('loading', {
 modalManager.destroy('loading')
 ```
 
-### ⚠️ 重要注意事项
+### 🎨 CSS Styling System
 
-#### confirmLoading 行为
-- 当 `confirmLoading` 为 `true` 时，模态框会自动禁用所有关闭操作
-- 这是为了防止用户在异步操作进行中意外关闭模态框
-- 确保在操作完成后将 `confirmLoading` 设置为 `false`
+#### Complete Style File Example
 
-#### 事件处理
-- `onOk` 和 `onCancel` 回调中的异常不会自动处理
-- 建议在回调中添加适当的错误处理逻辑
-- 使用 `confirmLoading` 来管理异步操作状态
+Here's a complete `modal.css` style file example that you can use as a reference to create your own modal styles:
 
-#### 样式优先级
-- 外部传入的样式会覆盖内部默认样式
-- 使用 `!important` 可以强制覆盖组件内部样式
-- 推荐通过 CSS 变量来自定义主题
+```css
+/* Simple Modal CSS - Standalone Modal Style File */
+/* This file contains all Modal related styles using Tailwind CSS classes */
+
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Modal Base Styles */
+.simple-modal-root,
+.simple-dialog-root {
+  @apply relative;
+}
+
+/* Mask Layer */
+.simple-modal-mask,
+.simple-dialog-mask {
+  @apply fixed inset-0 z-[50] bg-black/50;
+}
+
+/* Modal Container */
+.simple-modal-wrap,
+.simple-dialog-wrap {
+  @apply fixed inset-0 overflow-auto outline-none z-[50];
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Centered Layout */
+.simple-modal-wrap.simple-modal-centered,
+.simple-dialog-wrap.simple-dialog-centered {
+  @apply text-center;
+}
+
+.simple-modal-wrap.simple-modal-centered::before,
+.simple-dialog-wrap.simple-dialog-centered::before {
+  @apply inline-block w-0 h-full align-middle;
+  content: '';
+}
+
+/* Modal Body */
+.simple-modal,
+.simple-dialog {
+  position: relative;
+  top: var(--modal-top, 100px); /* Use CSS variable, default 100px */
+  width: auto;
+  max-width: calc(100vw - 32px);
+  margin: 0 auto;
+  padding-bottom: 1.5rem;
+  pointer-events: none;
+}
+
+/* Modal Content Area */
+.simple-modal-content,
+.simple-dialog-content {
+  @apply relative bg-background border border-border rounded-lg shadow-lg p-6 text-base leading-relaxed pointer-events-auto;
+}
+
+/* Close Button */
+.simple-modal-close,
+.simple-dialog-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  display: inline-flex;
+  height: 2rem;
+  width: 2rem;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--muted-foreground);
+  border-radius: 0.375rem;
+  transition: all 0.2s;
+}
+
+.simple-modal-close:hover,
+.simple-dialog-close:hover {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+/* Modal Header, Title, Content, Footer */
+.simple-modal-header,
+.simple-dialog-header {
+  margin-bottom: 0.5rem;
+}
+
+.simple-modal-title,
+.simple-dialog-title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.25;
+  color: var(--foreground);
+}
+
+.simple-modal-body,
+.simple-dialog-body {
+  font-size: 1rem;
+  line-height: 1.625;
+  color: var(--muted-foreground);
+}
+
+.simple-modal-footer,
+.simple-dialog-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+}
+
+/* Animation Effects */
+.simple-zoom-enter-active {
+  transition: all 0.3s cubic-bezier(0.08, 0.82, 0.17, 1);
+}
+
+.simple-zoom-leave-active {
+  transition: all 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86);
+  pointer-events: none;
+}
+
+.simple-zoom-enter-from,
+.simple-zoom-leave-to {
+  opacity: 0;
+  transform: scale(0.2);
+}
+
+.simple-fade-enter-active,
+.simple-fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.simple-fade-enter-from,
+.simple-fade-leave-to {
+  opacity: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 767px) {
+  .simple-modal,
+  .simple-dialog {
+    max-width: calc(100vw - 16px);
+    margin: 8px auto;
+  }
+}
+
+/* Confirm Dialog Styles */
+.simple-modal-confirm-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.simple-modal-confirm-title {
+  flex: none;
+  display: block;
+  overflow: hidden;
+  color: var(--foreground);
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.simple-modal-confirm-content {
+  font-size: 1rem;
+  color: var(--muted-foreground);
+}
+
+/* Confirm Dialog Icon Colors */
+.simple-modal-confirm-error > svg {
+  color: var(--destructive) !important;
+}
+
+.simple-modal-confirm-warning > svg,
+.simple-modal-confirm-confirm > svg {
+  color: #eab308 !important; /* yellow-500 */
+}
+
+.simple-modal-confirm-info > svg {
+  color: #3b82f6 !important; /* blue-500 */
+}
+
+.simple-modal-confirm-success > svg {
+  color: #22c55e !important; /* green-500 */
+}
+```
+
+#### Key Features
+
+**CSS Variable Support:**
+- `--modal-top`: Controls modal distance from top, default 100px
+- Theme variables support: `--background`, `--foreground`, `--muted-foreground`, etc.
+
+**Tailwind CSS Integration:**
+- Uses `@apply` directive to integrate Tailwind classes
+- Supports responsive design and dark mode
+
+**Animation System:**
+- `simple-zoom`: Scale animation effect
+- `simple-fade`: Fade in/out effect
+
+#### Usage Instructions
+
+1. **Copy the CSS code above** to your project and save as `modal.css`
+2. **Import in your main style file**:
+   ```css
+   @import "./modal.css";
+   ```
+3. **Customize as needed** CSS variables and styles
+4. **Ensure Tailwind CSS is properly configured** (if using)
+
+### ⚠️ Important Notes
+
+#### confirmLoading Behavior
+- When `confirmLoading` is `true`, the modal automatically disables all close operations
+- This prevents users from accidentally closing the modal during async operations
+- Make sure to set `confirmLoading` to `false` after operations complete
+
+#### Event Handling
+- Exceptions in `onOk` and `onCancel` callbacks are not automatically handled
+- It's recommended to add proper error handling logic in callbacks
+- Use `confirmLoading` to manage async operation states
+
+#### Style Priority
+- External styles will override internal default styles
+- Use `!important` to force override component internal styles
+- Recommended to customize themes through CSS variables
+
+### 🔧 Troubleshooting
+
+#### Styles Not Working
+1. Ensure you have created and imported CSS style file (refer to modal.css example in documentation)
+2. Check for CSS style conflicts
+3. Verify CSS variables are correctly defined
+4. Confirm Tailwind CSS configuration is correct (if using)
+5. Check CSS file path is correct
+
+#### Modal Not Displaying
+1. Check if `open` or `visible` property is correctly set
+2. Confirm there are no CSS style conflicts
+3. Check if `z-index` setting is appropriate
+
+#### Animation Effects Not Working
+1. Ensure `transitionName` corresponding CSS animation is defined
+2. Check if other CSS is affecting animation effects
+3. Verify `mousePosition` is correctly passed
+
+#### Drag Functionality Not Working
+1. Ensure `modalRender` function is correctly implemented
+2. Check if drag target element is correctly bound
+3. Verify drag library (like @vueuse/core) is correctly installed
+
+### 📖 API Reference
+
+#### Common Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `open` | `boolean` | `false` | Control modal visibility |
+| `title` | `string \| VNode` | - | Modal title |
+| `width` | `string \| number` | `520` | Modal width |
+| `centered` | `boolean` | `false` | Vertically center modal |
+| `confirmLoading` | `boolean` | `false` | Confirm button loading state |
+| `okText` | `string \| VNode` | `'OK'` | OK button text |
+| `cancelText` | `string \| VNode` | `'Cancel'` | Cancel button text |
+| `okType` | `ButtonType` | `'primary'` | OK button type |
+
+#### Style Properties
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `style` | `CSSProperties \| string` | Modal styles |
+| `bodyStyle` | `CSSProperties` | Modal body styles |
+| `maskStyle` | `CSSProperties` | Mask styles |
+| `wrapClassName` | `string` | Wrapper class name |
+| `zIndex` | `number` | Modal z-index |
+
+#### Interaction Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `closable` | `boolean` | `true` | Show close button |
+| `maskClosable` | `boolean` | `true` | Close on mask click |
+| `keyboard` | `boolean` | `true` | Close on ESC key |
+| `destroyOnClose` | `boolean` | `false` | Destroy content on close |
+
+#### Advanced Properties
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `modalRender` | `(arg: { originVNode: VNode }) => VNode` | Custom render function (for drag functionality) |
+| `mousePosition` | `{ x: number; y: number } \| null` | Mouse position for animation start point |
+| `getContainer` | `string \| HTMLElement \| (() => HTMLElement) \| false` | Modal container |
+
+#### Events
+
+| Event | Parameters | Description |
+|-------|------------|-------------|
+| `@ok` | `(e: MouseEvent)` | OK button click |
+| `@cancel` | `(e?: MouseEvent)` | Cancel button click or close |
+| `@update:open` | `(open: boolean)` | Visibility state change |
+| `@afterClose` | `()` | Triggered after completely closed |
+
+#### Slots
+
+| Slot | Description |
+|------|-------------|
+| `default` | Modal content |
+| `title` | Custom title |
+| `footer` | Custom footer |
+| `modalRender` | Custom wrapper (for drag functionality) |
+
+#### Programmatic API
+
+```typescript
+// Basic methods
+Modal.info({ title: 'Info', content: 'Content' })
+Modal.success({ title: 'Success', content: 'Operation successful' })
+Modal.error({ title: 'Error', content: 'Operation failed' })
+Modal.warning({ title: 'Warning', content: 'Warning message' })
+Modal.confirm({ title: 'Confirm', content: 'Are you sure?' })
+Modal.destroyAll() // Destroy all modals
+
+// useModal Hook
+const [modal, contextHolder] = Modal.useModal()
+// Returns: [modal methods object, component to render]
+```
+
+#### Return Value
+
+```typescript
+const modal = Modal.confirm({...})
+modal.destroy()  // Destroy modal
+modal.update({...})  // Update configuration
+```
+
+#### ModalOptions Interface
+
+```typescript
+interface ModalOptions {
+  // Basic configuration
+  title?: string | VNode            // Title
+  content?: string | VNode          // Content
+  width?: string | number           // Width
+  centered?: boolean                // Center display
+
+  // Button configuration
+  okText?: string | VNode           // OK button text
+  cancelText?: string | VNode       // Cancel button text
+  okType?: 'primary' | 'danger'     // OK button type
+
+  // Style configuration
+  style?: CSSProperties             // Custom styles
+  maskStyle?: CSSProperties         // Mask styles
+  bodyStyle?: CSSProperties         // Body styles
+
+  // Event handling
+  onOk?: () => void | Promise<void> // OK callback
+  onCancel?: () => void             // Cancel callback
+  afterClose?: () => void           // After close callback
+}
+```
+
+### 🎨 CSS Style Examples
+
+#### 1. Custom Modal Styles
+```vue
+<Modal
+  v-model:open="open"
+  title="Custom Style"
+  :style="{
+    top: '50px',
+    border: '2px solid #1890ff',
+    borderRadius: '12px',
+    boxShadow: '0 10px 30px rgba(0,0,0,0.3)'
+  }"
+>
+  <p>Custom border, border radius and shadow effects</p>
+</Modal>
+```
+
+#### 2. Custom Mask Styles
+```vue
+<Modal
+  v-model:open="open"
+  title="Mask Style"
+  :mask-style="{
+    backgroundColor: 'rgba(255, 0, 0, 0.3)',
+    backdropFilter: 'blur(5px)'
+  }"
+>
+  <p>Red semi-transparent mask + background blur effect</p>
+</Modal>
+```
+
+#### 3. Custom Body Styles
+```vue
+<Modal
+  v-model:open="open"
+  title="Body Style"
+  :body-style="{
+    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    color: 'white',
+    padding: '24px',
+    borderRadius: '8px'
+  }"
+>
+  <p>Gradient background + white text + border radius effect</p>
+</Modal>
+```
+
+#### 4. Wrapper Class Name Styles
+```vue
+<template>
+  <Modal
+    v-model:open="open"
+    title="Wrapper Class"
+    wrap-class-name="custom-modal-wrap"
+  >
+    <p>Complex style customization through CSS class names</p>
+  </Modal>
+</template>
+
+<style>
+.custom-modal-wrap {
+  animation: customAnimation 0.3s ease-out;
+}
+.custom-modal-wrap .simple-dialog {
+  border: 2px dashed #722ed1;
+  border-radius: 16px;
+}
+</style>
+```
+
+#### 5. Z-Index Control
+```vue
+<Modal
+  v-model:open="open"
+  title="High Z-Index Modal"
+  :z-index="2000"
+  :style="{ border: '3px solid #52c41a' }"
+>
+  <p>Set high z-index to ensure above other elements</p>
+</Modal>
+```
+
+### 🚀 Quick Examples
+
+#### Basic Usage
+```vue
+<Modal v-model:open="open" title="Title" @ok="handleOk">
+  <p>Content</p>
+</Modal>
+```
+
+#### Programmatic Usage
+```typescript
+Modal.confirm({
+  title: 'Confirm',
+  content: 'Are you sure you want to proceed?',
+  onOk: () => console.log('Confirmed')
+})
+```
+
+#### useModal Hook
+```vue
+<script setup>
+const [modal, contextHolder] = Modal.useModal()
+modal.info({ title: 'Info', content: 'Message content' })
+</script>
+<template>
+  <component :is="contextHolder" />
+</template>
+```
+
+### 🔧 Advanced Features
+
+#### confirmLoading Safety Mechanism
+```vue
+<Modal :confirm-loading="loading" @ok="handleSubmit">
+  <!-- Automatically disables all close operations when loading -->
+</Modal>
+```
+
+#### Mouse Position Animation
+```vue
+<Modal :mouse-position="{ x: 100, y: 100 }">
+  <!-- Start scale animation from specified position -->
+</Modal>
+```
+
+#### Drag Functionality
+```vue
+<Modal :modal-render="customRender">
+  <!-- Implement drag through modalRender -->
+</Modal>
+```
+
+---
+
+## 中文
+
+一个轻量级、灵活的 Vue 3 模态框组件库，使用 TypeScript 构建，专为现代 Vue 应用设计。
+
+### ✨ 特性
+
+- 🚀 **Vue 3 组合式 API** - 使用现代 Vue 3 和 TypeScript 构建
+- 🎨 **灵活样式** - 兼容任何 CSS 框架（Tailwind CSS 等）
+- 📱 **响应式设计** - 移动端友好，支持触摸操作
+- 🔧 **多种使用方式** - 组件式和编程式 API
+- 🎭 **丰富动画** - 流畅的进入/退出动画，可自定义效果
+- 🖱️ **拖拽支持** - 内置可拖拽模态框支持，带边界限制
+- 🔒 **焦点管理** - 自动焦点捕获和恢复
+- ⌨️ **键盘支持** - ESC 键关闭，Tab 键导航
+- 🌙 **主题支持** - 兼容深色/浅色模式主题
+- 📦 **轻量级** - 最小打包体积，支持 tree-shaking
+- 🛡️ **TypeScript** - 完整的 TypeScript 支持和类型定义
+
+### 🚀 快速开始
+
+#### 安装
+
+```bash
+npm install v-modals
+# 或
+yarn add v-modals
+# 或
+pnpm add v-modals
+```
+
+#### 基础用法
+
+```vue
+<template>
+  <div>
+    <Button @click="showModal = true">打开模态框</Button>
+
+    <Modal v-model:open="showModal" title="基础模态框">
+      <p>这是一个基础模态框示例。</p>
+      <template #footer>
+        <Button @click="showModal = false">关闭</Button>
+      </template>
+    </Modal>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { Modal } from 'v-modals'
+
+const showModal = ref(false)
+</script>
+```
+
+#### 设置样式
+
+模态框组件需要 CSS 样式才能正常显示。你需要创建自己的样式文件，或者使用下面的示例作为起点。
 
 ### 🔧 常见问题解决
 
