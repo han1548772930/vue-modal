@@ -345,7 +345,7 @@ export default defineComponent({
                             <div class={`${prefixCls}-title`}>{title}</div>
                           </div>
                         )}
-                        <div class={`${prefixCls}-body`}>
+                        <div class={`${prefixCls}-body`} style={props.bodyStyle}>
                           {slots.default?.()}
                         </div>
                         {footer && (

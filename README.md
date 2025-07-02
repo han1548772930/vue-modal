@@ -759,6 +759,95 @@ modalManager.create('loading', {
 modalManager.destroy('loading')
 ```
 
+### ⚠️ 重要注意事项
+
+#### confirmLoading 行为
+- 当 `confirmLoading` 为 `true` 时，模态框会自动禁用所有关闭操作
+- 这是为了防止用户在异步操作进行中意外关闭模态框
+- 确保在操作完成后将 `confirmLoading` 设置为 `false`
+
+#### 事件处理
+- `onOk` 和 `onCancel` 回调中的异常不会自动处理
+- 建议在回调中添加适当的错误处理逻辑
+- 使用 `confirmLoading` 来管理异步操作状态
+
+#### 样式优先级
+- 外部传入的样式会覆盖内部默认样式
+- 使用 `!important` 可以强制覆盖组件内部样式
+- 推荐通过 CSS 变量来自定义主题
+
+### 🔧 常见问题解决
+
+#### 模态框不显示
+1. 检查 `open` 或 `visible` 属性是否正确设置
+2. 确认没有 CSS 样式冲突
+3. 检查 `z-index` 设置是否合适
+
+#### 动画效果异常
+1. 确保 `transitionName` 对应的 CSS 动画已定义
+2. 检查是否有其他 CSS 影响了动画效果
+3. 验证 `mousePosition` 是否正确传递
+
+#### 拖拽功能不工作
+1. 确保 `modalRender` 函数正确实现
+2. 检查拖拽目标元素是否正确绑定
+3. 验证拖拽库（如 @vueuse/core）是否正确安装
+
+### ✅ 功能验证清单
+
+以下是所有已验证可用的模态框选项和功能：
+
+#### 基础组件属性 ✅
+- [x] `open` / `visible` - 显示控制
+- [x] `title` - 标题设置
+- [x] `width` - 宽度控制
+- [x] `centered` - 居中显示
+- [x] `closable` - 关闭按钮控制
+- [x] `closeIcon` - 自定义关闭图标
+- [x] `mask` / `maskClosable` - 遮罩控制
+- [x] `keyboard` - 键盘支持
+- [x] `confirmLoading` - 加载状态（自动禁用关闭操作）
+
+#### 按钮配置 ✅
+- [x] `okText` / `cancelText` - 按钮文本
+- [x] `okType` - 按钮类型（primary, danger 等）
+- [x] `okButtonProps` / `cancelButtonProps` - 按钮属性
+
+#### 样式配置 ✅
+- [x] `style` - 自定义样式（如 `style="top: 20px"`）
+- [x] `wrapClassName` - 包装器类名
+- [x] `maskStyle` / `bodyStyle` - 遮罩和主体样式
+- [x] `zIndex` - 层级控制
+
+#### 高级功能 ✅
+- [x] `modalRender` - 自定义渲染（拖拽功能）
+- [x] `mousePosition` - 鼠标位置动画
+- [x] `transitionName` / `maskTransitionName` - 自定义动画
+- [x] `getContainer` - 自定义容器
+- [x] `destroyOnClose` - 关闭时销毁
+
+#### 编程式 API ✅
+- [x] `Modal.info()` - 信息对话框
+- [x] `Modal.success()` - 成功对话框
+- [x] `Modal.error()` - 错误对话框
+- [x] `Modal.warning()` / `Modal.warn()` - 警告对话框
+- [x] `Modal.confirm()` - 确认对话框
+- [x] `Modal.destroyAll()` - 销毁所有模态框
+- [x] `Modal.useModal()` - Hook 版本
+
+#### 事件系统 ✅
+- [x] `@ok` / `@cancel` - 按钮点击事件
+- [x] `@update:open` - 状态更新事件
+- [x] `@change` - 状态改变事件
+- [x] `@after-close` - 关闭后事件
+
+#### 插槽系统 ✅
+- [x] `default` - 默认内容插槽
+- [x] `title` - 标题插槽
+- [x] `footer` - 底部插槽
+- [x] `closeIcon` - 关闭图标插槽
+- [x] `modalRender` - 自定义渲染插槽
+
 ### 📦 Bundle Information
 
 - **ES Module**: ~25KB
@@ -1134,7 +1223,7 @@ const transformStyle = computed(() => {
 
 ### 📖 API 参考
 
-#### Modal 组件属性
+#### 常用属性
 
 | 属性 | 类型 | 默认值 | 描述 |
 |------|------|--------|------|
@@ -1142,161 +1231,242 @@ const transformStyle = computed(() => {
 | `title` | `string \| VNode` | - | 模态框标题 |
 | `width` | `string \| number` | `520` | 模态框宽度 |
 | `centered` | `boolean` | `false` | 垂直居中显示 |
+| `confirmLoading` | `boolean` | `false` | 确认按钮加载状态 |
+| `okText` | `string \| VNode` | `'确定'` | 确定按钮文本 |
+| `cancelText` | `string \| VNode` | `'取消'` | 取消按钮文本 |
+| `okType` | `ButtonType` | `'primary'` | 确定按钮类型 |
+
+#### 样式属性
+
+| 属性 | 类型 | 描述 |
+|------|------|------|
+| `style` | `CSSProperties \| string` | 模态框样式 |
+| `bodyStyle` | `CSSProperties` | 模态框主体样式 |
+| `maskStyle` | `CSSProperties` | 遮罩样式 |
+| `wrapClassName` | `string` | 包装器类名 |
+| `zIndex` | `number` | 模态框层级 |
+
+#### 交互属性
+
+| 属性 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
 | `closable` | `boolean` | `true` | 显示关闭按钮 |
-| `closeIcon` | `string \| VNode` | - | 自定义关闭图标 |
-| `mask` | `boolean` | `true` | 显示背景遮罩 |
 | `maskClosable` | `boolean` | `true` | 点击遮罩层关闭 |
 | `keyboard` | `boolean` | `true` | ESC 键关闭 |
 | `destroyOnClose` | `boolean` | `false` | 关闭时销毁内容 |
-| `confirmLoading` | `boolean` | `false` | 确认按钮加载状态 |
-| `okText` | `string \| VNode` | - | 确定按钮文本 |
-| `cancelText` | `string \| VNode` | - | 取消按钮文本 |
-| `okType` | `ButtonType` | - | 确定按钮类型 |
-| `okButtonProps` | `ButtonProps` | - | 确定按钮属性 |
-| `cancelButtonProps` | `ButtonProps` | - | 取消按钮属性 |
-| `zIndex` | `number` | - | 模态框层级 |
-| `forceRender` | `boolean` | `false` | 强制渲染模态框内容 |
-| `getContainer` | `string \| HTMLElement \| (() => HTMLElement) \| false` | - | 模态框容器 |
-| `maskStyle` | `CSSProperties` | - | 遮罩样式 |
-| `bodyStyle` | `CSSProperties` | - | 模态框主体样式 |
-| `wrapClassName` | `string` | - | 包装器类名 |
-| `style` | `CSSProperties \| string` | - | 模态框样式 |
-| `transitionName` | `string` | - | 过渡动画名称 |
-| `maskTransitionName` | `string` | - | 遮罩过渡动画名称 |
-| `focusTriggerAfterClose` | `boolean` | `true` | 关闭后聚焦触发器 |
-| `modalRender` | `(originVNode: VNode) => VNode` | - | 自定义模态框渲染函数 |
 
-#### Modal 组件事件
+#### 高级属性
+
+| 属性 | 类型 | 描述 |
+|------|------|------|
+| `modalRender` | `(arg: { originVNode: VNode }) => VNode` | 自定义渲染函数（拖拽功能） |
+| `mousePosition` | `{ x: number; y: number } \| null` | 鼠标位置动画起始点 |
+| `getContainer` | `string \| HTMLElement \| (() => HTMLElement) \| false` | 模态框容器 |
+
+#### 事件
 
 | 事件 | 参数 | 描述 |
 |------|------|------|
-| `update:open` | `(open: boolean)` | 模态框显示状态改变时触发 |
-| `ok` | `(e: Event)` | 点击确定按钮时触发 |
-| `cancel` | `(e: Event)` | 点击取消按钮时触发 |
-| `afterClose` | `()` | 模态框完全关闭后触发 |
+| `@ok` | `(e: MouseEvent)` | 点击确定按钮 |
+| `@cancel` | `(e?: MouseEvent)` | 点击取消按钮或关闭 |
+| `@update:open` | `(open: boolean)` | 显示状态改变 |
+| `@afterClose` | `()` | 完全关闭后触发 |
 
-#### Modal 组件插槽
+#### 插槽
 
 | 插槽 | 描述 |
 |------|------|
 | `default` | 模态框内容 |
-| `title` | 自定义标题内容 |
-| `footer` | 自定义底部内容 |
-| `header` | 自定义头部内容 |
-| `modalRender` | 自定义模态框包装器（用于拖拽功能） |
+| `title` | 自定义标题 |
+| `footer` | 自定义底部 |
+| `modalRender` | 自定义包装器（拖拽功能） |
 
-#### 编程式 API 方法
+#### 编程式 API
 
-| 方法 | 参数 | 描述 |
-|------|------|------|
-| `Modal.info(options)` | `ModalOptions` | 显示信息模态框 |
-| `Modal.success(options)` | `ModalOptions` | 显示成功模态框 |
-| `Modal.error(options)` | `ModalOptions` | 显示错误模态框 |
-| `Modal.warning(options)` | `ModalOptions` | 显示警告模态框 |
-| `Modal.confirm(options)` | `ModalOptions` | 显示确认模态框 |
-| `Modal.destroyAll()` | - | 销毁所有模态框 |
+```typescript
+// 基础方法
+Modal.info({ title: '信息', content: '内容' })
+Modal.success({ title: '成功', content: '操作成功' })
+Modal.error({ title: '错误', content: '操作失败' })
+Modal.warning({ title: '警告', content: '注意事项' })
+Modal.confirm({ title: '确认', content: '确定要执行吗？' })
+Modal.destroyAll() // 销毁所有模态框
+
+// useModal Hook
+const [modal, contextHolder] = Modal.useModal()
+// 返回：[modal方法对象, 需要渲染的组件]
+```
 
 #### ModalOptions 接口
 
 ```typescript
 interface ModalOptions {
+  // 基础配置
   title?: string | VNode            // 标题
-  content?: string | VNode | (() => VNode)  // 内容
-  width?: number | string           // 宽度
+  content?: string | VNode          // 内容
+  width?: string | number           // 宽度
   centered?: boolean                // 居中显示
-  closable?: boolean                // 可关闭
-  closeIcon?: string | VNode        // 自定义关闭图标
-  mask?: boolean                    // 显示遮罩
-  maskClosable?: boolean            // 点击遮罩关闭
-  keyboard?: boolean                // 键盘支持
-  destroyOnClose?: boolean          // 关闭时销毁
-  type?: 'info' | 'success' | 'error' | 'warn' | 'warning' | 'confirm'  // 类型
+
+  // 按钮配置
   okText?: string | VNode           // 确定按钮文本
   cancelText?: string | VNode       // 取消按钮文本
-  okType?: ButtonType               // 确定按钮类型
-  zIndex?: number                   // 层级
-  forceRender?: boolean             // 强制渲染
-  getContainer?: string | HTMLElement | (() => HTMLElement) | false | null  // 容器
+  okType?: 'primary' | 'danger'     // 确定按钮类型
 
-  // 事件处理器
-  onOk?: (...args: any[]) => any    // 确定回调
-  onCancel?: (...args: any[]) => any // 取消回调
-  afterClose?: () => void           // 关闭后回调
-
-  // 高级选项
-  autoFocusButton?: null | 'ok' | 'cancel'  // 自动聚焦按钮
-  okButtonProps?: ButtonProps       // 确定按钮属性
-  cancelButtonProps?: ButtonProps   // 取消按钮属性
-  class?: string                    // 自定义类名
-  style?: CSSProperties | string    // 自定义样式
-  wrapClassName?: string            // 包装器类名
-  footer?: VNode                    // 自定义底部
-  icon?: VNode                      // 自定义图标
+  // 样式配置
+  style?: CSSProperties             // 自定义样式
   maskStyle?: CSSProperties         // 遮罩样式
   bodyStyle?: CSSProperties         // 主体样式
-  transitionName?: string           // 过渡动画名称
-  maskTransitionName?: string       // 遮罩过渡动画名称
-  focusTriggerAfterClose?: boolean  // 关闭后聚焦触发器
-  modalRender?: (arg: { originVNode: VNode }) => VNode  // 自定义渲染函数
-  mousePosition?: { x: number; y: number } | null       // 鼠标位置
-  okCancel?: boolean                // 显示取消按钮
-  appContext?: any                  // 应用上下文
+
+  // 事件处理
+  onOk?: () => void | Promise<void> // 确定回调
+  onCancel?: () => void             // 取消回调
+  afterClose?: () => void           // 关闭后回调
 }
 ```
 
 #### 返回值
 
-所有编程式方法都返回一个包含以下方法的对象：
-
 ```typescript
-interface ModalInstance {
-  destroy(): void                           // 手动销毁模态框
-  update(options: Partial<ModalOptions>): void  // 更新模态框选项
-}
+const modal = Modal.confirm({...})
+modal.destroy()  // 销毁模态框
+modal.update({...})  // 更新配置
 ```
 
-### 🎨 样式
 
-模态框组件设计为与您现有的 CSS 框架配合使用。您需要在项目中包含模态框样式：
 
-```css
-/* 导入您的模态框样式 */
-@import 'path/to/your/modal.css';
-```
+### 🔧 高级特性
 
-组件使用可自定义的 CSS 类：
-- `.v-modals-*` - 模态框容器类
-- `.simple-dialog-*` - 对话框特定类
-- `.v-modals-confirm-*` - 确认对话框类
-
-### 🔧 高级用法
-
-#### 自定义动画
-
+#### confirmLoading 安全机制
 ```vue
-<Modal 
-  v-model:open="showModal"
-  transition-name="custom-modal"
->
-  <!-- 模态框内容 -->
+<Modal :confirm-loading="loading" @ok="handleSubmit">
+  <!-- 加载时自动禁用所有关闭操作 -->
 </Modal>
 ```
 
-#### 异步操作
+#### 鼠标位置动画
+```vue
+<Modal :mouse-position="{ x: 100, y: 100 }">
+  <!-- 从指定位置开始缩放动画 -->
+</Modal>
+```
 
+#### 拖拽功能
+```vue
+<Modal :modal-render="customRender">
+  <!-- 通过 modalRender 实现拖拽 -->
+</Modal>
+```
+
+### 🎨 CSS 样式示例
+
+#### 1. 自定义模态框样式
+```vue
+<Modal
+  v-model:open="open"
+  title="自定义样式"
+  :style="{
+    top: '50px',
+    border: '2px solid #1890ff',
+    borderRadius: '12px',
+    boxShadow: '0 10px 30px rgba(0,0,0,0.3)'
+  }"
+>
+  <p>自定义边框、圆角和阴影效果</p>
+</Modal>
+```
+
+#### 2. 自定义遮罩样式
+```vue
+<Modal
+  v-model:open="open"
+  title="遮罩样式"
+  :mask-style="{
+    backgroundColor: 'rgba(255, 0, 0, 0.3)',
+    backdropFilter: 'blur(5px)'
+  }"
+>
+  <p>红色半透明遮罩 + 背景模糊效果</p>
+</Modal>
+```
+
+#### 3. 自定义主体样式
+```vue
+<Modal
+  v-model:open="open"
+  title="主体样式"
+  :body-style="{
+    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    color: 'white',
+    padding: '24px',
+    borderRadius: '8px'
+  }"
+>
+  <p>渐变背景 + 白色文字 + 圆角效果</p>
+</Modal>
+```
+
+#### 4. 包装器类名样式
+```vue
+<template>
+  <Modal
+    v-model:open="open"
+    title="包装器类名"
+    wrap-class-name="custom-modal-wrap"
+  >
+    <p>通过CSS类名进行复杂样式定制</p>
+  </Modal>
+</template>
+
+<style>
+.custom-modal-wrap {
+  animation: customAnimation 0.3s ease-out;
+}
+.custom-modal-wrap .simple-dialog {
+  border: 2px dashed #722ed1;
+  border-radius: 16px;
+}
+</style>
+```
+
+#### 5. 层级控制
+```vue
+<Modal
+  v-model:open="open"
+  title="高层级模态框"
+  :z-index="2000"
+  :style="{ border: '3px solid #52c41a' }"
+>
+  <p>设置高层级确保在其他元素之上</p>
+</Modal>
+```
+
+### 🚀 快速示例
+
+#### 基础用法
+```vue
+<Modal v-model:open="open" title="标题" @ok="handleOk">
+  <p>内容</p>
+</Modal>
+```
+
+#### 编程式调用
 ```typescript
 Modal.confirm({
-  title: '删除项目',
-  content: '此操作无法撤销。',
-  onOk: async () => {
-    try {
-      await deleteItem()
-      Modal.success({ content: '项目删除成功！' })
-    } catch (error) {
-      Modal.error({ content: '删除项目失败。' })
-    }
-  }
+  title: '确认',
+  content: '确定要执行此操作吗？',
+  onOk: () => console.log('确认')
 })
+```
+
+#### useModal Hook
+```vue
+<script setup>
+const [modal, contextHolder] = Modal.useModal()
+modal.info({ title: '信息', content: '消息内容' })
+</script>
+<template>
+  <component :is="contextHolder" />
+</template>
 ```
 
 ### 📦 打包信息

@@ -40,7 +40,8 @@ export const dialogProps = () => ({
   animation: String,
   maskAnimation: String,
   mousePosition: objectType<{ x: number; y: number }>(),
+  bodyStyle: objectType<CSSProperties>(),
   onClose: functionType<(e?: MouseEvent) => void>(),
   afterClose: functionType<() => void>(),
-  modalRender: Function as PropType<(arg: { originVNode: VueNode }) => VueNode>,
+  modalRender: Function as PropType<(arg: { originVNode: VueNode }) => VNode>,
 });
