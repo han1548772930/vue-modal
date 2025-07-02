@@ -40,7 +40,7 @@ pnpm add v-modals
 <template>
   <div>
     <Button @click="showModal = true">Open Modal</Button>
-    
+
     <Modal v-model:open="showModal" title="Basic Modal">
       <p>This is a basic modal example.</p>
       <template #footer>
@@ -56,6 +56,22 @@ import { Modal } from 'v-modals'
 
 const showModal = ref(false)
 </script>
+```
+
+#### Import Styles
+
+Don't forget to import the CSS styles:
+
+```css
+/* In your main CSS file */
+@import "v-modals/dist/style.css";
+```
+
+Or if using Tailwind CSS:
+
+```css
+@import "tailwindcss";
+@import "v-modals/dist/modal.css";
 ```
 
 #### Programmatic Usage
@@ -1333,6 +1349,102 @@ modal.update({...})  // 更新配置
 ```
 
 
+
+### 🎨 CSS 样式系统
+
+#### 样式文件引入
+
+模态框组件需要引入样式文件才能正常显示：
+
+```css
+/* 在你的主样式文件中引入 */
+@import "simple-modal/dist/style.css";
+
+/* 或者如果使用 Tailwind CSS */
+@import "tailwindcss";
+@import "simple-modal/dist/modal.css";
+```
+
+#### CSS 类名结构
+
+模态框使用以下 CSS 类名结构，你可以通过这些类名进行自定义：
+
+```css
+/* 根容器 */
+.simple-dialog-root { }
+
+/* 遮罩层 */
+.simple-dialog-mask { }
+
+/* 模态框包装器 */
+.simple-dialog-wrap { }
+.simple-dialog-wrap.simple-dialog-centered { } /* 居中模式 */
+
+/* 模态框主体 */
+.simple-dialog {
+  top: var(--modal-top, 100px); /* 支持 CSS 变量 */
+}
+
+/* 内容区域 */
+.simple-dialog-content { }
+.simple-dialog-header { }
+.simple-dialog-title { }
+.simple-dialog-body { }
+.simple-dialog-footer { }
+
+/* 关闭按钮 */
+.simple-dialog-close { }
+.simple-dialog-close-x { }
+.simple-dialog-close-icon { }
+```
+
+#### 自定义主题
+
+通过 CSS 变量自定义主题：
+
+```css
+:root {
+  --modal-top: 100px;           /* 默认顶部距离 */
+  --background: #ffffff;        /* 背景色 */
+  --foreground: #000000;        /* 前景色 */
+  --muted-foreground: #6b7280;  /* 次要文字色 */
+  --border: #e5e7eb;            /* 边框色 */
+  --accent: #f3f4f6;            /* 强调色 */
+  --accent-foreground: #111827; /* 强调前景色 */
+  --destructive: #ef4444;       /* 危险色 */
+}
+```
+
+#### 动画效果
+
+内置动画类名：
+
+```css
+/* 缩放动画 */
+.simple-zoom-enter-active { }
+.simple-zoom-leave-active { }
+.simple-zoom-enter-from { opacity: 0; transform: scale(0.2); }
+.simple-zoom-leave-to { opacity: 0; transform: scale(0.2); }
+
+/* 淡入淡出动画 */
+.simple-fade-enter-active { }
+.simple-fade-leave-active { }
+.simple-fade-enter-from { opacity: 0; }
+.simple-fade-leave-to { opacity: 0; }
+```
+
+#### 响应式设计
+
+内置移动端适配：
+
+```css
+@media (max-width: 767px) {
+  .simple-dialog {
+    max-width: calc(100vw - 16px);
+    margin: 8px auto;
+  }
+}
+```
 
 ### 🔧 高级特性
 
