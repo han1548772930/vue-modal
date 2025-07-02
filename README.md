@@ -927,6 +927,22 @@ const showModal = ref(false)
 </script>
 ```
 
+#### 引入样式
+
+别忘了引入 CSS 样式文件：
+
+```css
+/* 在你的主样式文件中 */
+@import "v-modals/dist/style.css";
+```
+
+或者如果使用 Tailwind CSS：
+
+```css
+@import "tailwindcss";
+@import "v-modals/dist/modal.css";
+```
+
 #### 编程式调用
 
 ```typescript
