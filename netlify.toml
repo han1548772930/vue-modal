@@ -1,6 +1,6 @@
 [build]
 publish = "example-project/dist"
-command = "cd example-project && npm install && npm run build"
+command = "npm install && npm run build && cd example-project && npm install && npm run build"
 
 [[headers]]
 for = "/*"
