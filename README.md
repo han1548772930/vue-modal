@@ -2037,8 +2037,6 @@ Here's a complete `modal.css` style file example that you can use as a reference
 }
 ```
 
-```
-
 ### Key Features | 关键特性
 
 **CSS Variable Support | CSS 变量支持:**
@@ -2084,24 +2082,6 @@ The modal uses the following CSS class structure for customization:
 - `.simple-modal-body` / `.simple-dialog-body` - Body | 主体
 - `.simple-modal-footer` / `.simple-dialog-footer` - Footer | 页脚
 - `.simple-modal-close` / `.simple-dialog-close` - Close button | 关闭按钮
-
-
-
-### 📄 License | 许可证
-
-MIT License
-
-### 🤝 Contributing | 贡献
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-欢迎贡献！请随时提交 Pull Request。
-
-### 📞 Support | 支持
-
-If you encounter any issues while using this library, please submit an Issue or check the example project.
-
-如果您在使用过程中遇到问题，请提交 Issue 或查看示例项目。
 
 ---
 
