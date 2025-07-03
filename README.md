@@ -2037,6 +2037,8 @@ Here's a complete `modal.css` style file example that you can use as a reference
 }
 ```
 
+```
+
 ### Key Features | 关键特性
 
 **CSS Variable Support | CSS 变量支持:**
@@ -2082,3 +2084,53 @@ The modal uses the following CSS class structure for customization:
 - `.simple-modal-body` / `.simple-dialog-body` - Body | 主体
 - `.simple-modal-footer` / `.simple-dialog-footer` - Footer | 页脚
 - `.simple-modal-close` / `.simple-dialog-close` - Close button | 关闭按钮
+
+
+
+### 📄 License | 许可证
+
+MIT License
+
+### 🤝 Contributing | 贡献
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+欢迎贡献！请随时提交 Pull Request。
+
+### 📞 Support | 支持
+
+If you encounter any issues while using this library, please submit an Issue or check the example project.
+
+如果您在使用过程中遇到问题，请提交 Issue 或查看示例项目。
+
+---
+
+## 🙏 Acknowledgments | 致谢
+
+This project is inspired by and built upon the excellent work of:
+
+本项目受到以下优秀项目的启发并基于其构建：
+
+- **[Ant Design Vue](https://antdv.com/)** - A high-quality Vue UI library that provides the foundation and design patterns for this modal component. Their modal implementation served as the primary reference for API design and functionality.
+
+- **[Ant Design](https://ant.design/)** - The original React-based design system that established the design principles and interaction patterns that make this modal component intuitive and user-friendly.
+
+We are grateful to the maintainers and contributors of these projects for their outstanding work in creating robust, accessible, and well-designed UI components that benefit the entire frontend development community.
+
+我们感谢 Ant Design Vue 和 Ant Design 的维护者和贡献者们，感谢他们在创建强大、可访问且设计精良的 UI 组件方面所做的杰出工作，这些工作使整个前端开发社区受益。
+
+Special thanks to:
+- The Ant Design team for establishing the design language and interaction patterns
+- The Ant Design Vue team for the Vue.js implementation and API design
+- All contributors who have helped improve these libraries over the years
+
+特别感谢：
+- Ant Design 团队建立的设计语言和交互模式
+- Ant Design Vue 团队的 Vue.js 实现和 API 设计
+- 多年来帮助改进这些库的所有贡献者
+
+---
+
+*This modal component aims to provide a lightweight, framework-agnostic solution while maintaining the familiar API and behavior patterns that developers love from Ant Design Vue.*
+
+*这个模态框组件旨在提供一个轻量级、框架无关的解决方案，同时保持开发者喜爱的 Ant Design Vue 熟悉的 API 和行为模式。*
