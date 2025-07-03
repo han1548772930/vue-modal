@@ -1824,18 +1824,6 @@ modal.info({ title: '信息', content: '消息内容' })
 - **TypeScript**: 包含完整类型定义
 - **Tree-shaking**: 支持
 
-### 📄 许可证
-
-MIT License
-
-### 🤝 贡献
-
-欢迎提交 Issue 和 Pull Request！
-
-### 📞 支持
-
-如果您在使用过程中遇到问题，请提交 Issue 或查看示例项目。
-
 ---
 
 ## 🎨 CSS Styling System | CSS 样式系统
@@ -2085,7 +2073,25 @@ The modal uses the following CSS class structure for customization:
 
 ---
 
-## 🙏 Acknowledgments | 致谢
+## � License | 许可证
+
+MIT License
+
+## 🤝 Contributing | 贡献
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+欢迎贡献！请随时提交 Pull Request。
+
+## 📞 Support | 支持
+
+If you encounter any issues while using this library, please submit an Issue or check the example project.
+
+如果您在使用过程中遇到问题，请提交 Issue 或查看示例项目。
+
+---
+
+## �🙏 Acknowledgments | 致谢
 
 This project is inspired by and built upon the excellent work of:
 
