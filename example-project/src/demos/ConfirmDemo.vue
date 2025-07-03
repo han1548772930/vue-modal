@@ -103,6 +103,7 @@ const showNoFooter = () => {
     title: 'No Footer Test',
     content: 'This modal should not display footer buttons',
     footer: null,
+    closable: true,
     onOk() {
       console.log('OK');
     },
