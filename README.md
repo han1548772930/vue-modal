@@ -2073,7 +2073,7 @@ The modal uses the following CSS class structure for customization:
 
 ---
 
-## � License | 许可证
+##  License | 许可证
 
 MIT License
 
@@ -2091,7 +2091,7 @@ If you encounter any issues while using this library, please submit an Issue or 
 
 ---
 
-## �🙏 Acknowledgments | 致谢
+## 🙏 Acknowledgments | 致谢
 
 This project is inspired by and built upon the excellent work of:
 
