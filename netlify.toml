@@ -1,0 +1,16 @@
+[build]
+publish = "example-project/dist"
+command = "cd example-project && npm install && npm run build"
+
+[[headers]]
+for = "/*"
+[headers.values]
+Cross-Origin-Embedder-Policy = "require-corp"
+Cross-Origin-Opener-Policy = "same-origin"
+
+
+# 确保重定向以支持 SPA 路由
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200

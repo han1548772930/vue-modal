@@ -1,6 +1,6 @@
 {
   "name": "v-modals",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A simple Vue 3 modal component extracted from Ant Design Vue without internationalization",
   "type": "module",
   "main": "dist/simple-modal.umd.js",
