@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Loader2 } from 'lucide-vue-next'
+// @ts-expect-error - Button component is provided by the consuming project
 import { Button } from '@/components/ui/button'
+// @ts-expect-error - ButtonVariants type is provided by the consuming project
 import type { ButtonVariants } from '@/components/ui/button'
 
 // Legacy button props interface
