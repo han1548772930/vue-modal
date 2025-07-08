@@ -3,6 +3,7 @@ import classNames from '../../utils/classNames';
 import { dialogProps } from './types';
 import { initDefaultProps } from '../../utils/props';
 import { useModalScrollLocker } from '../../utils/scrollLocker';
+import { useModalFocusTrap } from '../../utils/focusTrap';
 
 export default defineComponent({
   name: 'SimpleDialog',
@@ -26,6 +27,15 @@ export default defineComponent({
     // 滚动锁定 - 当Modal可见时锁定背景滚动
     useModalScrollLocker(() => props.visible);
 
+    // 焦点捕获
+    const { containerRef: focusTrapRef, handleVisibilityChange } = useModalFocusTrap(
+      () => props.visible,
+      {
+        autoFocus: true,
+        restoreFocus: props.focusTriggerAfterClose,
+      }
+    );
+
     // 计算内容样式 - 参考原始 vc-dialog/Content.tsx
     const contentStyle = computed(() => {
       const { width, height } = props;
@@ -47,13 +57,9 @@ export default defineComponent({
       (visible) => {
         if (visible) {
           animatedVisible.value = true;
-          // 当modal显示时，让wrapper获得焦点以便ESC键能正常工作
-          nextTick(() => {
-            if (wrapperRef.value) {
-              wrapperRef.value.focus();
-            }
-          });
         }
+        // 处理焦点捕获
+        handleVisibilityChange(visible);
       },
       { immediate: true }
     );
@@ -83,13 +89,12 @@ export default defineComponent({
         contentClickRef.value = false;
       } else {
         const target = e.target as HTMLElement;
-        // 允许点击包装器本身或者模态框内的 tabindex="0" 元素来关闭模态框
+        // 允许点击包装器本身来关闭模态框
         const isWrapper = wrapperRef.value === target;
-        const isTabindexElement = target?.getAttribute?.('tabindex') === '0' &&
-          target?.style?.outline === 'none' &&
-          wrapperRef.value?.contains(target);
+        // 允许点击模态框内容区域的空白部分来关闭模态框
+        const isContentArea = contentRef.value === target;
 
-        if (isWrapper || isTabindexElement) {
+        if (isWrapper || isContentArea) {
           onInternalClose(e);
         }
       }
@@ -301,7 +306,11 @@ export default defineComponent({
           >
             {visible || !destroyOnClose ? (
               <div
-                ref={contentRef}
+                ref={(el) => {
+                  const element = el as HTMLDivElement;
+                  contentRef.value = element;
+                  focusTrapRef.value = element;
+                }}
                 v-show={visible}
                 key="dialog-element"
                 role="document"
@@ -309,58 +318,49 @@ export default defineComponent({
                 style={[contentStyle.value, contentStyleFromAttrs]}
                 onMousedown={onContentMouseDown}
                 onMouseup={onContentMouseUp}
+                onClick={(e: MouseEvent) => {
+                  // 如果点击的是模态框内容区域本身（不是内部元素），则关闭模态框
+                  if (e.target === e.currentTarget && props.maskClosable) {
+                    onInternalClose(e);
+                  }
+                }}
               >
-                <div
-                  tabindex={0}
-                  style={{ outline: 'none' }}
-                  onClick={(e) => {
-                    // 如果点击的是这个 tabindex div 本身，传播事件到包装器
-                    if (e.target === e.currentTarget) {
-                      e.stopPropagation();
-                      if (props.maskClosable) {
-                        onInternalClose(e);
-                      }
-                    }
-                  }}
-                >
-                  {(() => {
-                    const content = (
-                      <div class={`${prefixCls}-content`}>
-                        {closable && (
-                          <button
-                            type="button"
-                            onClick={onInternalClose}
-                            aria-label="Close"
-                            class={`${prefixCls}-close`}
-                          >
-                            {closeIcon || (
-                              <span class={`${prefixCls}-close-x`}>
-                                <span class={`${prefixCls}-close-icon`}>×</span>
-                              </span>
-                            )}
-                          </button>
-                        )}
-                        {title && (
-                          <div class={`${prefixCls}-header`}>
-                            <div class={`${prefixCls}-title`}>{title}</div>
-                          </div>
-                        )}
-                        <div class={`${prefixCls}-body`} style={props.bodyStyle}>
-                          {slots.default?.()}
+                {(() => {
+                  const content = (
+                    <div class={`${prefixCls}-content`}>
+                      {closable && (
+                        <button
+                          type="button"
+                          onClick={onInternalClose}
+                          aria-label="Close"
+                          class={`${prefixCls}-close`}
+                        >
+                          {closeIcon || (
+                            <span class={`${prefixCls}-close-x`}>
+                              <span class={`${prefixCls}-close-icon`}>×</span>
+                            </span>
+                          )}
+                        </button>
+                      )}
+                      {title && (
+                        <div class={`${prefixCls}-header`}>
+                          <div class={`${prefixCls}-title`}>{title}</div>
                         </div>
-                        {footer && (
-                          <div class={`${prefixCls}-footer`}>
-                            {footer}
-                          </div>
-                        )}
+                      )}
+                      <div class={`${prefixCls}-body`} style={props.bodyStyle}>
+                        {slots.default?.()}
                       </div>
-                    );
+                      {footer && (
+                        <div class={`${prefixCls}-footer`}>
+                          {footer}
+                        </div>
+                      )}
+                    </div>
+                  );
 
-                    // 完全按照 Ant Design Vue 的方式应用 modalRender
-                    return finalModalRender ? finalModalRender({ originVNode: content }) : content;
-                  })()}
-                </div>
-                <div tabindex={0} style={{ width: '0px', height: '0px', overflow: 'hidden', outline: 'none' }} />
+                  // 完全按照 Ant Design Vue 的方式应用 modalRender
+                  return finalModalRender ? finalModalRender({ originVNode: content }) : content;
+                })()}
               </div>
             ) : null}
           </Transition>
