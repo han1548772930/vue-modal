@@ -1,6 +1,6 @@
 {
   "name": "v-modals",
-  "version": "1.0.9",
+  "version": "1.0.12",
   "description": "A simple Vue 3 modal component extracted from Ant Design Vue without internationalization",
   "type": "module",
   "main": "dist/simple-modal.umd.js",
@@ -43,13 +43,13 @@
     "url": "https://github.com/han1548772930/vue-modal/issues"
   },
 "peerDependencies": {
-  "vue": "^3.0.0",
-  "lucide-vue-next": "^0.400.0",
-  "reka-ui": "^2.0.0", 
-  "class-variance-authority": "^0.7.0",
-  "clsx": "^2.0.0",
-  "tailwind-merge": "^3.0.0",
-  "@vueuse/core": "^11.0.0"
+  "vue": ">=3.0.0",
+  "lucide-vue-next": ">=0.500.0",
+  "reka-ui": ">=2.0.0", 
+  "class-variance-authority": ">=0.7.0",
+  "clsx": ">=2.0.0",
+  "tailwind-merge": ">=3.0.0",
+  "@vueuse/core": ">=13.0.0"
 },
   "dependencies": {
     "vue-types": "^6.0.0"
