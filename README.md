@@ -1835,50 +1835,61 @@ Here's a complete `modal.css` style file example that you can use as a reference
 以下是一个完整的 `modal.css` 样式文件示例，你可以参考这个文件来创建自己的模态框样式：
 
 ```css
-/* Simple Modal CSS - Standalone Modal Style File */
 /* Simple Modal CSS - 独立的 Modal 样式文件 */
-/* This file contains all Modal related styles using Tailwind CSS classes */
 /* 这个文件包含所有 Modal 相关的样式，使用 Tailwind CSS 类 */
 
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* Modal Base Styles | Modal 基础样式 */
+/* Modal 基础样式 */
 .simple-modal-root,
 .simple-dialog-root {
   @apply relative;
 }
 
-/* Mask Layer | 遮罩层 */
+/* 遮罩层 */
 .simple-modal-mask,
 .simple-dialog-mask {
-  @apply fixed inset-0 z-[50] bg-black/50;
+  @apply fixed inset-0 z-[50] bg-base-300/60 backdrop-blur-sm;
 }
 
-/* Modal Container | Modal 容器 */
+/* Modal 容器 */
 .simple-modal-wrap,
 .simple-dialog-wrap {
   @apply fixed inset-0 overflow-auto outline-none z-[50];
   -webkit-overflow-scrolling: touch;
 }
 
-/* Centered Layout | 居中布局 */
+.simple-modal-wrap-rtl {
+  direction: rtl;
+}
+
+/* 居中布局 */
 .simple-modal-wrap.simple-modal-centered,
-.simple-dialog-wrap.simple-dialog-centered {
+.simple-dialog-wrap.simple-dialog-centered,
+.simple-dialog-wrap.simple-modal-centered {
   @apply text-center;
 }
 
 .simple-modal-wrap.simple-modal-centered::before,
-.simple-dialog-wrap.simple-dialog-centered::before {
+.simple-dialog-wrap.simple-dialog-centered::before,
+.simple-dialog-wrap.simple-modal-centered::before {
   @apply inline-block w-0 h-full align-middle;
   content: '';
 }
 
-/* Modal Body | Modal 主体 */
+.simple-modal-wrap.simple-modal-centered .simple-modal,
+.simple-dialog-wrap.simple-dialog-centered .simple-dialog,
+.simple-dialog-wrap.simple-modal-centered .simple-dialog {
+  @apply top-0 inline-block pb-0 text-left align-middle;
+}
+
+/* Modal 主体 */
 .simple-modal,
 .simple-dialog {
   position: relative;
-  top: var(--modal-top, 100px); /* Use CSS variable, default 100px | 使用 CSS 变量，默认 100px */
+  top: var(--modal-top, 100px);
+  /* 使用 CSS 变量，默认 100px */
   width: auto;
   max-width: calc(100vw - 32px);
   margin: 0 auto;
@@ -1886,70 +1897,81 @@ Here's a complete `modal.css` style file example that you can use as a reference
   pointer-events: none;
 }
 
-/* Modal Content Area | Modal 内容区域 */
+/* Modal 内容区域 */
 .simple-modal-content,
 .simple-dialog-content {
-  @apply relative bg-background border border-border rounded-lg shadow-lg p-6 text-base leading-relaxed pointer-events-auto;
+  @apply relative bg-base-100 text-base-content border border-base-content/15 rounded-box shadow-2xl p-6 text-base leading-relaxed pointer-events-auto;
 }
 
-/* Close Button | 关闭按钮 */
+/* 关闭按钮 */
 .simple-modal-close,
 .simple-dialog-close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  z-index: 10;
-  display: inline-flex;
-  height: 2rem;
-  width: 2rem;
+  @apply btn btn-sm btn-ghost btn-circle absolute top-4 right-4 z-10;
+}
+
+/* daisyUI 按钮自带 hover 态，这里无需额外样式 */
+
+.simple-modal-close:disabled,
+.simple-dialog-close:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.simple-modal-close-x,
+.simple-dialog-close-x {
+  display: flex;
+  height: 100%;
+  width: 100%;
   align-items: center;
   justify-content: center;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  color: var(--muted-foreground);
-  border-radius: 0.375rem;
-  transition: all 0.2s;
 }
 
-.simple-modal-close:hover,
-.simple-dialog-close:hover {
-  background-color: var(--accent);
-  color: var(--accent-foreground);
+.simple-modal-close-icon,
+.simple-dialog-close-icon {
+  height: 1rem;
+  width: 1rem;
 }
 
-/* Modal Header, Title, Content, Footer | Modal 头部、标题、内容、页脚 */
+/* Modal 头部 */
 .simple-modal-header,
 .simple-dialog-header {
   margin-bottom: 0.5rem;
 }
 
+/* Modal 标题 */
 .simple-modal-title,
 .simple-dialog-title {
-  margin: 0;
-  font-weight: 600;
-  font-size: 1.125rem;
-  line-height: 1.25;
-  color: var(--foreground);
+  @apply m-0 text-lg font-bold leading-snug text-base-content;
 }
 
+/* Modal 内容 */
 .simple-modal-body,
 .simple-dialog-body {
-  font-size: 1rem;
-  line-height: 1.625;
-  color: var(--muted-foreground);
+  @apply text-base leading-relaxed text-base-content/70;
 }
 
+/* Modal 页脚 */
 .simple-modal-footer,
 .simple-dialog-footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  padding-top: 0.75rem;
+  @apply flex items-center justify-end gap-2 pt-3;
 }
 
-/* Animation Effects | 动画效果 */
+/* Loading 动画 - 确保 spin 动画正确工作 */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* 动画效果 - 使用 transition 方式确保兼容性 */
 .simple-zoom-enter-active {
   transition: all 0.3s cubic-bezier(0.08, 0.82, 0.17, 1);
 }
@@ -1965,6 +1987,12 @@ Here's a complete `modal.css` style file example that you can use as a reference
   transform: scale(0.2);
 }
 
+.simple-zoom-enter-to,
+.simple-zoom-leave-from {
+  opacity: 1;
+  transform: scale(1);
+}
+
 .simple-fade-enter-active,
 .simple-fade-leave-active {
   transition: opacity 0.3s;
@@ -1975,53 +2003,98 @@ Here's a complete `modal.css` style file example that you can use as a reference
   opacity: 0;
 }
 
-/* Responsive Design | 响应式设计 */
+/* 响应式设计 */
 @media (max-width: 767px) {
+
   .simple-modal,
   .simple-dialog {
     max-width: calc(100vw - 16px);
     margin: 8px auto;
   }
+
+  .simple-modal-centered .simple-modal,
+  .simple-dialog-centered .simple-dialog {
+    flex: 1;
+  }
 }
 
-/* Confirm Dialog Styles | Confirm Dialog 样式 */
+/* 确保 Dialog 组件可见 */
+.simple-dialog {
+  pointer-events: auto;
+}
+
+.simple-dialog-content {
+  pointer-events: auto;
+}
+
+/* Confirm Dialog 样式 */
+.simple-modal-confirm .simple-modal-header {
+  display: none;
+}
+
 .simple-modal-confirm-body {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
 }
 
+/* Confirm Dialog 标题样式 */
 .simple-modal-confirm-title {
-  flex: none;
-  display: block;
-  overflow: hidden;
-  color: var(--foreground);
-  font-weight: 600;
-  font-size: 1rem;
-  line-height: 1.25;
+  @apply flex-none block overflow-hidden text-base-content font-semibold text-base leading-snug;
 }
 
+.simple-modal-confirm-title+.simple-modal-confirm-content {
+  margin-top: 0.5rem;
+  flex: 100%;
+  max-width: calc(100% - 38px);
+}
+
+/* Confirm Dialog 内容样式 */
 .simple-modal-confirm-content {
-  font-size: 1rem;
-  color: var(--muted-foreground);
+  @apply text-base text-base-content/70;
 }
 
-/* Confirm Dialog Icon Colors | 确认框图标颜色 */
-.simple-modal-confirm-error > svg {
-  color: var(--destructive) !important;
+/* Confirm Dialog 图标样式 */
+.simple-modal-confirm-body>* {
+  flex: none;
+  margin-right: 0.75rem;
+  font-size: 1.125rem;
 }
 
-.simple-modal-confirm-warning > svg,
-.simple-modal-confirm-confirm > svg {
-  color: #eab308 !important; /* yellow-500 */
+.simple-modal-confirm-body>*+.simple-modal-confirm-title {
+  flex: 1;
 }
 
-.simple-modal-confirm-info > svg {
-  color: #3b82f6 !important; /* blue-500 */
+.simple-modal-confirm-body>*+.simple-modal-confirm-title+.simple-modal-confirm-content {
+  margin-left: 34px;
 }
 
-.simple-modal-confirm-success > svg {
-  color: #22c55e !important; /* green-500 */
+/* Confirm Modal 按钮样式 */
+.simple-modal-confirm-btns {
+  @apply flex items-center justify-end gap-2 pt-3;
+}
+
+.simple-modal-confirm-btns .simple-btn+.simple-btn {
+  margin-bottom: 0;
+  margin-left: 0.5rem;
+}
+
+/* 确认框图标颜色 - 直接在 body 元素上应用类型类名 */
+.simple-modal-confirm-error>svg {
+  @apply text-error;
+}
+
+.simple-modal-confirm-warning>svg,
+.simple-modal-confirm-confirm>svg {
+  @apply text-warning;
+}
+
+.simple-modal-confirm-info>svg {
+  @apply text-info;
+}
+
+.simple-modal-confirm-success>svg {
+  @apply text-success;
 }
 ```
 
