@@ -1,11 +1,11 @@
-# Tailwind CSS 4 + shadcn/vue 示例项目
+# Tailwind CSS 4 + daisyUI 示例项目
 
-这是一个使用 Tailwind CSS 4 和 shadcn/vue 的示例项目，展示了如何集成和使用 simple-modal 插件。
+这是一个使用 Tailwind CSS 4 和 daisyUI 的示例项目，展示了如何集成和使用 simple-modal 插件。
 
 ## 功能特性
 
 - ✨ **Tailwind CSS 4**: 使用最新的 Tailwind CSS 4 和 @tailwindcss/vite 插件
-- 🎨 **shadcn/vue**: 集成 shadcn/vue 组件库和主题系统
+- 🎨 **daisyUI**: 集成 daisyUI 组件库和主题系统
 - 🌙 **深色模式**: 支持亮色/暗色主题切换
 - 📱 **响应式设计**: 完全响应式，支持各种屏幕尺寸
 - 🚀 **TypeScript**: 完整的 TypeScript 支持
@@ -39,12 +39,12 @@ example-project/
 ├── src/
 │   ├── components/          # Vue 组件
 │   ├── lib/                # 工具函数
-│   │   └── utils.ts        # shadcn/vue 工具函数
+│   │   └── utils.ts        # 工具函数
 │   ├── styles/             # 样式文件
 │   │   └── globals.css     # 全局样式和 Tailwind CSS 配置
 │   ├── App.vue             # 主应用组件
 │   └── main.ts             # 应用入口
-├── components.json         # shadcn/vue 配置
+├── components.json         # 组件配置（可选）
 ├── package.json            # 项目配置
 ├── tsconfig.json           # TypeScript 配置
 └── vite.config.ts          # Vite 配置
@@ -89,7 +89,7 @@ const showModal = () => {
 
 ## 主题配置
 
-项目使用 shadcn/vue 的主题系统，支持：
+项目使用 daisyUI 的主题系统，支持：
 
 - 多种预设主题（neutral、stone、zinc、gray、slate）
 - 深色/亮色模式切换
@@ -102,7 +102,7 @@ const showModal = () => {
 - **TypeScript**: 类型安全的 JavaScript
 - **Vite**: 快速的构建工具
 - **Tailwind CSS 4**: 实用优先的 CSS 框架
-- **shadcn/vue**: 高质量的 Vue 组件库
+- **daisyUI**: 基于 Tailwind 的组件库
 - **Lucide Vue**: 美观的图标库
 - **simple-modal**: 简洁的 Modal 组件库
 
@@ -110,7 +110,7 @@ const showModal = () => {
 
 1. 本项目使用 `file:../` 引用父目录的 simple-modal 插件
 2. 样式系统基于 Tailwind CSS 4 的新特性
-3. 组件库使用 shadcn/vue 的设计系统
+3. 组件库使用 daisyUI 的主题系统
 4. 支持完整的 TypeScript 类型检查
 
 ## 许可证

@@ -3,12 +3,12 @@
     <template #title>自定义位置</template>
     <template #description>使用 centered 或类似 style.top 的样式来设置对话框位置。</template>
     <template #buttons>
-      <Button @click="setModal1Visible(true)">
+      <button class="btn btn-primary" @click="setModal1Visible(true)">
         Display a modal dialog at 20px to Top
-      </Button>
-      <Button @click="modal2Visible = true">
+      </button>
+      <button class="btn btn-primary" @click="modal2Visible = true">
         Vertically centered modal dialog
-      </Button>
+      </button>
     </template>
 
     <Modal v-model:open="modal1Visible" title="20px to Top" style="top: 20px" @ok="setModal1Visible(false)">
@@ -26,7 +26,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { Modal } from 'simple-modal';
-import { Button } from '@/components/ui/button';
 import DemoSection from '@/components/DemoSection.vue';
 
 const modal1Visible = ref<boolean>(false);

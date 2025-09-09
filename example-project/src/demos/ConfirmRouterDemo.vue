@@ -5,14 +5,13 @@
       使用 Modal.destroyAll() 可以销毁弹出的确认窗。通常用于路由监听当中，处理路由前进、后退不能销毁确认对话框的问题。
     </template>
     <template #buttons>
-      <Button @click="showConfirm">Confirm</Button>
+      <button class="btn btn-warning" @click="showConfirm">Confirm</button>
     </template>
   </DemoSection>
 </template>
 
 <script lang="ts" setup>
 import { Modal } from 'simple-modal';
-import { Button } from '@/components/ui/button';
 import DemoSection from '@/components/DemoSection.vue';
 
 const showConfirm = () => {

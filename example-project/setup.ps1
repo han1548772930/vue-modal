@@ -1,6 +1,6 @@
-# Tailwind CSS 4 + shadcn/vue 项目设置脚本
+# Tailwind CSS 4 + daisyUI 项目设置脚本
 
-Write-Host "🚀 开始设置 Tailwind CSS 4 + shadcn/vue 示例项目..." -ForegroundColor Green
+Write-Host "🚀 开始设置 Tailwind CSS 4 + daisyUI 示例项目..." -ForegroundColor Green
 
 # 检查 Node.js 是否安装
 try {
@@ -31,14 +31,7 @@ if ($LASTEXITCODE -eq 0) {
     exit 1
 }
 
-# 检查是否需要安装 shadcn/vue CLI
-Write-Host "🎨 检查 shadcn/vue CLI..." -ForegroundColor Yellow
-try {
-    npx shadcn-vue@latest --version
-    Write-Host "✅ shadcn/vue CLI 可用" -ForegroundColor Green
-} catch {
-    Write-Host "⚠️  shadcn/vue CLI 不可用，但项目仍可正常运行" -ForegroundColor Yellow
-}
+# daisyUI 无需 CLI，确保在 CSS 中通过 @plugin "daisyui" 已启用
 
 Write-Host ""
 Write-Host "🎉 项目设置完成!" -ForegroundColor Green

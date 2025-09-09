@@ -1,7 +1,7 @@
 {
-  "name": "tailwindcss4-shadcn-vue-example",
+  "name": "tailwindcss4-daisyui-example",
   "version": "1.0.0",
-  "description": "Example project using Tailwind CSS 4 and shadcn/vue with simple-modal plugin",
+  "description": "Example project using Tailwind CSS 4 and daisyUI with simple-modal plugin",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -12,10 +12,8 @@
   },
   "dependencies": {
     "@vueuse/core": "^13.4.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
     "lucide-vue-next": "^0.523.0",
-    "reka-ui": "^2.3.1",
+    "daisyui": "^5.1.9",
     "simple-modal": "file:../",
     "tailwind-merge": "^3.3.1",
     "vue": "^3.5.17"

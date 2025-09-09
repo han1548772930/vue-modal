@@ -3,12 +3,12 @@
     <template #title>自定义页脚</template>
     <template #description>更复杂的例子，自定义了页脚的按钮，点击提交后进入 loading 状态。</template>
     <template #buttons>
-      <Button @click="showModal">Open Modal with customized footer</Button>
+      <button class="btn btn-accent" @click="showModal">Open Modal with customized footer</button>
     </template>
     <Modal v-model:open="open" title="Title" @ok="handleOk">
       <template #footer>
-        <Button key="back" @click="handleCancel">Return</Button>
-        <Button key="submit" :loading="loading" @click="handleOk">Submit</Button>
+        <button key="back" class="btn" @click="handleCancel">Return</button>
+        <button key="submit" class="btn btn-primary" :disabled="loading" @click="handleOk">Submit</button>
       </template>
       <p>Some contents...</p>
       <p>Some contents...</p>
@@ -22,7 +22,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { Modal } from 'simple-modal';
-import { Button } from '@/components/ui/button';
 import DemoSection from '@/components/DemoSection.vue';
 
 const loading = ref<boolean>(false);

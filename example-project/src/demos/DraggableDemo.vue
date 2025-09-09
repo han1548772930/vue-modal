@@ -3,8 +3,8 @@
     <template #title>可拖拽模态框</template>
     <template #description>使用 VueUse 的 useDraggable 实现可拖拽的模态框，支持边界限制和位置记忆。</template>
     <template #buttons>
-      <Button variant="default" @click="showModal">打开可拖拽模态框</Button>
-      <Button variant="outline" @click="resetPosition" class="ml-2">重置位置</Button>
+      <button class="btn btn-primary" @click="showModal">打开可拖拽模态框</button>
+      <button class="btn btn-outline ml-2" @click="resetPosition">重置位置</button>
     </template>
 
     <Modal v-model:open="open" :wrap-style="{ overflow: 'hidden' }" @ok="handleOk" @after-close="handleAfterClose">
@@ -56,7 +56,6 @@ import { ref, computed, watch, watchEffect } from 'vue';
 import type { CSSProperties } from 'vue';
 import { useDraggable } from '@vueuse/core';
 import { Modal } from 'simple-modal';
-import { Button } from '@/components/ui/button';
 import DemoSection from '@/components/DemoSection.vue';
 
 const open = ref<boolean>(false);

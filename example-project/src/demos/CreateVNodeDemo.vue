@@ -3,12 +3,14 @@
     <template #title>CreateVNode 用法</template>
     <template #description>使用 createVNode 创建复杂的模态框内容，支持组件、HTML元素和交互功能。</template>
     <template #buttons>
-      <Button @click="showSimpleVNode">简单VNode</Button>
-      <Button @click="showComplexVNode">复杂VNode</Button>
-      <Button @click="showInteractiveVNode">交互式VNode</Button>
-      <Button @click="showFormVNode">表单VNode</Button>
-      <Button @click="showListVNode">列表VNode</Button>
-      <Button @click="showNestedVNode">嵌套VNode</Button>
+      <div class="flex flex-wrap items-center gap-2">
+        <button class="btn btn-primary" @click="showSimpleVNode">简单VNode</button>
+        <button class="btn btn-secondary" @click="showComplexVNode">复杂VNode</button>
+        <button class="btn btn-accent" @click="showInteractiveVNode">交互式VNode</button>
+        <button class="btn btn-info" @click="showFormVNode">表单VNode</button>
+        <button class="btn btn-success" @click="showListVNode">列表VNode</button>
+        <button class="btn btn-warning" @click="showNestedVNode">嵌套VNode</button>
+      </div>
     </template>
   </DemoSection>
 </template>
@@ -16,7 +18,6 @@
 <script lang="ts" setup>
 import { createVNode, ref } from 'vue';
 import { Modal } from 'simple-modal';
-import { Button } from '@/components/ui/button';
 import DemoSection from '@/components/DemoSection.vue';
 
 // 简单的VNode示例
@@ -44,7 +45,7 @@ const showComplexVNode = () => {
         createVNode('h3', { class: 'text-xl font-bold text-gray-800' }, '产品信息'),
         createVNode('p', { class: 'text-gray-500' }, '详细的产品描述和特性')
       ]),
-      
+
       // 网格布局
       createVNode('div', { class: 'grid grid-cols-2 gap-4' }, [
         createVNode('div', { class: 'p-4 border rounded-lg' }, [
@@ -69,7 +70,7 @@ const showComplexVNode = () => {
           ])
         ])
       ]),
-      
+
       // 进度条
       createVNode('div', { class: 'space-y-2' }, [
         createVNode('div', { class: 'flex justify-between text-sm' }, [
@@ -77,7 +78,7 @@ const showComplexVNode = () => {
           createVNode('span', null, '85%')
         ]),
         createVNode('div', { class: 'w-full bg-gray-200 rounded-full h-2' }, [
-          createVNode('div', { 
+          createVNode('div', {
             class: 'bg-blue-500 h-2 rounded-full transition-all duration-300',
             style: 'width: 85%'
           })
@@ -93,7 +94,7 @@ const showComplexVNode = () => {
 const showInteractiveVNode = () => {
   let counter = 0;
   let modalInstance: any;
-  
+
   const updateContent = () => {
     counter++;
     const newContent = createVNode('div', { class: 'space-y-4 text-center' }, [
@@ -114,12 +115,12 @@ const showInteractiveVNode = () => {
       ]),
       createVNode('p', { class: 'text-sm text-gray-600' }, '点击按钮查看实时更新')
     ]);
-    
+
     if (modalInstance) {
       modalInstance.update({ content: newContent });
     }
   };
-  
+
   modalInstance = Modal.info({
     title: '交互式VNode示例',
     content: createVNode('div', { class: 'space-y-4 text-center' }, [
@@ -151,7 +152,7 @@ const showFormVNode = () => {
     email: '',
     message: ''
   };
-  
+
   Modal.confirm({
     title: '联系表单',
     content: createVNode('form', { class: 'space-y-4' }, [
@@ -215,7 +216,7 @@ const showListVNode = () => {
     { id: 3, name: '胡萝卜', price: 2.99, category: '蔬菜' },
     { id: 4, name: '西兰花', price: 4.99, category: '蔬菜' }
   ];
-  
+
   Modal.info({
     title: '商品列表',
     content: createVNode('div', { class: 'space-y-4' }, [
@@ -224,7 +225,7 @@ const showListVNode = () => {
         createVNode('span', { class: 'text-sm text-gray-500' }, `共 ${items.length} 件商品`)
       ]),
       createVNode('div', { class: 'space-y-2' }, items.map(item =>
-        createVNode('div', { 
+        createVNode('div', {
           key: item.id,
           class: 'flex justify-between items-center p-3 border rounded-lg hover:bg-gray-50 transition-colors'
         }, [
@@ -249,7 +250,7 @@ const showListVNode = () => {
       createVNode('div', { class: 'pt-3 border-t' }, [
         createVNode('div', { class: 'flex justify-between items-center' }, [
           createVNode('span', { class: 'font-semibold' }, '总计:'),
-          createVNode('span', { class: 'text-lg font-bold text-green-600' }, 
+          createVNode('span', { class: 'text-lg font-bold text-green-600' },
             `¥${items.reduce((sum, item) => sum + item.price, 0).toFixed(2)}`
           )
         ])

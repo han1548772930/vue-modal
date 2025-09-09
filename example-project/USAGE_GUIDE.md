@@ -4,7 +4,7 @@
 
 这个示例项目展示了如何在 Vue 3 项目中集成：
 - Tailwind CSS 4
-- shadcn/vue 组件库
+- daisyui 组件库
 - simple-modal 插件
 
 ## 快速开始
@@ -60,25 +60,25 @@ export default defineConfig({
 }
 ```
 
-### shadcn/vue 配置
+### daisyUI 安装与启用
 
-**components.json**
-```json
-{
-  "$schema": "https://shadcn-vue.com/schema.json",
-  "style": "new-york",
-  "typescript": true,
-  "tailwind": {
-    "css": "src/styles/globals.css",
-    "baseColor": "neutral",
-    "cssVariables": true
-  },
-  "aliases": {
-    "components": "@/components",
-    "utils": "@/lib/utils"
-  },
-  "iconLibrary": "lucide"
-}
+1) 安装（已安装可跳过）
+```bash
+npm i -D daisyui @tailwindcss/vite
+```
+
+2) 在全局样式启用插件（`src/styles/globals.css`）
+```css
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "daisyui";
+```
+
+3) 运行时切换主题（在根元素上设置 `data-theme`）
+```html
+<html data-theme="light">
+  <!-- ... -->
+</html>
 ```
 
 ### simple-modal 集成
@@ -89,7 +89,7 @@ export default defineConfig({
   "dependencies": {
     "simple-modal": "file:../",
     "lucide-vue-next": "^0.523.0",
-    "reka-ui": "^2.3.1",
+    "daisyui": "^5.1.9",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.3.1"
@@ -661,20 +661,21 @@ const toggleTheme = () => {
 </template>
 ```
 
-### 使用主题变量
+### 使用主题变量（daisyUI）
 
 ```vue
 <template>
-  <!-- 使用 shadcn/vue 主题变量 -->
-  <div class="bg-background text-foreground">
-    <div class="bg-card text-card-foreground p-4 rounded-lg border">
-      <h3 class="text-primary">主标题</h3>
-      <p class="text-muted-foreground">副文本</p>
-      <button class="bg-primary text-primary-foreground px-4 py-2 rounded">
-        主要按钮
-      </button>
+  <!-- 使用 daisyUI 主题变量（基于类名） -->
+  <div class="bg-base-100 text-base-content">
+    <div class="bg-base-200 text-base-content p-4 rounded-box border border-base-content/10">
+      <h3 class="text-base-content font-semibold">主标题</h3>
+      <p class="text-base-content/70 text-sm">副文本</p>
+      <button class="btn btn-primary">主要按钮</button>
     </div>
   </div>
+  <!-- 切换主题：document.documentElement.setAttribute('data-theme', 'dark') -->
+  <!-- 主题列表与示例：https://daisyui.com/docs/themes/ -->
+  
 </template>
 ```
 
@@ -690,22 +691,26 @@ const toggleTheme = () => {
 
 ## 添加新组件
 
-### 使用 shadcn/vue CLI
+无需 CLI，直接在模板中使用 daisyUI 类名即可：
+```vue
+<button class="btn btn-primary">Primary</button>
+<button class="btn btn-outline">Outline</button>
+<button class="btn btn-success">Success</button>
+<button class="btn btn-warning">Warning</button>
+<button class="btn btn-error">Error</button>
 
-```bash
-# 添加按钮组件
-npx shadcn-vue@latest add button
-
-# 添加卡片组件
-npx shadcn-vue@latest add card
-
-# 添加输入框组件
-npx shadcn-vue@latest add input
+<!-- 表单选择 -->
+<select class="select select-bordered w-full max-w-xs">
+  <option disabled selected>Pick one</option>
+  <option>Apple</option>
+  <option>Orange</option>
+  <option>Banana</option>
+  <option>Cherry</option>
+  <option>Grape</option>
+</select>
 ```
 
-### 手动创建组件
-
-在 `src/components/ui/` 目录下创建新组件，遵循 shadcn/vue 的设计规范。
+更多组件与用法见 daisyUI 文档。
 
 ## 构建和部署
 
@@ -1102,6 +1107,6 @@ const showLargeContentModal = async () => {
 ## 进一步学习
 
 - [Tailwind CSS 4 文档](https://tailwindcss.com/docs)
-- [shadcn/vue 文档](https://shadcn-vue.com)
+- [daisyui 文档](https://daisyui.com)
 - [Vue 3 文档](https://vuejs.org)
 - [Vite 文档](https://vitejs.dev)

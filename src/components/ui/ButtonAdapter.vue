@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Loader2 } from 'lucide-vue-next'
-// @ts-expect-error - Button component is provided by the consuming project
-import { Button } from '@/components/ui/button'
-// @ts-expect-error - ButtonVariants type is provided by the consuming project
-import type { ButtonVariants } from '@/components/ui/button'
 
 // Legacy button props interface
 interface LegacyButtonProps {
@@ -36,22 +32,14 @@ const emit = defineEmits<{
   mousedown: [event: MouseEvent]
 }>()
 
-// Convert legacy props to shadcn-vue props
-const variant = computed((): ButtonVariants['variant'] => {
-  if (props.danger) {
-    return 'destructive'
-  } else if (props.ghost) {
-    return 'ghost'
-  } else if (props.type === 'link') {
-    return 'link'
-  } else if (props.type === 'dashed') {
-    return 'outline'
-  } else if (props.type === 'text') {
-    return 'ghost'
-  } else if (props.type === 'primary') {
-    return 'default'
-  }
-  return 'default'
+// 计算 daisyUI 按钮类名
+const variantClass = computed(() => {
+  if (props.danger) return 'btn-error'
+  if (props.ghost || props.type === 'text') return 'btn-ghost'
+  if (props.type === 'link') return 'btn-link'
+  if (props.type === 'dashed') return 'btn-outline'
+  if (props.type === 'primary') return 'btn-primary'
+  return 'btn-primary'
 })
 
 const isLoading = computed(() => {
@@ -81,13 +69,14 @@ const handleMousedown = (e: MouseEvent) => {
 </script>
 
 <template>
-  <Button :as="href ? 'a' : 'button'" :variant="variant" size="default" :class="{ 'w-full': block }" :href="href"
-    :target="target" :title="title" :disabled="disabled || isLoading" @click="handleClick" @mousedown="handleMousedown">
+  <component :is="href ? 'a' : 'button'" :href="href" :target="target" :title="title"
+    :type="href ? undefined : htmlType" :disabled="disabled || isLoading" @click="handleClick"
+    @mousedown="handleMousedown" :class="['btn', variantClass, { 'btn-block': block }]">
     <!-- 使用固定的图标容器确保高度一致 -->
     <span v-if="hasContent" class="inline-flex items-center justify-center w-4 h-4 mr-2">
       <Loader2 v-if="isLoading" :key="'loading'" class="h-4 w-4 animate-spin" />
       <component v-else-if="icon" :key="'icon'" :is="icon" class="h-4 w-4" />
     </span>
     <slot />
-  </Button>
+  </component>
 </template>

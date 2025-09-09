@@ -4,17 +4,47 @@
       <div class="max-w-6xl mx-auto space-y-8">
         <!-- Header -->
         <div class="text-center space-y-4">
-          <h1 class="text-4xl font-bold">Tailwind CSS 4 + shadcn/vue 示例</h1>
+          <h1 class="text-4xl font-bold">Tailwind CSS 4 + daisyUI 示例</h1>
           <p class="text-muted-foreground text-lg">
             使用 simple-modal 插件的完整示例项目
           </p>
-          <div class="flex justify-center">
-            <button @click="toggleTheme"
-              class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
-              <Sun v-if="isDark" class="h-4 w-4" />
-              <Moon v-else class="h-4 w-4" />
-              <span class="ml-2">{{ isDark ? '切换到亮色模式' : '切换到暗色模式' }}</span>
-            </button>
+          <div title="Change Theme" class="dropdown dropdown-end">
+            <div tabindex="0" role="button" class="btn group btn-sm gap-1.5 px-1.5 btn-ghost" aria-label="Change Theme">
+              <div
+                class="bg-base-100 group-hover:border-base-content/20 border-base-content/10 grid shrink-0 grid-cols-2 gap-0.5 rounded-md border p-1 transition-colors">
+                <div class="bg-base-content size-1 rounded-full"></div>
+                <div class="bg-primary size-1 rounded-full"></div>
+                <div class="bg-secondary size-1 rounded-full"></div>
+                <div class="bg-accent size-1 rounded-full"></div>
+              </div>
+              <svg width="12px" height="12px" class="mt-px hidden size-2 fill-current opacity-60 sm:inline-block"
+                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048">
+                <path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
+              </svg>
+            </div>
+            <div tabindex="0"
+              class="dropdown-content bg-base-200 text-base-content rounded-box max-h-96 overflow-y-auto border-[length:var(--border)] border-white/5 shadow-2xl outline-[length:var(--border)] outline-black/5 mt-2">
+              <ul class="menu w-56">
+                <li class="menu-title text-xs">主题</li>
+                <li v-for="theme in themes" :key="theme.value">
+                  <button class="gap-3 px-2" :class="currentTheme === theme.value ? '[&_svg]:visible' : ''"
+                    :data-set-theme="theme.value" @click="setTheme(theme.value)">
+                    <div :data-theme="theme.value"
+                      class="bg-base-100 grid shrink-0 grid-cols-2 gap-0.5 rounded-md p-1 shadow-sm">
+                      <div class="bg-base-content size-1 rounded-full"></div>
+                      <div class="bg-primary size-1 rounded-full"></div>
+                      <div class="bg-secondary size-1 rounded-full"></div>
+                      <div class="bg-accent size-1 rounded-full"></div>
+                    </div>
+                    <div class="w-32 truncate">{{ theme.label }}</div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                      fill="currentColor" class="invisible h-3 w-3 shrink-0">
+                      <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                    </svg>
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 
@@ -45,9 +75,9 @@
               </p>
             </div>
             <div class="space-y-2">
-              <h4 class="font-medium">🎨 shadcn/vue</h4>
+              <h4 class="font-medium">🎨 daisyUI</h4>
               <p class="text-sm text-muted-foreground">
-                集成 shadcn/vue 组件库和主题系统
+                集成 daisyUI 组件库和主题系统
               </p>
             </div>
             <div class="space-y-2">
@@ -71,7 +101,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Sun, Moon } from 'lucide-vue-next'
 
 // Import all demo components
 import BasicDemo from './demos/BasicDemo.vue'
@@ -87,22 +116,62 @@ import ManualDemo from './demos/ManualDemo.vue'
 import PositionDemo from './demos/PositionDemo.vue'
 import ConfirmRouterDemo from './demos/ConfirmRouterDemo.vue'
 
-const isDark = ref(false)
+interface Theme { value: string; label: string }
+// DaisyUI 主题列表
+const themes: Theme[] = [
+  { value: 'light', label: 'light' },
+  { value: 'dark', label: 'dark' },
+  { value: 'cupcake', label: 'cupcake' },
+  { value: 'bumblebee', label: 'bumblebee' },
+  { value: 'emerald', label: 'emerald' },
+  { value: 'corporate', label: 'corporate' },
+  { value: 'synthwave', label: 'synthwave' },
+  { value: 'retro', label: 'retro' },
+  { value: 'cyberpunk', label: 'cyberpunk' },
+  { value: 'valentine', label: 'valentine' },
+  { value: 'halloween', label: 'halloween' },
+  { value: 'garden', label: 'garden' },
+  { value: 'forest', label: 'forest' },
+  { value: 'aqua', label: 'aqua' },
+  { value: 'lofi', label: 'lofi' },
+  { value: 'pastel', label: 'pastel' },
+  { value: 'fantasy', label: 'fantasy' },
+  { value: 'wireframe', label: 'wireframe' },
+  { value: 'black', label: 'black' },
+  { value: 'luxury', label: 'luxury' },
+  { value: 'dracula', label: 'dracula' },
+  { value: 'cmyk', label: 'cmyk' },
+  { value: 'autumn', label: 'autumn' },
+  { value: 'business', label: 'business' },
+  { value: 'acid', label: 'acid' },
+  { value: 'lemonade', label: 'lemonade' },
+  { value: 'night', label: 'night' },
+  { value: 'coffee', label: 'coffee' },
+  { value: 'winter', label: 'winter' },
+  { value: 'dim', label: 'dim' },
+  { value: 'nord', label: 'nord' },
+  { value: 'sunset', label: 'sunset' },
+  { value: 'abyss', label: 'abyss' },
+  { value: 'silk', label: 'silk' },
+  { value: 'caramellatte', label: 'caramellatte' }
+]
 
-const toggleTheme = () => {
-  isDark.value = !isDark.value
-  if (isDark.value) {
-    document.documentElement.classList.add('dark')
-  } else {
-    document.documentElement.classList.remove('dark')
-  }
+const currentTheme = ref<string>('light')
+
+const applyTheme = (theme: string) => {
+  document.documentElement.setAttribute('data-theme', theme)
+  currentTheme.value = theme
+  try { localStorage.setItem('daisyui-theme', theme) } catch { }
+}
+
+const setTheme = (theme: string) => {
+  applyTheme(theme)
 }
 
 onMounted(() => {
-  // 检查系统主题偏好
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    isDark.value = true
-    document.documentElement.classList.add('dark')
-  }
+  const saved = (() => { try { return localStorage.getItem('daisyui-theme') } catch { return null } })()
+  if (saved) return applyTheme(saved)
+  const prefersDark = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  applyTheme(prefersDark ? 'dark' : 'light')
 })
 </script>

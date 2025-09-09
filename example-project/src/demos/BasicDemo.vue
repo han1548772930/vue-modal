@@ -3,13 +3,13 @@
     <template #title>CSS 样式选项验证</template>
     <template #description>验证各种CSS相关的属性选项。</template>
     <template #buttons>
-      <div class="space-x-2 space-y-2">
-        <Button variant="default" @click="showBasicModal">基础样式</Button>
-        <Button variant="outline" @click="showStyledModal">自定义样式</Button>
-        <Button variant="outline" @click="showMaskStyledModal">遮罩样式</Button>
-        <Button variant="outline" @click="showBodyStyledModal">主体样式</Button>
-        <Button variant="outline" @click="showWrapClassModal">包装器类名</Button>
-        <Button variant="outline" @click="showZIndexModal">层级控制</Button>
+      <div class="flex flex-wrap items-center gap-2">
+        <button class="btn btn-primary" @click="showBasicModal">基础样式</button>
+        <button class="btn btn-outline" @click="showStyledModal">自定义样式</button>
+        <button class="btn btn-outline" @click="showMaskStyledModal">遮罩样式</button>
+        <button class="btn btn-outline" @click="showBodyStyledModal">主体样式</button>
+        <button class="btn btn-outline" @click="showWrapClassModal">包装器类名</button>
+        <button class="btn btn-outline" @click="showZIndexModal">层级控制</button>
       </div>
     </template>
 
@@ -91,7 +91,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { Modal } from 'simple-modal';
-import { Button } from '@/components/ui/button';
 import DemoSection from '@/components/DemoSection.vue';
 
 // 各种模态框的显示状态

@@ -3,11 +3,11 @@
     <template #title>可拖拽模态框 - Hook 版本</template>
     <template #description>使用 useDraggableModal Hook 实现的可拖拽模态框，提供更灵活的自定义能力。</template>
     <template #buttons>
-      <Button variant="default" @click="showModal">打开 Hook 版本模态框</Button>
-      <Button variant="outline" @click="resetPosition" class="ml-2">重置位置</Button>
-      <Button variant="secondary" @click="toggleBoundary" class="ml-2">
+      <button class="btn btn-primary" @click="showModal">打开 Hook 版本模态框</button>
+      <button class="btn btn-outline ml-2" @click="resetPosition">重置位置</button>
+      <button class="btn btn-secondary ml-2" @click="toggleBoundary">
         {{ boundary ? '禁用' : '启用' }}边界限制
-      </Button>
+      </button>
     </template>
 
     <Modal v-model:open="open" :wrap-style="{ overflow: 'hidden' }" @ok="handleOk" @after-close="handleAfterClose">
@@ -68,7 +68,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { Modal } from 'simple-modal';
-import { Button } from '@/components/ui/button';
 import DemoSection from '@/components/DemoSection.vue';
 import { useDraggableModal } from '@/hooks/useDraggableModal';
 

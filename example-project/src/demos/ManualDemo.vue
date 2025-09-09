@@ -3,14 +3,13 @@
     <template #title>手动更新和移除</template>
     <template #description>手动更新和关闭 Modal.method 方式创建的对话框。</template>
     <template #buttons>
-      <Button @click="countDown">Open modal to close in 5s</Button>
+      <button class="btn btn-primary" @click="countDown">Open modal to close in 5s</button>
     </template>
   </DemoSection>
 </template>
 
 <script lang="ts" setup>
 import { Modal } from 'simple-modal';
-import { Button } from '@/components/ui/button';
 import DemoSection from '@/components/DemoSection.vue';
 
 const countDown = () => {

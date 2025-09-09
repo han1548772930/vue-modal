@@ -3,7 +3,7 @@
     <template #title>异步关闭</template>
     <template #description>点击确定后异步关闭对话框，例如提交表单。</template>
     <template #buttons>
-      <Button @click="showModal">Open Modal with async logic</Button>
+      <button class="btn btn-primary" @click="showModal">Open Modal with async logic</button>
     </template>
     <Modal v-model:open="open" title="Title" :confirm-loading="confirmLoading" @ok="handleOk">
       <p>{{ modalText }}</p>
@@ -14,7 +14,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { Modal } from 'simple-modal';
-import { Button } from '@/components/ui/button';
 import DemoSection from '@/components/DemoSection.vue';
 
 const modalText = ref<string>('Content of the modal');

@@ -34,7 +34,7 @@ export default defineConfig({
       external: [
         'vue',
         'lucide-vue-next',
-        'reka-ui',
+        'daisyui',
         'class-variance-authority',
         'clsx',
         'tailwind-merge',
@@ -42,19 +42,13 @@ export default defineConfig({
         // Tailwind CSS 相关
         'tailwindcss',
         '@tailwindcss/vite',
-        // UI 组件 - 这些应该来自用户项目
-        /^@\/components\/ui\//,
-        /^@\/lib\//,
-        // 具体的 UI 组件路径
-        '@/components/ui/button',
-        '@/components/ui/dropdown-menu',
-        '@/lib/utils'
+
       ],
       output: {
         globals: {
           vue: 'Vue',
           'lucide-vue-next': 'LucideVueNext',
-          'reka-ui': 'RekaUI',
+          'daisyui': 'daisyui',
           'class-variance-authority': 'ClassVarianceAuthority',
           'clsx': 'clsx',
           'tailwind-merge': 'tailwindMerge',

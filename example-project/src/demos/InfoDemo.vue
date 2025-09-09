@@ -3,17 +3,16 @@
     <template #title>信息提示</template>
     <template #description>各种类型的信息提示，只提供一个按钮用于关闭。</template>
     <template #buttons>
-      <Button @click="info">Info</Button>
-      <Button @click="success">Success</Button>
-      <Button @click="error">Error</Button>
-      <Button @click="warning">Warning</Button>
+      <button class="btn btn-info" @click="info">Info</button>
+      <button class="btn btn-success" @click="success">Success</button>
+      <button class="btn btn-error" @click="error">Error</button>
+      <button class="btn btn-warning" @click="warning">Warning</button>
     </template>
   </DemoSection>
 </template>
 
 <script lang="ts" setup>
 import { Modal } from 'simple-modal';
-import { Button } from '@/components/ui/button';
 import DemoSection from '@/components/DemoSection.vue';
 
 const info = () => {

@@ -3,10 +3,10 @@
     <template #title>使用 useModal 获取上下文</template>
     <template #description>通过 Modal.useModal 创建支持读取 context 的 contextHolder。</template>
     <template #buttons>
-      <Button @click="showConfirm">Confirm</Button>
-      <Button @click="showPromiseConfirm">With promise</Button>
-      <Button variant="outline" @click="showDeleteConfirm">Delete</Button>
-      <Button variant="outline" @click="showPropsConfirm">With extra props</Button>
+      <button class="btn btn-primary" @click="showConfirm">Confirm</button>
+      <button class="btn btn-primary" @click="showPromiseConfirm">With promise</button>
+      <button class="btn btn-outline" @click="showDeleteConfirm">Delete</button>
+      <button class="btn btn-outline" @click="showPropsConfirm">With extra props</button>
     </template>
     <contextHolder />
   </DemoSection>
@@ -14,7 +14,6 @@
 
 <script lang="ts" setup>
 import { Modal } from 'simple-modal';
-import { Button } from '@/components/ui/button';
 import DemoSection from '@/components/DemoSection.vue';
 
 const [modal, contextHolder] = Modal.useModal();
