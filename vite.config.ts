@@ -35,8 +35,6 @@ export default defineConfig({
         'vue',
         'lucide-vue-next',
         'daisyui',
-        'class-variance-authority',
-        'clsx',
         'tailwind-merge',
         '@vueuse/core',
         // Tailwind CSS 相关
@@ -49,8 +47,6 @@ export default defineConfig({
           vue: 'Vue',
           'lucide-vue-next': 'LucideVueNext',
           'daisyui': 'daisyui',
-          'class-variance-authority': 'ClassVarianceAuthority',
-          'clsx': 'clsx',
           'tailwind-merge': 'tailwindMerge',
           '@vueuse/core': 'VueUse'
         },
