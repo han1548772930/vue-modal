@@ -1,6 +1,6 @@
 [build]
 publish = "example-project/dist"
-command = "npm ci && npm run build && cd example-project && rm -rf node_modules package-lock.json && npm install && npm run build:no-check"
+command = "rm -rf node_modules package-lock.json && npm install && npm run build && cd example-project && rm -rf node_modules package-lock.json && npm install && npm run build:no-check"
 
 [[headers]]
 for = "/*"
