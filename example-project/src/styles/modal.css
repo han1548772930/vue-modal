@@ -1,5 +1,5 @@
 /* Simple Modal CSS - 独立的 Modal 样式文件 */
-/* 这个文件包含所有 Modal 相关的样式，使用 Tailwind CSS 类 */
+/* 这个文件包含所有 Modal 相关的样式,使用 Tailwind CSS 类 */
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -52,7 +52,7 @@
 .simple-dialog {
   position: relative;
   top: var(--modal-top, 100px);
-  /* 使用 CSS 变量，默认 100px */
+  /* 使用 CSS 变量,默认 100px */
   width: auto;
   max-width: calc(100vw - 32px);
   margin: 0 auto;
@@ -72,7 +72,7 @@
   @apply btn btn-sm btn-ghost btn-circle absolute top-4 right-4 z-10;
 }
 
-/* daisyUI 按钮自带 hover 态，这里无需额外样式 */
+/* daisyUI 按钮自带 hover 态,这里无需额外样式 */
 
 .simple-modal-close:disabled,
 .simple-dialog-close:disabled {

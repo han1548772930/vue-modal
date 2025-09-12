@@ -108,7 +108,7 @@ import { Modal } from 'simple-modal'
 const showConfirm = () => {
   Modal.confirm({
     title: '确认删除',
-    content: '删除后无法恢复，确定要删除吗？',
+    content: '删除后无法恢复,确定要删除吗？',
     onOk: () => {
       console.log('确认删除')
     },
@@ -145,7 +145,7 @@ import { Modal } from 'simple-modal'
 const showAsyncModal = () => {
   Modal.confirm({
     title: '保存数据',
-    content: '正在保存数据，请稍候...',
+    content: '正在保存数据,请稍候...',
     onOk: async () => {
       try {
         // 模拟异步操作
@@ -157,7 +157,7 @@ const showAsyncModal = () => {
       } catch (error) {
         Modal.error({
           title: '保存失败',
-          content: '保存数据时发生错误，请重试。'
+          content: '保存数据时发生错误,请重试。'
         })
       }
     }
@@ -328,7 +328,7 @@ const showFormModal = () => {
       console.log('表单数据:', formData)
       Modal.success({
         title: '提交成功',
-        content: `感谢您的留言，${formData.name}！我们会尽快回复您。`
+        content: `感谢您的留言,${formData.name}！我们会尽快回复您。`
       })
     }
   })
@@ -596,7 +596,7 @@ const showWizardModal = () => {
 const showDeleteConfirmChain = () => {
   Modal.warning({
     title: '删除警告',
-    content: '您即将删除重要数据，此操作不可撤销。',
+    content: '您即将删除重要数据,此操作不可撤销。',
     okText: '我了解风险',
     onOk: () => {
       Modal.confirm({
@@ -691,7 +691,7 @@ const toggleTheme = () => {
 
 ## 添加新组件
 
-无需 CLI，直接在模板中使用 daisyUI 类名即可：
+无需 CLI,直接在模板中使用 daisyUI 类名即可：
 ```vue
 <button class="btn btn-primary">Primary</button>
 <button class="btn btn-outline">Outline</button>
@@ -847,7 +847,7 @@ export const showNetworkError = (retry?: () => void) => {
   Modal.error({
     title: '网络错误',
     content: createVNode('div', { class: 'space-y-3' }, [
-      createVNode('p', null, '网络连接失败，请检查您的网络设置。'),
+      createVNode('p', null, '网络连接失败,请检查您的网络设置。'),
       retry ? createVNode('button', {
         class: 'px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600',
         onClick: () => {
@@ -955,7 +955,7 @@ export const useModalStore = defineStore('modal', () => {
 
 ### 1. 模态框设计原则
 
-- **简洁明了**：模态框内容应该简洁，避免过多信息
+- **简洁明了**：模态框内容应该简洁,避免过多信息
 - **明确目的**：每个模态框应该有明确的目的和行动号召
 - **易于关闭**：提供多种关闭方式（ESC键、点击遮罩、关闭按钮）
 - **响应式设计**：确保在不同设备上都有良好的显示效果
@@ -1002,7 +1002,7 @@ const handleApiError = (error: any) => {
   } else if (error.code === 500) {
     Modal.error({
       title: '服务器错误',
-      content: '服务器暂时无法处理您的请求，请稍后重试。'
+      content: '服务器暂时无法处理您的请求,请稍后重试。'
     })
   } else if (error.code === 'NETWORK_ERROR') {
     showNetworkError(() => {

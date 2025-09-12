@@ -59,7 +59,7 @@ export function useFocusTrap(active: () => boolean) {
       updateFocusableElements();
 
       if (!firstFocusableElement.value) {
-        // 如果没有可聚焦元素，阻止默认行为
+        // 如果没有可聚焦元素,阻止默认行为
         e.preventDefault();
         return;
       }
@@ -93,7 +93,7 @@ export function useFocusTrap(active: () => boolean) {
     // 更新可聚焦元素
     updateFocusableElements();
 
-    // 聚焦到第一个可聚焦元素，如果没有则聚焦容器
+    // 聚焦到第一个可聚焦元素,如果没有则聚焦容器
     if (firstFocusableElement.value) {
       firstFocusableElement.value.focus();
     } else {
@@ -118,7 +118,7 @@ export function useFocusTrap(active: () => boolean) {
       try {
         lastActiveElement.value.focus();
       } catch (error) {
-        // 如果无法聚焦，忽略错误
+        // 如果无法聚焦,忽略错误
         console.warn('Failed to restore focus:', error);
       }
     }

@@ -1,7 +1,7 @@
 <template>
   <DemoSection>
     <template #title>可拖拽模态框</template>
-    <template #description>使用 VueUse 的 useDraggable 实现可拖拽的模态框，支持边界限制和位置记忆。</template>
+    <template #description>使用 VueUse 的 useDraggable 实现可拖拽的模态框,支持边界限制和位置记忆。</template>
     <template #buttons>
       <button class="btn btn-primary" @click="showModal">打开可拖拽模态框</button>
       <button class="btn btn-outline ml-2" @click="resetPosition">重置位置</button>
@@ -71,7 +71,7 @@ const handleOk = (e: MouseEvent) => {
 };
 
 const handleAfterClose = () => {
-  // 关闭动画完成后不重置位置，保持用户拖拽的位置
+  // 关闭动画完成后不重置位置,保持用户拖拽的位置
   console.log('Modal closed, position preserved');
 };
 
@@ -106,7 +106,7 @@ watch([x, y], () => {
     startX.value = x.value;
     startY.value = y.value;
     const bodyRect = document.body.getBoundingClientRect();
-    // 改进边界计算，考虑模态框的实际大小
+    // 改进边界计算,考虑模态框的实际大小
     dragRect.value.left = 0;
     dragRect.value.top = 0;
     dragRect.value.right = bodyRect.width - 520; // 假设模态框宽度为520px
@@ -142,7 +142,7 @@ watchEffect(() => {
 const transformStyle = computed<CSSProperties>(() => {
   return {
     transform: `translate(${transformX.value}px, ${transformY.value}px)`,
-    // 拖拽时移除 transition，停止拖拽后恢复
+    // 拖拽时移除 transition,停止拖拽后恢复
     transition: isDragging.value ? 'none' : 'transform 0.2s ease-out',
   };
 });

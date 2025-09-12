@@ -8,6 +8,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
+      'v-modals/i18n': resolve(__dirname, '../src/i18n/index.ts'),
+      'v-modals': resolve(__dirname, '../src/index.ts'),
     },
   },
   server: {

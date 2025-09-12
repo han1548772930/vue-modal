@@ -1,7 +1,7 @@
 <template>
   <DemoSection>
     <template #title>自定义页脚</template>
-    <template #description>更复杂的例子，自定义了页脚的按钮，点击提交后进入 loading 状态。</template>
+    <template #description>更复杂的例子,自定义了页脚的按钮,点击提交后进入 loading 状态。</template>
     <template #buttons>
       <button class="btn btn-accent" @click="showModal">Open Modal with customized footer</button>
     </template>

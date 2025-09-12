@@ -1,7 +1,7 @@
 <template>
   <DemoSection>
     <template #title>可拖拽模态框 - Hook 版本</template>
-    <template #description>使用 useDraggableModal Hook 实现的可拖拽模态框，提供更灵活的自定义能力。</template>
+    <template #description>使用 useDraggableModal Hook 实现的可拖拽模态框,提供更灵活的自定义能力。</template>
     <template #buttons>
       <button class="btn btn-primary" @click="showModal">打开 Hook 版本模态框</button>
       <button class="btn btn-outline ml-2" @click="resetPosition">重置位置</button>

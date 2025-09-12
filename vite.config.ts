@@ -23,16 +23,25 @@ export default defineConfig({
 
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
+      entry: {
+        index: resolve(__dirname, 'src/index.ts'),
+        i18n: resolve(__dirname, 'src/i18n/index.ts'),
+      },
       name: 'SimpleModal',
-      fileName: (format) => `simple-modal.${format}.js`,
+      fileName: (format, entryName) => {
+        if (entryName === 'i18n') {
+          return `i18n.${format}.js`;
+        }
+        return `simple-modal.${format}.js`;
+      },
     },
     minify: 'esbuild',
     cssCodeSplit: false,
     rollupOptions: {
-      // 将这些依赖标记为外部依赖，用户项目中应该已经有这些依赖
+      // 将这些依赖标记为外部依赖,用户项目中应该已经有这些依赖
       external: [
         'vue',
+        'vue-i18n',
         'lucide-vue-next',
         'daisyui',
         'tailwind-merge',
@@ -45,13 +54,14 @@ export default defineConfig({
       output: {
         globals: {
           vue: 'Vue',
+          'vue-i18n': 'VueI18n',
           'lucide-vue-next': 'LucideVueNext',
           'daisyui': 'daisyui',
           'tailwind-merge': 'tailwindMerge',
           '@vueuse/core': 'VueUse'
         },
         assetFileNames: (assetInfo) => {
-          // 只保留 modal.css，其他 CSS 文件不打包
+          // 只保留 modal.css,其他 CSS 文件不打包
           if (assetInfo.names?.[0] === 'style.css') return 'simple-modal.css';
           return assetInfo.names?.[0] || 'asset';
         },

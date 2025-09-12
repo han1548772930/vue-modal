@@ -1,6 +1,6 @@
 # 可拖拽模态框
 
-基于您的 DraggableDemo.vue 封装的 Hook 版本，提供可复用的拖拽逻辑。
+基于您的 DraggableDemo.vue 封装的 Hook 版本,提供可复用的拖拽逻辑。
 
 ## 🎯 Hook 版本 - `useDraggableModal`
 
@@ -54,8 +54,8 @@ const {
 #### 参数 (DraggableModalOptions)
 | 参数 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
-| modalWidth | number | 520 | 模态框宽度，用于边界计算 |
-| modalHeight | number | 400 | 模态框高度，用于边界计算 |
+| modalWidth | number | 520 | 模态框宽度,用于边界计算 |
+| modalHeight | number | 400 | 模态框高度,用于边界计算 |
 | boundary | boolean | true | 是否启用边界限制 |
 | onDragStart | function | - | 拖拽开始回调 |
 | onDragEnd | function | - | 拖拽结束回调 |
@@ -77,7 +77,7 @@ const {
 - 需要在多个组件中复用拖拽逻辑
 - 需要完全自定义模态框样式和行为
 - 需要精细控制拖拽状态和事件
-- 已有现成的模态框组件，只需要添加拖拽功能
+- 已有现成的模态框组件,只需要添加拖拽功能
 
 ## 📝 示例文件
 

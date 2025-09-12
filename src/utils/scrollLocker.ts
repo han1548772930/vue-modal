@@ -45,8 +45,8 @@ class ScrollLocker {
 
       // 设置body样式来禁用滚动
       document.body.style.overflow = 'hidden';
-      
-      // 如果有滚动条，添加padding来防止内容跳动
+
+      // 如果有滚动条,添加padding来防止内容跳动
       if (isOverflow && scrollbarSize > 0) {
         const currentPaddingRight = parseInt(
           window.getComputedStyle(document.body).paddingRight || '0',
@@ -60,7 +60,7 @@ class ScrollLocker {
 
   static unlock(): void {
     this.lockCount = Math.max(0, this.lockCount - 1);
-    
+
     if (this.lockCount === 0) {
       // 恢复原始样式
       document.body.style.overflow = this.originalBodyStyle.overflow || '';

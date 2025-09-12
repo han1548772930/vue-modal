@@ -3,9 +3,9 @@ import type { CSSProperties, Ref, MaybeRef } from 'vue';
 import { useDraggable } from '@vueuse/core';
 
 export interface DraggableModalOptions {
-  /** 模态框宽度，用于边界计算 */
+  /** 模态框宽度,用于边界计算 */
   modalWidth?: number;
-  /** 模态框高度，用于边界计算 */
+  /** 模态框高度,用于边界计算 */
   modalHeight?: number;
   /** 是否启用边界限制 */
   boundary?: MaybeRef<boolean>;

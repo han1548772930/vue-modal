@@ -168,12 +168,12 @@ export default defineComponent({
     const onBeforeLeave = () => {
       console.log('onBeforeLeave called', transformOrigin.value, 'mousePosition:', props.mousePosition);
       // 确保关闭动画使用正确的 transform-origin
-      // 如果没有值或者鼠标位置发生了变化，重新计算
+      // 如果没有值或者鼠标位置发生了变化,重新计算
       if (props.mousePosition && contentRef.value) {
         const elementOffset = getElementOffset(contentRef.value);
         const newTransformOrigin = `${props.mousePosition.x - elementOffset.left}px ${props.mousePosition.y - elementOffset.top}px`;
 
-        // 只有在值不同时才更新，避免不必要的重新计算
+        // 只有在值不同时才更新,避免不必要的重新计算
         if (transformOrigin.value !== newTransformOrigin) {
           transformOrigin.value = newTransformOrigin;
           console.log('transform-origin updated for leave:', transformOrigin.value);
@@ -226,7 +226,7 @@ export default defineComponent({
       console.log('Dialog received style from props:', props.style, 'type:', typeof props.style);
       console.log('Dialog received style from attrs:', attrs.style, 'type:', typeof attrs.style);
 
-      // 使用 props.style 优先，然后是 attrs.style
+      // 使用 props.style 优先,然后是 attrs.style
       const style = props.style || attrs.style;
 
       // 处理样式 - 特别处理 top 值
@@ -245,7 +245,7 @@ export default defineComponent({
           }
         });
       } else if (typeof style === 'string') {
-        // 如果是字符串样式，需要解析
+        // 如果是字符串样式,需要解析
         (style as string).split(';').forEach((rule: string) => {
           const [key, value] = rule.split(':').map((s: string) => s.trim());
           if (key && value) {
@@ -258,13 +258,13 @@ export default defineComponent({
         });
       }
 
-      // 如果有 top 值，设置 CSS 变量
+      // 如果有 top 值,设置 CSS 变量
       if (modalTopValue) {
         contentStyleFromAttrs['--modal-top'] = modalTopValue;
         console.log('Setting --modal-top to:', modalTopValue);
       }
 
-      // 按照 Ant Design Vue 的方式处理 modalRender：优先使用 slot，然后是 prop
+      // 按照 Ant Design Vue 的方式处理 modalRender：优先使用 slot,然后是 prop
       const finalModalRender = slots.modalRender || modalRender;
 
       const maskElement = mask ? (
@@ -319,7 +319,7 @@ export default defineComponent({
                 onMousedown={onContentMouseDown}
                 onMouseup={onContentMouseUp}
                 onClick={(e: MouseEvent) => {
-                  // 如果点击的是模态框内容区域本身（不是内部元素），则关闭模态框
+                  // 如果点击的是模态框内容区域本身（不是内部元素）,则关闭模态框
                   if (e.target === e.currentTarget && props.maskClosable) {
                     onInternalClose(e);
                   }

@@ -1,7 +1,7 @@
 <template>
   <DemoSection>
     <template #title>异步关闭</template>
-    <template #description>点击确定后异步关闭对话框，例如提交表单。</template>
+    <template #description>点击确定后异步关闭对话框,例如提交表单。</template>
     <template #buttons>
       <button class="btn btn-primary" @click="showModal">Open Modal with async logic</button>
     </template>

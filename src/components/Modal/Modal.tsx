@@ -10,6 +10,7 @@ import { getTransitionName } from '../../utils/transition';
 import { getMousePosition } from '../../utils/mousePosition';
 import type { MousePosition } from '../../utils/mousePosition';
 import { modalProps } from './types';
+import { useModalI18n } from '../../i18n/useModalI18n';
 
 export default defineComponent({
   name: 'SimpleModal',
@@ -24,10 +25,13 @@ export default defineComponent({
     const dialogPrefixCls = 'simple-dialog';
     const rootPrefixCls = 'simple';
 
-    // 保存鼠标位置，确保在关闭时仍能使用
+    // 使用内置 i18n
+    const { okText: i18nOkText, cancelText: i18nCancelText } = useModalI18n();
+
+    // 保存鼠标位置,确保在关闭时仍能使用
     const savedMousePosition = ref<MousePosition>(null);
 
-    // 监听 visible/open 变化，在打开时保存鼠标位置
+    // 监听 visible/open 变化,在打开时保存鼠标位置
     watch(
       () => props.open ?? props.visible,
       (visible) => {
@@ -41,7 +45,7 @@ export default defineComponent({
     );
 
     const handleCancel = (e?: MouseEvent) => {
-      // 当 confirmLoading 为 true 时，不允许取消
+      // 当 confirmLoading 为 true 时,不允许取消
       if (props.confirmLoading) {
         return;
       }
@@ -70,7 +74,7 @@ export default defineComponent({
             disabled={confirmLoading}
             {...props.cancelButtonProps}
           >
-            {cancelText || '取消'}
+            {cancelText || i18nCancelText.value}
           </ButtonAdapter>
           <ButtonAdapter
             type={okType === 'danger' ? 'primary' : okType}
@@ -79,7 +83,7 @@ export default defineComponent({
             onClick={handleOk}
             {...props.okButtonProps}
           >
-            {okText || '确定'}
+            {okText || i18nOkText.value}
           </ButtonAdapter>
         </>
       );
@@ -105,7 +109,7 @@ export default defineComponent({
         [`${prefixCls}-centered`]: !!centered,
       });
 
-      // 当 confirmLoading 为 true 时，禁用遮罩点击关闭、键盘关闭和关闭按钮
+      // 当 confirmLoading 为 true 时,禁用遮罩点击关闭、键盘关闭和关闭按钮
       const finalMaskClosable = confirmLoading ? false : maskClosable;
       const finalKeyboard = confirmLoading ? false : (restProps.keyboard ?? true);
       const finalClosable = confirmLoading ? false : (restProps.closable ?? true);

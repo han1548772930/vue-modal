@@ -6,6 +6,7 @@ import ButtonAdapter from '../ui/ButtonAdapter.vue';
 import type { ModalFuncProps } from './types';
 import type { VueNode } from '../../utils/types';
 import { getTransitionName } from '../../utils/transition';
+import { useModalI18n } from '../../i18n/useModalI18n';
 
 interface ConfirmDialogProps extends ModalFuncProps {
   afterClose?: () => void;
@@ -67,20 +68,27 @@ export default defineComponent({
   setup(props: ConfirmDialogProps, { attrs }) {
     const confirmLoading = ref(false);
 
+    // 使用内置 i18n
+    const {
+      okText: i18nOkText,
+      cancelText: i18nCancelText,
+      justOkText: i18nJustOkText
+    } = useModalI18n();
+
     const iconNode = computed(() => {
       const { icon, type } = props;
 
-      // 如果 icon 明确设置为 null，则不显示图标
+      // 如果 icon 明确设置为 null,则不显示图标
       if (icon === null) {
         return null;
       }
 
-      // 如果 icon 有值，则渲染自定义图标
+      // 如果 icon 有值,则渲染自定义图标
       if (icon !== undefined) {
         return renderSomeContent(icon);
       }
 
-      // 使用 lucide 图标，移除内联颜色，让 CSS 样式控制颜色
+      // 使用 lucide 图标,移除内联颜色,让 CSS 样式控制颜色
       const iconMap = {
         info: <Info class="w-6 h-6" />,
         success: <CheckCircle class="w-6 h-6" />,
@@ -106,13 +114,13 @@ export default defineComponent({
         try {
           const result = await onOk(e);
           console.log('ConfirmDialog: onOk result:', result);
-          // 如果 onOk 返回 false，不关闭 Modal
+          // 如果 onOk 返回 false,不关闭 Modal
           if (result !== false) {
             close?.({ triggerCancel: false }, e);
           }
         } catch (error) {
           console.error('ConfirmDialog: onOk error:', error);
-          // 即使出错也不关闭 Modal，让用户决定下一步操作
+          // 即使出错也不关闭 Modal,让用户决定下一步操作
         } finally {
           console.log('ConfirmDialog: Setting loading to false');
           confirmLoading.value = false;
@@ -183,7 +191,7 @@ export default defineComponent({
           disabled={confirmLoading.value}
           {...cancelButtonProps}
         >
-          {cancelText || '取消'}
+          {cancelText || i18nCancelText.value}
         </ButtonAdapter>
       );
 
@@ -195,7 +203,7 @@ export default defineComponent({
           onClick={handleOk}
           {...okButtonProps}
         >
-          {okText || (mergedOkCancel.value ? '确定' : '知道了')}
+          {okText || (mergedOkCancel.value ? i18nOkText.value : i18nJustOkText.value)}
         </ButtonAdapter>
       );
 

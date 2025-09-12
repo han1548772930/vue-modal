@@ -45,7 +45,7 @@ const variantClass = computed(() => {
 const isLoading = computed(() => {
   const loading = props.loading
   if (typeof loading === 'object' && loading !== null) {
-    return true // 如果是对象形式的 loading 配置，认为是 loading 状态
+    return true // 如果是对象形式的 loading 配置,认为是 loading 状态
   }
   return Boolean(loading)
 })

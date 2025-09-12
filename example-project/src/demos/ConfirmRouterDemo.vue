@@ -2,7 +2,7 @@
   <DemoSection>
     <template #title>销毁确认对话框</template>
     <template #description>
-      使用 Modal.destroyAll() 可以销毁弹出的确认窗。通常用于路由监听当中，处理路由前进、后退不能销毁确认对话框的问题。
+      使用 Modal.destroyAll() 可以销毁弹出的确认窗。通常用于路由监听当中,处理路由前进、后退不能销毁确认对话框的问题。
     </template>
     <template #buttons>
       <button class="btn btn-warning" @click="showConfirm">Confirm</button>

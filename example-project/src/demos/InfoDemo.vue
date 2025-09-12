@@ -1,7 +1,7 @@
 <template>
   <DemoSection>
     <template #title>信息提示</template>
-    <template #description>各种类型的信息提示，只提供一个按钮用于关闭。</template>
+    <template #description>各种类型的信息提示,只提供一个按钮用于关闭。</template>
     <template #buttons>
       <button class="btn btn-info" @click="info">Info</button>
       <button class="btn btn-success" @click="success">Success</button>

@@ -1,13 +1,13 @@
 # Tailwind CSS 4 + daisyUI 示例项目
 
-这是一个使用 Tailwind CSS 4 和 daisyUI 的示例项目，展示了如何集成和使用 simple-modal 插件。
+这是一个使用 Tailwind CSS 4 和 daisyUI 的示例项目,展示了如何集成和使用 simple-modal 插件。
 
 ## 功能特性
 
 - ✨ **Tailwind CSS 4**: 使用最新的 Tailwind CSS 4 和 @tailwindcss/vite 插件
 - 🎨 **daisyUI**: 集成 daisyUI 组件库和主题系统
 - 🌙 **深色模式**: 支持亮色/暗色主题切换
-- 📱 **响应式设计**: 完全响应式，支持各种屏幕尺寸
+- 📱 **响应式设计**: 完全响应式,支持各种屏幕尺寸
 - 🚀 **TypeScript**: 完整的 TypeScript 支持
 - 🎯 **Modal 组件**: 集成 simple-modal 插件的各种使用示例
 
@@ -89,7 +89,7 @@ const showModal = () => {
 
 ## 主题配置
 
-项目使用 daisyUI 的主题系统，支持：
+项目使用 daisyUI 的主题系统,支持：
 
 - 多种预设主题（neutral、stone、zinc、gray、slate）
 - 深色/亮色模式切换

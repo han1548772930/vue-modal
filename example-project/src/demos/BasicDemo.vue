@@ -15,7 +15,7 @@
 
     <!-- 基础模态框 -->
     <Modal v-model:open="basicOpen" title="基础模态框" @ok="() => basicOpen = false">
-      <p>这是基础模态框，没有额外样式。</p>
+      <p>这是基础模态框,没有额外样式。</p>
       <p>用于对比其他样式效果。</p>
     </Modal>
 

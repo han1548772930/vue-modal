@@ -86,7 +86,7 @@ function useModal(): UseModalReturnType {
             ref={modalRef}
             open={open.value}
             destroyAction={() => {
-              // 先关闭 Modal 触发动画，然后在 afterClose 中移除
+              // 先关闭 Modal 触发动画,然后在 afterClose 中移除
               open.value = false;
             }}
             afterClose={() => {
@@ -110,7 +110,7 @@ function useModal(): UseModalReturnType {
         if (modalRef.value) {
           modalRef.value.destroy();
         } else {
-          // 如果 modalRef 还没有准备好，直接关闭
+          // 如果 modalRef 还没有准备好,直接关闭
           open.value = false;
         }
       };

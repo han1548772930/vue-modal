@@ -1,7 +1,7 @@
 <template>
   <DemoSection>
     <template #title>CreateVNode 用法</template>
-    <template #description>使用 createVNode 创建复杂的模态框内容，支持组件、HTML元素和交互功能。</template>
+    <template #description>使用 createVNode 创建复杂的模态框内容,支持组件、HTML元素和交互功能。</template>
     <template #buttons>
       <div class="flex flex-wrap items-center gap-2">
         <button class="btn btn-primary" @click="showSimpleVNode">简单VNode</button>
@@ -201,7 +201,7 @@ const showFormVNode = () => {
       console.log('表单提交:', formData);
       Modal.success({
         title: '提交成功',
-        content: `感谢您的留言，${formData.name}！我们会尽快回复您。`
+        content: `感谢您的留言,${formData.name}！我们会尽快回复您。`
       });
     },
     onCancel: () => console.log('表单取消')
@@ -266,7 +266,7 @@ const showNestedVNode = () => {
   Modal.info({
     title: '嵌套VNode示例',
     content: createVNode('div', { class: 'space-y-4' }, [
-      createVNode('p', null, '这个模态框包含一个按钮，点击可以打开另一个模态框'),
+      createVNode('p', null, '这个模态框包含一个按钮,点击可以打开另一个模态框'),
       createVNode('button', {
         class: 'px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors',
         onClick: () => {

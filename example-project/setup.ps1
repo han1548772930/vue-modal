@@ -31,7 +31,7 @@ if ($LASTEXITCODE -eq 0) {
     exit 1
 }
 
-# daisyUI 无需 CLI，确保在 CSS 中通过 @plugin "daisyui" 已启用
+# daisyUI 无需 CLI,确保在 CSS 中通过 @plugin "daisyui" 已启用
 
 Write-Host ""
 Write-Host "🎉 项目设置完成!" -ForegroundColor Green

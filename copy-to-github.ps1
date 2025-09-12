@@ -36,7 +36,7 @@ Write-Host "复制 README.md..." -ForegroundColor Blue
 Copy-Item -Path "$sourceRoot\README.md" -Destination "$targetRoot\README.md" -Force
 
 Write-Host "文件复制完成！" -ForegroundColor Green
-Write-Host "请进入 $targetRoot 目录，然后运行以下命令推送到 GitHub：" -ForegroundColor Yellow
+Write-Host "请进入 $targetRoot 目录,然后运行以下命令推送到 GitHub：" -ForegroundColor Yellow
 Write-Host "cd $targetRoot" -ForegroundColor Cyan
 Write-Host "git add ." -ForegroundColor Cyan
 Write-Host "git commit -m 'Add complete source code and build files'" -ForegroundColor Cyan
