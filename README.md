@@ -559,14 +559,6 @@ pnpm add v-modals
 #### 编程式 API
 
 ```typescript
-// 基础方法
-Modal.info({ title: '信息', content: '内容' })
-Modal.success({ title: '成功', content: '操作成功' })
-Modal.error({ title: '错误', content: '操作失败' })
-Modal.warning({ title: '警告', content: '注意事项' })
-Modal.confirm({ title: '确认', content: '确定要执行吗？' })
-Modal.destroyAll() // 销毁所有模态框
-
 // useModal Hook
 const [modal, contextHolder] = Modal.useModal()
 // 返回：[modal方法对象, 需要渲染的组件]
